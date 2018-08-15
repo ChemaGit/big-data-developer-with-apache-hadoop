@@ -63,3 +63,25 @@ sqoop import --table accounts \
 --fields-terminated by "\t"
 --target-dir /loudacre/customer_accounts \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+#sqoop supports importing data sa Parquet or Avro files
+sqoop import --table accounts \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--as-parquetfile \
+--target-dir /loudacre/customer_accounts
+
+sqoop import --table accounts \
+--connnect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--as-avrodatafile \
+--target-dir /loudacre/customer_accounts
+#Sqoop supports export data from Hadoop to RDBMS with the export tool
+sqoop export \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--export-dir /loudacre/recommender_output \
+--update-mode allowinsert \
+--table product_recommendations

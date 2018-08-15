@@ -12,3 +12,5 @@
 #the import tool imports a single table(we can import only specified columns, or only matching rows from a single table)
 #we can specify a different delimiter(by default comma)
 #sqoop supports storing data in a compressed file
+#Sqoop supports importing data as Parquet or Avro files
+#Sqoop can export data from Hadoop to RDBMS
