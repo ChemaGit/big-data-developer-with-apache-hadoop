@@ -24,7 +24,7 @@ sqoop import-all-tables \
 --warehouse-dir /loudacre
 #import a single table
 sqoop import --table accounts \
-connnect jdbc:mysql://localhost/loudacre \
+--connnect jdbc:mysql://localhost/loudacre \
 --username training
 --password training
 --warehouse-dir /loudacre

@@ -22,8 +22,7 @@ object TransformarIguales {
 		val sc = new SparkContext(sconf)
 		sc.setLogLevel("ERROR")
 		
-		val resource = fsPath(args(0))
-		println("MotherFucker")
+		val resource = fsPath(args(0))		
 		println(resource)
 		val rdd = sc.textFile(resource, 1)
 		            .map(line => ( (line.split("=")(0), line.split("=")(1)), 1 ))
