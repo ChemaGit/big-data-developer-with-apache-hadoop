@@ -63,6 +63,17 @@ sqoop import --table accounts \
 --fields-terminated by "\t"
 --target-dir /loudacre/customer_accounts \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--delete-target-dir \
+--target-dir /loudacre/accounts \
+--compression-codec org.apache.hadoop.io.compress.GzipCodec \
+--num-mappers 1
+
 #sqoop supports importing data sa Parquet or Avro files
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
