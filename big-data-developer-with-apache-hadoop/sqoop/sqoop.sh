@@ -12,10 +12,12 @@ sqoop eval \
 --username training
 --password training
 #imports an entire database
+#The option --autoreset-to-one-mapper is typically used with the import-all-tables tool to automatically handle tables without a primary key in a schema.
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
---username training
---password training
+--username training \
+--password training \
+--autoreset-to-one-mapper
 #use the --warehouse-dir option to specify a different base directory
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
@@ -35,6 +37,28 @@ sqoop import --table accounts \
 --password training
 --columns "id, first_name,last_name,state"
 --warehouse-dir /loudacre
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--columns "acct_num, acct_create_dt, first_name, last_name" \
+--target-dir /loudacre/accounts \
+--num-mappers 1
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--columns "acct_num,acct_close_dt, first_name,city,state,zipcode" \
+--fields-terminated-by "-" \
+--null-string "none" \
+--null-non-string "0" \
+--delete-target-dir \
+--target-dir /loudacre/accounts \
+--num-mappers 1
 #import only matching rows from a single table
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
@@ -42,11 +66,26 @@ sqoop import --table accounts \
 --password training \
 --where "state='CA'"
 --warehouse-dir /loudacre
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--columns "acct_num, acct_close_dt, first_name, city, state, zipcode" \
+--where "acct_num >= 5 and acct_num <= 30" \
+--fields-terminated-by "@" \
+--null-string "none" \
+--null-non-string "0" \
+--delete-target-dir \
+--target-dir /loudacre/accounts \
+--num-mappers 1
 #we can specify an altenate location
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
---password training
+--password training \
+--autoreset-to-one-mapper \
 --target-dir /loudacre/customer_accounts
 #specifying an alternate delimiter
 sqoop import --table accounts \
@@ -74,7 +113,7 @@ sqoop import \
 --compression-codec org.apache.hadoop.io.compress.GzipCodec \
 --num-mappers 1
 
-#sqoop supports importing data sa Parquet or Avro files
+#sqoop supports importing data as Parquet or Avro files
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -88,6 +127,34 @@ sqoop import --table accounts \
 --password training \
 --as-avrodatafile \
 --target-dir /loudacre/customer_accounts
+
+#sqoop provides an incremental import mode which can be used to retrieve only rows newer than some previously-imported set of rows.
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+-P \
+--table accounts \
+--null-string "none" \
+--null-non-string "0"
+--check-column acct_num \
+--incremental append \
+--last-value 1000 \
+--as-avrodatafile \
+--delete-target-dir \
+--target-dir /loudacre/accounts \
+--num-mappers 1
+
+import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training --password training \
+--incremental append \
+--table visitas \
+--target-dir /visitas \
+--check-column id \
+--last-value 9 \
+--fields-terminated-by ":" \
+--outdir /tmp
+
 #Sqoop supports export data from Hadoop to RDBMS with the export tool
 sqoop export \
 --connect jdbc:mysql://localhost/loudacre \
