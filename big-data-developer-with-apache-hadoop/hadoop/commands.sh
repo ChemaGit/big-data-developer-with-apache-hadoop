@@ -32,3 +32,10 @@ $hdfs dfs -cat /loudacre/kb/KBDOC-00289.html | less -n 5
 #the "help" of the command line
 $hdfs dfs -help <command>
 $hdfs dfs -help cat
+
+#reading a parquet file from command line
+$parquet-tools head hdfs://localhost/loudacre/accounts/myfile.parquet
+$parquet-tools schema hdfs://localhost/loudacre/accounts/myfile.parquet
+#reading a avro file from command line
+$avro-tools getschema hdfs://localhost/loudacre/accounts/part-m-00000.avro
+$avro-tools cat --offset 1 --limit 5 hdfs://localhost/loudacre/accounts/part-m-00000.avro -

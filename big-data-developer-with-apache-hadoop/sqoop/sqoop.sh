@@ -94,6 +94,19 @@ sqoop import --table accounts \
 --password training
 --fields-terminated-by "\t" \
 --target-dir /loudacre/customer_accounts
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--fields-terminated-by "|" \
+--escaped-by \\ \
+--enclosed-by '\"' \
+--delete-target-dir \
+--target-dir /loudacre/accounts \
+--num-mappers 1
+
 #storing data in a compressed file
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
@@ -111,6 +124,16 @@ sqoop import \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
 --compression-codec org.apache.hadoop.io.compress.GzipCodec \
+--num-mappers 1
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--compress \  #compression in default mode .gz
+--delete-target-dir \
+--target-dir /loudacre/compress \
 --num-mappers 1
 
 #sqoop supports importing data as Parquet or Avro files
