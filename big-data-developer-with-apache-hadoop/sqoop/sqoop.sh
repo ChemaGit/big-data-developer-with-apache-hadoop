@@ -9,7 +9,7 @@ sqoop list-tables \
 sqoop eval \
 --query "SELECT * FROM device LIMIT 20" \
 --connect jdbc:mysql://localhost/loudacre \
---username training
+--username training \
 --password training
 #imports an entire database
 #The option --autoreset-to-one-mapper is typically used with the import-all-tables tool to automatically handle tables without a primary key in a schema.
@@ -80,6 +80,36 @@ sqoop import \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
 --num-mappers 1
+
+#import from a query
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--query "select * from accounts a, accountdevice b where a.acct_num = b.account_id and \$CONDITIONS" \
+-m 1 \
+--target-dir /loudacre/accounts/join \
+--delete-target-dir
+
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--query "select * from accounts where acct_num between 1 and 22 and \$CONDITIONS" \
+-m 1 \
+--target-dir /loudacre/accounts/problem \
+--delete-target-dir
+
+#import from MYSQL to a HIVE table
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accountdevice \
+--where "account_id between 1 and 22" \
+-m 1 \
+--hive-import
+
 #we can specify an altenate location
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
