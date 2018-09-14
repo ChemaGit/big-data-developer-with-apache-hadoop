@@ -28,6 +28,7 @@ object Spark16 {
 	def main(args: Array[String]): Unit = {
 		if(args.length <= 0) {
 		  System.err.println("usage: runMain spark.Spark16 /spark16")
+		  System.exit(1)
 		}
 		
 		val resource = args(0)

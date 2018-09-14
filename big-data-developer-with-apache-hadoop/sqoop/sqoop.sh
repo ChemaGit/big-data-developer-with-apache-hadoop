@@ -208,6 +208,17 @@ import \
 --fields-terminated-by ":" \
 --outdir /tmp
 
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training \
+--password training \
+--table accounts \
+--incremental append \
+--check-column acct_num \
+--last-value 10 \
+--target-dir /loudacre/accounts \
+-m 1
+
 #Sqoop supports export data from Hadoop to RDBMS with the export tool
 sqoop export \
 --connect jdbc:mysql://localhost/loudacre \
