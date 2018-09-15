@@ -1,4 +1,4 @@
-package spark
+package spark.spark-exercises
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
