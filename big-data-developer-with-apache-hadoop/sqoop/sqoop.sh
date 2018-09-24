@@ -110,6 +110,13 @@ sqoop import \
 -m 1 \
 --hive-import
 
+sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training -P \
+--table webpage \
+--hive-import \
+--hive-table hiveweb
+
 #we can specify an altenate location
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
