@@ -24,6 +24,8 @@ $hdfs dfs -rm input_old/file1
 $hdfs dfs -rm input_old/*
 #delete the directory input_old and all its contents
 $hdfs dfs -rm -r input_old
+#copy a file from hdfs directory to another hdfs directory 
+$hdfs dfs -cp /loudacre/account_device/*.parquet myfile.parquet
 #viewing HDFS files
 $hdfs dfs -cat /loudacre/kb/KBDOC-00289.html | head -n 20
 $hdfs dfs -cat /loudacre/kb/KBDOC-00289.html | tail -n 20

@@ -44,6 +44,18 @@
 # -Many RDD operations take functions as parameters
 #RDDs can hold any serializable type of element
 #Some RDDs are specialized and have additional functionality
-# -Pair RDDs: RDDs consisting of key-value pairs
+# -Pair RDDs: RDDs consisting of key-value pairs: each element must be
+#  a key-value pair (key, value1)...
+# - Use with map-reduce algorithms
+# - Many additional functions are available for common data processing needs:
+#   sorting, joining, grouping ......
+# - Commonly used functions to create pair RDDs: map, flatMap/flatMapValues, keyBy
+# - Pair RDD Operations specific to pair RDDs: countByKey, groupByKey, sortByKey, join....
+# - Some other pair operations: keys, values, lookup(key), leftOuterJoin, rightOuterJoin, fullOuterJoin, mapValues, flatMapValues
 # -Double RDDs: RDDs consisting of numerical data
+# A common programming pattern
+# 1. Map separates datasets into Key-value pairRdds
+# 2. Join by Key
+# 3. Map joined data into the desired format
+# 4. Save, display or continue processing
 
