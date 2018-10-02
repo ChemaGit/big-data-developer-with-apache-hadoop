@@ -11,6 +11,17 @@ sqoop eval \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
 --password training
+
+sqoop eval \
+--connect jdbc:mysql://localhost/loudacre \
+--username training -P \
+-e "INSERT INTO test VALUES(194765,129762, 'Pinto', '17/07/1969', 'Happy Man')"
+
+#List database schemas present on a server.
+sqoop list-databases \
+--connect jdbc:mysql://localhost/loudacre \
+--username training -P
+
 #imports an entire database
 #The option --autoreset-to-one-mapper is typically used with the import-all-tables tool to automatically handle tables without a primary key in a schema.
 sqoop import-all-tables \
@@ -234,3 +245,20 @@ sqoop export \
 --export-dir /loudacre/recommender_output \
 --update-mode allowinsert \
 --table product_recommendations
+
+sqoop export \
+--connect jdbc:mysql://localhost/loudacre \
+--username training -P \
+--table test \
+--update-mode allowinsert \
+--export-dir /loudacre/test \
+--input-null-string "null" \
+--input-null-non-string "0" \
+-m 1
+
+#create a hive table, only metastore data with a definition for a table based on a database table previously imported to HDFS, or one planned to be imported.
+sqoop create-hive-table \
+--connect jdbc:mysql://localhost/loudacre \
+--username training  -P \
+--table accounts \
+--hive-table accounts
