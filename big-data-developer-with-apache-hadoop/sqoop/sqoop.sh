@@ -211,7 +211,6 @@ sqoop import \
 --incremental append \
 --last-value 1000 \
 --as-avrodatafile \
---delete-target-dir \
 --target-dir /loudacre/accounts \
 --num-mappers 1
 

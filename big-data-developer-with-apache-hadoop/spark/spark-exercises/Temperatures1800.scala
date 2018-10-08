@@ -27,3 +27,25 @@
  val rddFar = rddGroup.mapValues(v => (v * 0.1) * (9.0 / 5.0) + 32)	
  val rddFormat = rddFar.map({case(e, v) => e + " " + "%.2fF".format(v)})
  rddFormat.repartition(1).saveAsTextFile("/loudacre/temperatures/resMin")
+ 
+ /**
+ * max-temperature
+ * Lo mismo que min-temperatury pero calcular la temperatura máxima.
+ */
+ val dirTemp = "/files/1800.csv"
+ val rddTemp = sc.textFile(dirTemp).map(line => line.split(",")).map(arr => (arr(0),arr(2),arr(3))).filter(arr => arr._2 == "TMAX")
+ val rddGroup = rddTemp.map({case(est, pat,temp) => (est, temp.toDouble)}).reduceByKey({case(v, v1) => if(v > v1) v else v1})
+ val rddFar = rddGroup.mapValues(v => (v * 0.1) * (9.0 /5.0) + 32) 	
+ val rddFormat = rddFar.map({case(e, v) => e + " " + "%.2fF".format(v)})
+ rddFormat.repartition(1).saveAsTextFile("/loudacre/temperatures/resMax")
+ 
+ /**
+ * max-temperatures_groupByKey
+ * Lo mismo que max-temperature pero hay que usar groupByKey.
+ */
+ val dirTemp = "/files/1800.csv"
+ val rddTemp = sc.textFile(dirTemp).map(line => line.split(",")).map(arr => (arr(0), arr(2), arr(3))).filter(arr => arr._2 == "TMAX")
+ val rddGroup = rddTemp.map({case(est, pat, temp) => (est, temp.toDouble)}).groupByKey()
+ val rddFar = rddGroup.mapValues({case(it) => (it.max * 0.1) * (9.0 / 5.0) + 32})
+ val rddFormat = rddFar.map({case(e, t) => e + " " + "%.2fF".format(t)})
+ rddFormat.repartition(1).saveAsTextFile("/loudacre/temperatures/resMax_b")
