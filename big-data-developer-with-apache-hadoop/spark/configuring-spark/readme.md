@@ -94,5 +94,38 @@
 				-log4j.logger.org.apache.spark.repl.Main=DEBUG  ==> Default override for Spark shell (Scala)			
 		*Logging in the Spark shell can be configured interactively
 			+ The setLogLevel method sets the logging level temporarily
-				- sc.setLogLevel("ERROR")							    	
-    		  	     
+				- sc.setLogLevel("ERROR")		
+				
+#EXAMPLES
+	#FROM COMMAND LINE
+		$ spark-submit --class stubs.CountJPGs --master yarn-client --name 'Count JPGs' target/countjpgs-1.0.jar /loudacre/weblogs/*
+		
+	#SETTINGS CONFIGURATION OPTIONS	IN A PROPERTIES FILE
+		-Using a text editor, create a file in the current working directory called myspark.conf, containing settings for the propertiess shown below:
+		
+			spark.app.name				My Spark App
+			spark.master				yarn-client
+			spark.executor.memory		400M
+			
+		$ spark-submit --properties-file myspark.conf --class stubs.CountJPGs target/countjpgs-1.0.jar /loudacre/weblogs/*
+		
+#SETTING LOGGINGS LEVELS
+	-Copy the template file
+		/usr/lib/spark/conf/log4j.properties.template  
+		     to   
+		/usr/lib/spark/conf/log4j.properties	
+		     You will need to use superuser privileges to this, so use the sudo command
+       $ sudo cp /usr/lib/spark/conf/log4j.properties.template /usr/lib/spark/conf/log4j.properties
+       
+    -Load the new log4j.properties file into an editor. Again, you will need to use sudo:
+    	$ sudo gedit /usr/lib/spark/conf/log4j.properties
+    -The first line currently reads:
+    	log4j.rootCategory=INFO, console
+    -Replace INFO with DEBUG and save the file and rerun your Spark application
+    	log4j.rootCategory=DEBUG, console		 
+    -Edit the file again to replace DEBUG with WARN and try again.
+    
+    -You can also override the current setting temporarily by calling sc.setLogLevel with your preferred setting.
+    	> sc.setLogLevel("ERROR")	   		     	 
+			
+	    		  	     

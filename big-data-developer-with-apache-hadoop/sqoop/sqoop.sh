@@ -29,12 +29,23 @@ sqoop import-all-tables \
 --username training \
 --password training \
 --autoreset-to-one-mapper
+#we can exclude some tables
+sqoop import-all-tables \
+--connect jdbc:mysql://localhost/loudacre \
+--username training -P \
+--outdir /home/training/Desktop/outdir \
+--bindir /home/training/Desktop/bindir \
+--warehouse-dir /loudacre/almost-all-tables \
+--exclude-tables "test,webpage,device,accountdevice,accounts" \
+--autoreset-to-one-mapper
+
 #use the --warehouse-dir option to specify a different base directory
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
 --password training
 --warehouse-dir /loudacre
+
 #import a single table
 sqoop import --table accounts \
 --connnect jdbc:mysql://localhost/loudacre \
