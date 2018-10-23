@@ -74,4 +74,88 @@ With our newfound understanding of the cost of data movement in a Spark job, and
 		               .option("user","training")
 		               .option("password","training")
 		               .load()					
-#Data Sources		               										
+#Data Sources		             
+	-Spark SQL built-in data source types
+		*table
+		*json
+		*parquet
+		*jdbc
+		*orc
+	-You can also use third party data source libraries, such as
+		*Avro
+		*HBase
+		*CSV
+		*MySQL
+#DataFrame Basic Operations(1)
+	-Basic operations deal with DataFrame metadata(rather than its data)
+	-Some examples
+		*schema -> returns a schema object describing the data
+		*printSchema -> diplays the schema as a visual tree
+		*cache / persist -> persist the DataFrame to disk or memory
+		*columns -> returns an array containing the names of the columns
+		*dtypes -> returns an array of (column name, type) pairs
+		*explain -> prints debug information about the DataFrame to the console
+#DataFrame Basic Operations(2)
+	-Example: Displaying column data types using dtypes
+		> val peopleDF = sqlContext.read.json("people.json")
+		> peopleDF.dtypes.foreach(println)
+		  (age, LongType)
+		  (name, StringType)
+		  (pcode, StringType)					
+#Working with Data in a DataFrame
+	-Queries-create a new DataFrame
+		*DataFrames are immutable
+		*Queries are analogous to RDD transformations
+	-Actions-return data to the driver
+		*Actions trigger "lazy" execution of queries
+#DataFrame Actions		
+	-Some DataFrame actions
+		*collect returns all rows as an array of Row objects
+		*take(n) returns the first n rows as an array of Row objects
+		*count returns the number of rows
+		*show(n) displays the first n rows(default = 20)
+#DataFrame Queries(1)
+	-DataFrame query methods return new DataFrames
+		*Queries can be chained like transformations
+	-Some query methods
+		*distinct returns a new DataFrame with distinct elements of this DF
+		*join joins this DataFrame with a second DataFrame
+			Variants for inside, outside, left, and right joins					
+		*limit returns a new DataFrame with the first n rows of this DF
+		*select returns a new DataFrame with data from one or more columns of the base DataFrame
+		*where returns a new DataFrame with rows meeting specified query criteria(alias for filter)			
+#DataFrame Queries(2)
+	-Examples
+		> peopleDF.limit(3).show()
+		> peopleDF.select("age")
+		> peopleDF.select("name", "age")	
+		> peopleDF.where("age > 21")	    	
+#Querying DataFrames using Columns(1)
+	-Some DataFrame queries take one or more columns or column expressions
+		*Required for more sophisticated operations
+	-Some examples
+		*select
+		*sort
+		*join
+		*where
+#Querying DataFrames using Columns(2)
+	-Columns can be referenced in multiple ways
+		*Python
+			> ageDF = peopleDF.select(peopleDF['age'])
+			> ageDF = peopleDF.select(peopleDF.age)
+		*Scala
+			> val ageDF = peopleDF.select(peopleDF("age"))	
+			> val ageDF = peopleDF.select($"age")			
+#Querying DataFrames using Columns(3)
+	-Column references can also be column expressions
+		*Python
+			> peopleDF.select(peopleDF['name'], peopleDF['age'] + 10)
+		*Scala
+			> peopleDF.select(peopleDF("name"), peopleDF("age") + 10)		
+#Querying DataFrames using Columns(4)
+	-Example: Sorting by columns(descending)
+		*Python
+			> peopleDF.sort(peopleDF['age'].desc())  //.asc and .desc are column expression methods used with sort
+		*Scala
+			> peopleDF.sort(peopleDF("age").desc)			
+#Joining DataFrames(1)																	

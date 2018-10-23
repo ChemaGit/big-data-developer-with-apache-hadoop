@@ -29,14 +29,14 @@ object CheckPointDir {
 
       for (i <- 1 to 1001) {
         val sumRddEnteros = rddEnteros.map(x => x + 1)
-	  if (i % 10 == 0) {
-	    println("Bucle numero " + i)
-	    //Before any actions "checkpoint"
-	    sumRddEnteros.checkpoint()
-	    sumRddEnteros.count()
-            println("sumRddEnteros.count(): " + sumRddEnteros.count())
-	    println("sumRddEnteros: " + sumRddEnteros.collect().mkString(",") )
-	}
+	      if (i % 10 == 0) {
+	        println("Bucle numero " + i)
+	        //Before any actions "checkpoint"
+	        sumRddEnteros.checkpoint()
+	        sumRddEnteros.count()
+          println("sumRddEnteros.count(): " + sumRddEnteros.count())
+	        println("sumRddEnteros: " + sumRddEnteros.collect().mkString(",") )
+	      }
       }
     } catch {
         case ex: Exception => println("Exception: " + ex.toString())
