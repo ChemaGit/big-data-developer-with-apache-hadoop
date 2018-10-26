@@ -158,4 +158,138 @@ With our newfound understanding of the cost of data movement in a Spark job, and
 			> peopleDF.sort(peopleDF['age'].desc())  //.asc and .desc are column expression methods used with sort
 		*Scala
 			> peopleDF.sort(peopleDF("age").desc)			
-#Joining DataFrames(1)																	
+#Joining DataFrames(1)						
+	-A basic inner join when join column is in both DataFrames
+		> peopleDF.join(pcodesDF, "pcode")
+	-Specify type of join as inner(default), outer, left_outer, right_outer, or leftsemi
+		Python >> peopleDF.join(pcodesDF, "pcode", "left_outer")
+		Scala >> peopleDF.join(pcodesDF, Array("pcode"), "left_outer")
+	-Use a column expression when column names are different
+		Python >> peopleDF.join(zcodesDF, peopleDF.pcode == zcodesDF.zip)
+		Scala >> peopleDF.join(zcodesDF, $"pcode" === $"zip")		
+#SQL Queries
+	-When using HiveContext, you can query Hive/Impala tables using HiveQL
+		*Returns a DataFrame
+			> sqlContext.sql("""Select * From customers Where name Like "A%" """)
+	-You can also perform some SQL queries with a DataFrame
+		*First, register the DataFrame as a "table" with the SQL context
+			> peopleDF.registerTempTable("people")
+			> sqlContext.sql("""Select * From customers Where name Like "A%" """)
+	-You can query directly from Parquet or JSON files without needing to create a DataFrame or register a temporary table
+		> sqlContext.sql("""Select * From json.'/user/training/people.json' Where name Like "A%" """)
+#Other Query Functions
+	-DataFrames provide many other data manipulation and query functions such as
+		*Aggregation such as groupBy, orderBy, and agg
+		*Multi-dataset operations such as join, unionAll, and intersect
+		*Statistics such as avg, sampleBy, corr, and cov
+		*Multi-variable functions rollup and cube
+		*Window-based analysis functions
+		
+#Saving DataFrames
+	-Data in DataFrames can be saved to a data source
+	-Use DataFrame.write to create a DataFrameWriter
+	-DataFrameWriter provides convenience functions to externally save the data represented by a DataFrame
+		*jdbc inserts into a new or existing table in a database
+		*json saves as JSON file
+		*parquet saves as a Parquet file
+		*orc saves as an ORC file
+		*text saves as a text file (string data in a single column only)
+		*saveAsTable saves as a Hive/Impala table(HiveContext only)
+			> peopleDF.write.saveAsTable("people")
+#Options for Saving DataFrames
+	-DataFrameWriter option methods
+		*format -> specifies a data source type
+		*mode -> determines the behavior if file or table already exists: overwrite, append, ignore or error(default is error)
+		*partitionBy -> stores data in partitioned directories in the form column=value(as with Hive/Impala partitioning)	
+		*options -> specifies properties for the target data source
+		*save -> is the generic base function to write the data
+			> peopleDF.write.format("parquet").mode("append").partitionBy("age").saveAsTable("people")
+#DataFrames and RDDs
+	-DataFrames are built on RDDs
+		*Base RDDs contain Row objects
+		*Use rdd to get the underlying RDD
+			> peopleRDD = peopleDF.rdd
+	-Row RDDs have all the standard Spark actions and transformations
+		*Actions: collect, take, count, and so on
+		*Transformations: map, flatMap, filter, and so on
+	-Row RDDs can be transformed into pair RDDs to use map-reduce methods
+	-DataFrames also provide convenience methods(such as map, flatMap, and foreach) for converting to RDDs
+#Working with Row Objects
+	-The sintax for extracting data from Row objects depends on language
+	-Python
+		*Column names are object attributes
+			row.age -> returns age column value from row
+	-Scala
+		*Use Array-like syntax to return values with type Any
+			row(n) -> returns element in the nth column
+			row.fieldIndex("age") -> returns index of the age column
+		*Use methods to get correctly typed values
+			row.getAs[Long]("age")		
+		*Use type-specific get methods to return typed values
+			row.getString(n) returns nth column as a string
+			row.getInt(n) returns nth column as an integer
+			And so on
+#Example: Extracting Data from Row Objects
+	-Extract data from Row objects
+		*Python
+			> peopleRDD = peopleDF.map(lambda row: (row.pcode, row.name))
+			> peopleByPCode = peopleRDD.groupByKey()
+		*Scala
+			> val peopleRDD = peopleDF.map(row => (row(row.fieldIndex("pcode")),row(row.fieldIndex("name"))))
+			> val peopleByPCode = peopleRDD.groupByKey()
+#Converting RDDs to DataFrames
+	-You can also create a DF from an RDD using createDataFrame
+		*Python
+			from pyspark.sql.types import *
+			schema = StructType([StructField("age",IntegerType(),True),
+									StructField("name",StringType(),True),
+									StructField("pcode",StringType(),True)])
+			myrdd = sc.parallelize([(40,"Abram","01601"),(16,"Lucia","87501")])
+			mydf = sqlContext.createDataFrame(myrdd,schema)
+		*Scala
+			import org.apache.spark.sql.types._
+			import org.apache.spark.sql.Row
+			val schema = StructType(Array(
+							StructField("age", IntegerType, true),
+							StructField("name", StringType, true),
+							StructField("pcode", StringType, true)))
+			val rowrdd = sc.parallelize(Array(Row(40,"Abram","01601"),Row(16,"Lucia","87501")))
+			val mydf = sqlContext.createDataFrame(rowrdd,schema)
+#Comparing Impala to Spark SQL
+	-Spark SQL is built on Spark, a general purpose processing engine
+		*Provides convenient SQL-like access to structured data in a Spark application
+	-Impala is a specialized SQL engine
+		*Much better performance for querying
+		*Much more mature than SparkSQL
+		*Robust security using Sentry
+	-Impala is better for
+		*Interactive queries
+		*Data analysis
+	-Use SparkSQL for						
+		*ETL
+		*Access to structured data required by a Spark application
+#Comparing SparkSQL with Hive on Spark
+	-SparkSQL
+		*Provides the DataFrame API allow structured data processing in a Spark application
+		*Programmers can mix SQL with procedural processing
+	-Hive on Spark
+		*Hive provides a SQL abstraction layer over MapReduce or Spark
+			*Allows non-programmers to analyze data using familiar SQL
+		*Hive on Spark replaces MapReduce as the engine underlying Hive
+			*Does not affect the user experience of Hive
+			*Except queries run many times faster!					
+#Spark 2.x
+	-Spark 2.0 is the next major release of Spark
+	-Several significant changes related to SparkSQL, including
+		*SparkSession replaces SQLContext and HiveContext
+		*Support for ANSI-SQL as well as HiveQL
+		*Support for subqueries
+		*Support for Datasets
+#Spark Datasets
+									
+																											
+
+
+
+
+											
