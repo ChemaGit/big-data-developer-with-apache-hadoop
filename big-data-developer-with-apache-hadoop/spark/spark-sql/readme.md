@@ -286,7 +286,20 @@ With our newfound understanding of the cost of data movement in a Spark job, and
 		*Support for subqueries
 		*Support for Datasets
 #Spark Datasets
-									
+	-Datasets are an alternative to RDDs for structured data
+		*A strongly-typed collection of objects, mapped to a relational schema
+		*Unified with the DataFrame API-DFs are Datasets of Row objects
+		*Use the Spark Catalyst optimizer as DFs do for better performance
+		*Word count using RDDs: Scala
+			val countsRDD = sc.textFile(filename)
+			                  .flatMap(line => line.split(" "))
+			                  .map(word => (word, 1))
+			                  .reduceByKey((v1, v2) => v1 + v2)
+	 	*Word count using Datasets: Scala
+	 		val countDS = sqlContext.read.text(filename).as[String]
+	 		                        .flatMap(line => line.split(" "))
+	 		                        .groupBy(word => word)
+	 		                        .count()		                  								
 																											
 
 
