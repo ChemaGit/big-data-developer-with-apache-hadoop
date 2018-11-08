@@ -143,4 +143,46 @@
 			               --zookeeper zkhost1:2181,zkhost2:2181,zkhost3:2181 \
 			               --replication-factor 3 \
 			               --topic device_status
-#Displaying Topics from the Command Line			            																														
+#Displaying Topics from the Command Line
+	-Use the --list option to list all topics
+		$ kafka-topics --list --zookeeper zkhost1:2181, zkhost2:2181, zdhost3: 2181
+	-Use the --help option to list all kafka-topics options
+		$ kafka-topics --help
+		
+#Running a Producer from the Command Line(1)
+	-You can run a producer using the kafka-console-producer tool
+	-Spcify one or more brokers in the --broker-list option
+		*Each broker consists of a hostname, a colon, and a port number
+		*If specifying multiple brokers, separate them with commas
+	-You must also provide the name of the topic
+		$ kafka-console-producer \
+		  --broker-list brokerhost1: 9092, brokerhost2:9092 \
+		  --topic device_status
+#Running a Producer from the Command Line(2)
+	-You may see a few log messages in the terminal after the producer starts
+	-The producer will then accept input in the terminal window
+		*Each line you type will be a message sent to the topic
+	-Until you have configured a consumer for this topic, you will see no other output from Kafka
+#Writing File Contents to Topics Using the Command Line
+	-The data can then be sent to a topic using the command line producer
+		*The data can then be sent to a topic using the command line producer
+	-This example shows how to read input from a file named alerts.txt
+		*Each line in this file becomes a separate message in the topic
+			$ cat alerts.txt | kafka-console-producer \
+			--broker-list brokerhost1:9092, brokerhost2:9092 \
+			--topic device_status
+	-This technique can be an easy way to integrate with existing programs
+#Running a Consumer from the Command Line
+	-You can run a consumer with the kafka-console-consumer tool
+	-This requires the ZooKeeper connection string for you cluster
+		*Unlike starting a producer, which instead requires a list of brokers
+	-The command also requires a topic name
+	-Use --from-beginning to read all available messages
+		*Otherwise, it reads only new messages
+			$ kafka-console-consumer \
+			--zookeeper zkhost1:2181,zkhost2:2181,zkhost3:2181 \
+			--topic device_status \
+			--from-beginning				 					  				
+		
+		
+					            																														
