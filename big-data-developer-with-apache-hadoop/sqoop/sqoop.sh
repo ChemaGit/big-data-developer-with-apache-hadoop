@@ -266,6 +266,22 @@ sqoop export \
 --input-null-non-string "0" \
 -m 1
 
+$ sqoop export \
+--connect jdbc:mysql://localhost/test \
+--username training \
+--password training \
+--table departments_hive02 \
+--update-mode allowinsert \
+--export-dir /user/hive/warehouse/hadoopexam.db/departments_hive01 \
+--input-fields-terminated-by '\001' \
+--input-lines-terminated-by '\n' \
+--input-null-string "" \
+--input-null-non-string "-999" \
+--outdir /home/training/Desktop/outdir \
+--bindir /home/training/Desktop/bindir \
+--validate \
+--num-mappers 1
+
 #create a hive table, only metastore data with a definition for a table based on a database table previously imported to HDFS, or one planned to be imported.
 sqoop create-hive-table \
 --connect jdbc:mysql://localhost/loudacre \

@@ -291,4 +291,138 @@
 			  	
 #HOW HIVE READS DATA
 
-#Recap: Reading Data in MapReduce			  											  											  			  				
+#Recap: Reading Data in MapReduce
+	-Recall: a MapReduce job's InputFormat class controls how records are read from files
+		*TextInputFormat (default) supplies each line of text as the value
+		*It is your responsibility to parse content into specific fields
+#How Hive Reads Records from files
+	-Hive queries are executed as MapReduce jobs
+		*Records are read using the InputFormat associated with the table
+		*Similarly, records are written using the table's OutputFormat
+		*These formats are specified or implied during table creation
+	-As with MapReduce, TextInputFormat is used by default
+		*Each line from the input file(s) is considered a record
+			CREATE TABLE sales(
+				id INT,
+				salesperson STRING,
+				price INT		
+			)
+			ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+#Specifying the Input and Output Format in Hive
+	-The file type implies which input and output formats are used for the table
+		CREATE TABLE people (
+			id INT,
+			name STRING
+		)
+		STORED AS SEQUENCEFILE;
+	-This is an alternative to specifying input and output formats explicitly	
+		CREATE TABLE people (
+			id INT,
+			name STRING
+		)
+		STORED AS
+			INPUTFORMAT 'org.apache.hadoop.mapred.SequenceFileInputFormat'
+			OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat'
+#How Hive Extracts Fields from Records
+	-You have learned how Hive reads records from a file
+		*How does Hive retrieve fields from those records?
+	-Hive uses a class called a SerDe to extracts fields from each record
+		*SerDe is short for "Serializer/Deserializer"
+	-The default SerDe(LazySimpleSerDe) parses fields based on delimiter
+		*Used if ROW FORMAT DELIMITED specified in CREATE TABLE
+		*Also used if ROW FORMAT is missing from CREATE TABLE
+			CREATE TABLE sales(
+				id INT,
+				salesperson STRING,
+				price INT		
+			)
+			ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+#Common SerDe Implementations
+	-Hive in CDH ships with many SerDes, including:
+		Class Name									Reads and Writes Records
+		LaxySimpleSerDe							Using specified field delimiters(default)
+		AvroSerDe									Using Avro, according to specified schema
+		ColumnarSerDe								Using the RCFile columnar format
+		ParquetHiveSerDe							Using the Parquet columnar format
+		RegexSerDe									Using the supplied regular expression
+		
+		*See Hive documentation for fully-qualified class names
+	-Not all SerDes are compatible with all file formats
+		*Cannot use AvroSerDe with SequenceFiles, for example
+		
+#Specifying the SerDe Type
+	-A SerDe can be specified explicitly in the CREATE TABLE statement
+		CREATE TABLE products
+		ROW FORMAT SERDE
+			'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+		STORED AS
+		INPUTFORMAT
+			'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+		OUTPUTFORMAT
+			'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+		TBLPROPERTIES
+			('avro.schema.url'='hdfs://dev.loudacre.com:8020/schemas/products.avsc');
+															
+#USING THE REGEXSERDE IN HIVE
+#About the RegexSerDe
+	-Hadoop is a great fit for semi-structured data
+		*Many formats typically lack a consistent delimiter character
+			08/14/2015@15:25:47 415-555-2854:312-555-7819 "Call placed"
+			08/14/2015@15:25:53 415-555-2854:312-555-7819 "Call dropped"
+					
+	-RegexSerDe can help you to parse such data
+		*Regular expressions provide great flexibility
+		*Example: using RegexSerDe allows you to perform queries on log files
+	-Points to note about RegexSerDe
+		*Only supports STRING column type in Hive 0.10 and earlier
+		*Backslashes in regular expressions must be escaped with a backslash
+		
+#Using the RegexSerDe
+	-Input
+		08/14/2015@15:25:47 415-555-2854:312-555-7819 "Call placed"
+		08/14/2015@15:25:53 415-555-2854:312-555-7819 "Call dropped"
+	-SerDe	
+		CREATE TABLE calls (
+			event_date STRING,
+			event_time STRING,
+			from_number STRING,
+			to_number STRING,
+			event_desc STRING)
+		ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
+		WITH SERDEPROPERTIES ("input.regex" =
+			"(.*?)@(.*?) (.*?):(.*?) \"([^\"]*)\"");
+	-Table		
+		event_date	 	event_time	 	from_number	 	to_number	 	event_desc	
+		08/14/2015 	15:25:47 		415-555-2854 		312-555-7819  Call placed
+		08/14/2015    15:25:53 		415-555-2854 		312-555-7819  Call dropped
+		 
+#Supporting Fixed-Width Formats with RegexSerDe
+	-Hive does not have a specific SerDe to support fixed-width formats
+		*Yet these are commonly produced by older applications
+		*Fixed-width data is easy to read with RegexSerDe
+			Raw Data
+				2015-08-1212345673661845I love the guitar solo
+				2015-08-1216431444025652Hard to dance to this one
+				2015-08-1412957863971103It needs more cowbell
+			SerDe(Excerpt)
+				CREATE TABLE ... WITH SERDEPROPERTIES ("input.regex" =
+					"(.{10})(\\d{6})(\\d{7})(\\d)(.*)";
+			Resulting Table
+				comment_date	 acct_num	 prod_id	 rating	 comments	
+				2015-08-12 	123456 		7366184 		5 		I love the guitar solo
+				2015-08-12 	164314 		4402565 		2 		Hard to dance to this one
+				2015-08-14 	129578 		6397110 		3 		It needs more cowbell
+				
+#DEVELOPING USER-DEFINED FUNCTIONS
+
+#Why Create User-Defined Functions?				
+					
+			
+					
+		
+		
+											
+			
+			
+			
+								  											  											  			  				
