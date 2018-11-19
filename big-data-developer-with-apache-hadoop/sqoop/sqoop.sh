@@ -288,3 +288,22 @@ sqoop create-hive-table \
 --username training  -P \
 --table accounts \
 --hive-table accounts
+
+#The job tool allows you to create and work with saved jobs. Saved jobs remember the parameters used to specify a job, so they can be re-executed by invoking the job by its handle.
+$ sqoop job \
+--create myjob \
+-- import \
+--connect jdbc:mysql://localhost/retail_db \
+--username training \
+--password training \
+--table categories \
+--warehouse-dir /categories_target_job \
+--outdir /home/training/Desktop/outdir \
+--bindir /home/training/Desktop/bindir \
+--num-mappers 1
+#Step 2: list the jobs
+$ sqoop job --list
+#Step 3: Describe the job
+$ sqoop job --show myjob
+#Step 4: Execute the job
+$ sqoop job --exec myjob

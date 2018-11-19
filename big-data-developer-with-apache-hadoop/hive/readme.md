@@ -415,7 +415,158 @@
 				
 #DEVELOPING USER-DEFINED FUNCTIONS
 
-#Why Create User-Defined Functions?				
+#Why Create User-Defined Functions?
+	-User-defined functions allow you to extend the capabilities of Hive
+		*You might need to reformat values in a query
+		*You might need to add new mathematical functions
+		*You might need to include support for custom processing
+#Types of User-Defined Functions
+	-There are three distinct types of user-defined functions
+	-UDF(User-Defined Function)
+		*Operates on exactly one record and returns a single value
+		*Examples include SUBSTRING and ROUND
+	-UDAF(User-Defined Aggregate Function)
+		*Operates on multiple records and returns a single value
+		*Usually used in conjunction with GROUP BY clause
+		*Examples include SUM and AVG
+	-UDTF(User-Defined Table Function)
+		*Operates on a single record but returns multiple records
+		*The EXPLODE function is an example of a UDTF
+	-UDFs are the most common
+		*We will focus on them in this chapter
+
+#IMPLEMENTING A USER-DEFINED FUNCTION
+#Maven Configuration for Custom UDF Development
+	-To develop a custom UDF, first add the following to you pom.xml
+		<dependency>
+			<artifactId>hive-exec</artifactId>
+			<groupId>org.apache.hive</groupId>
+			<version>${hive.version}</version>
+		</dependency>
+	-Value of hive.version varies based on your CDH release
+		*Use the Maven repository Web UI to search for available versions
+		*https://repository.cloudera.com/
+#Developing and Using a Custom UDF
+	-The easiest way to develop a UDF is to extend the UDF class
+		*Implementation differs for UDAFs and UDTFs
+	-Your UDF must implement one or more methods named evaluate
+		*Each method can accept a different type of argument
+		*Methods should accept and return Writable types
+	-The UDF should also use a Description annotation
+		*Provides information used in SHOW FUNCTION command	
+#Simple UDF Example
+	-The simplest UDF implementation just returns a constant value
+	
+		package com.loudacre.example;
+		
+		import org.apache.hadoop.hive.ql.exec.Description;
+		import org.apache.hadoop.hive.ql.exec.UDF;
+		import org.apache.hadoop.io.DoubleWritable;
+		
+		@Description (
+			name="KPM",
+			value="_FUNC_() - returns the number of kilometers per mile",
+				extended = "Example:\n"
+				+ " > SELECT _FUNC_() * distance FROM locations LIMIT 1;\n"
+				+ " 482.802")
+		public class KilometersPerMile extends UDF {
+			private final DoubleWritable result = new DoubleWritable(1.60934);
+			public DoubleWritable evaluate() {
+				return result;
+			}
+		}
+		
+#Price Formatting UDF Example(1)
+	-This example can accept either one or two arguments
+		*Example: FORMAT_CENTS(375) returns $3.75
+		*Example: FORMAT_CENTS(375, '€') returns €3.75
+	-The class defines two Text objects as member variables
+		*It is more efficient to reuse objects than create new instances
+	-This evaluate method invokes the two-argument version
+		*By supplying the default symbol			
+		
+		package com.loudacre.example;
+		
+		import org.apache.hadoop.hive.ql.exec.Description;
+		import org.apache.hadoop.hive.ql.exec.UDF;
+		import org.apache.hadoop.io.IntWritable;
+		import org.apache.hadoop.io.Text;
+
+		@Description(
+			name = "FORMAT_CENTS",
+			value = "_FUNC_(cents) - Formats INT value as dollars and cents.",
+			extended = "Example:\n"
+				+ " > SELECT _FUNC_(price_in_cents) FROM sales;\n"
+				+ " > SELECT _FUNC_(price_in_eurocents, '€') FROM sales;\n"
+		)
+		
+		public class FormatCents extends UDF {
+			private static final Text DEFAULT_SYMBOL = new Text("$");
+			private final Text result = new Text();
+			
+			public Text evaluate(IntWritable centsAsWritable) {
+				return evaluate(centsAsWritable, DEFAULT_SYMBOL);
+			}
+			
+			public Text evaluate(IntWritable centsAsWritable, Text symbol) {
+				int cents = centsAsWritable.get();
+				StringBuilder sb = new StringBuilder();
+				if (cents <= 9) {
+					sb.append("00");
+				} else if (cents <= 99) {
+					sb.append("0");
+				}
+				sb.append(cents);
+				sb.insert(sb.length() - 2, ".");
+				sb.insert(0, symbol);
+				result.set(sb.toString());
+				return result;
+			}
+		}
+#Deploying Custom Libraries To Hive			
+	-The first step in deployment is to package your UDF as a JAR file
+		$ mvn package
+	-Deployment may require assistance from your system administrator
+		*Your account may lack permissions to make the necessary changes
+	-Older versions of Hive used the ADD JAR command
+		*This approach does not work with HiveServer2
+		*We need to update the HiveServer2 daemon's classpath
+	-Edit /etc/hive/conf/hive-site.xml on the node running HiveServer2
+		*Add or edit the hive.aux.jars.path property
+		*Set its value to the fully-qualified URI of your JAR file(s)
+		*Multiple URIs are separated by commas for this property
+			<property>
+				<name>hive.aux.jars.path</name>
+				<value>file:///home/bob/myudf.jar,file:///opt/lib/foo.jar</value>
+			</property>
+	-HiveServer2 will add these JARs to the distributed cache
+	-We could also upload the JAR file to HDFS
+		*In this case, the URI would begin with hdfs://instead of file://
+	-Edit /etc/default/hive-server2 on the node running HiveServer2
+		*Set the AUX_CLASSPATH environment variable to include all your JARS
+		*The value follows the typical classpath format(colon delimited)
+		*The value must always consist of local paths
+		*This step adds the libraries to HiveServer2's runtime classpath
+			export AUX_CLASSPATH=/home/bob/myudf.jar:/opt/lib/foo.jar
+	-Finally, restart the hive-server2 service
+		*You must redeploy the JAR and restart the service whenever you modify the code
+			$ sudo service hive-server2 restart
+	-Error messages in Beeline can be cryptic
+	-If you have problems with a newly-registered UDF, check the logs
+		-Typically located in the /var/log/hive directory
+#Registering a User-Defined Function in Hive
+	-Your UDF must be registered before using it in a query
+	-This can be done using the CREATE TEMPORARY FUNCTION command
+		> CREATE TEMPORARY FUNCTION KPM
+			AS 'com.loudacre.example.KilometersPerMile';
+		> SELECT KPM() * miles_to_warehouse AS km_to_warehouse
+			FROM store_locations
+			WHERE store_id=1234;
+	-Repeat this step during every Hive session where the function is used		
+											
+						
+	
+												
 					
 			
 					
