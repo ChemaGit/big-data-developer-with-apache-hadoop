@@ -301,6 +301,18 @@ $ sqoop job \
 --outdir /home/training/Desktop/outdir \
 --bindir /home/training/Desktop/bindir \
 --num-mappers 1
+
+#The merge tool allows you to combine two datasets where entries in one dataset should overwrite entries of an older dataset. 
+#For example, an incremental import run in last-modified mode will generate multiple datasets in HDFS where successively newer data appears in each dataset. 
+#The merge tool will "flatten" two datasets into one, taking the newest available records for each primary key.
+$ sqoop merge \
+--class-name products_replica \
+--jar-file /home/training/Desktop/bindir/products_replica.jar \
+--new-data /user/cloudera/problem5/products-text-part1/ \
+--onto /user/cloudera/problem5/products-text-part2/ \
+--target-dir /user/cloudera/problem5/products-text-both-parts \
+--merge-key product_id
+
 #Step 2: list the jobs
 $ sqoop job --list
 #Step 3: Describe the job
