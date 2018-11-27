@@ -77,3 +77,15 @@
   > CREATE EXTERNAL TABLE products_parquet(productid Int, code String, name String, quantity Int, price Float) STORED AS parquet LOCATION "/user/hive/warehouse/product_parquet_table";
   //step 10
   > select * from products_parquet;
+  
+  /************A BETTER WAY TO TO THIS************************/
+case class Product(id: Int, code: String, name: String, quantity: Int, price: Float)
+
+val p = sc.textFile("/files/product.csv").map(lines => lines.split(','))
+val first = p.first
+val product = p.filter(arr => arr(0) != first(0)).map(arr => Product(arr(0).toInt, arr(1), arr(2), arr(3).toInt, arr(4).toFloat)).toDF
+product.registerTempTable("product_mine")
+sqlContext.sql("CREATE TABLE retail_cca174.product_orc STORED AS ORC AS SELECT * from product_mine")
+sqlContext.sql("CREATE TABLE retail_cca174.product_parquet STORED AS PARQUET AS SELECT * from product_mine")
+sqlContext.sql("select * from product_orc").show
+sqlContext.sql("select * from product_parquet").show
