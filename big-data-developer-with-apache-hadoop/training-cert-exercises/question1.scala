@@ -7,5 +7,5 @@
  */
   val b = sc.parallelize(List(1,2,3,4,5,6,7,8,2,4,2,1,1,1,1,1))
   val rdd = b.countByValue()
-  //Alternative solution
+  //Alternative bad solution, Whyyyyyyy?
   val rdd1 = b.map(v => (v, 1L)).countByKey()
