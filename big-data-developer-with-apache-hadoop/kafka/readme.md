@@ -1,37 +1,41 @@
-#What is Apache Kafka?
-	-Apache Kafka is a distributed commit log service
-		*Widely used for data ingest
-		*Conceptually similar to a publish-subscribe messaging system
-		*Offers scalability, performance, reliability, and flexibility
-#Characteristics of Kafka
-	-Scalable
-		*Kafka is a distributed system that supports multiple nodes
-	-Fault-tolerant
-		*Data is persisted to disk and can be replicated throughout the cluster
-	-High throughput
-		*Each broker can process hundreds of thousands of messages per second
-	-Low latency
-		*Data is delivered in a fraction of a second
-	-Flexible
-		*Decouples the production of data from its consumption
-#Kafka Use Cases
-	-Kafka is used for a variety of use cases, such as
+# What is Apache Kafka?
+	- Apache Kafka is a distributed commit log service
+		* Widely used for data ingest
+		* Conceptually similar to a publish-subscribe messaging system
+		* Offers scalability, performance, reliability, and flexibility
+		
+# Characteristics of Kafka
+	-S calable
+		* Kafka is a distributed system that supports multiple nodes
+	- Fault-tolerant
+		* Data is persisted to disk and can be replicated throughout the cluster
+	- High throughput
+		* Each broker can process hundreds of thousands of messages per second
+	- Low latency
+		* Data is delivered in a fraction of a second
+	- Flexible
+		* Decouples the production of data from its consumption
+		
+# Kafka Use Cases
+	- Kafka is used for a variety of use cases, such as
 		*Log aggregation
 		*Messaging
 		*Web site activity tracking
 		*Stream processing
 		*Event sourcing
 		
-#Apache Kafka Overview
-#Key Terminology
-	-Message
-		*A single data record passed by Kafka
-	-Topic
-		*A named log or feed of messages within Kafka
-	-Producer
-		*A program that reads messages from Kafka			
-	-Consumer
-		*A program that reads messages from Kafka
+# Apache Kafka Overview
+
+# Key Terminology
+	- Message
+		* A single data record passed by Kafka
+	- Topic
+		* A named log or feed of messages within Kafka
+	- Producer
+		* A program that reads messages from Kafka			
+	- Consumer
+		* A program that reads messages from Kafka
+		
 #Messages
 	-Messages in Kafka are variable-size byte arrays
 		*Represent arbitrary user-defined content
