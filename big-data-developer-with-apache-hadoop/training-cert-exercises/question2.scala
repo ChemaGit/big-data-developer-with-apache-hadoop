@@ -79,13 +79,22 @@
   > select * from products_parquet;
   
   /************A BETTER WAY TO TO THIS************************/
-case class Product(id: Int, code: String, name: String, quantity: Int, price: Float)
+hive> create database pruebas;
 
-val p = sc.textFile("/files/product.csv").map(lines => lines.split(','))
-val first = p.first
-val product = p.filter(arr => arr(0) != first(0)).map(arr => Product(arr(0).toInt, arr(1), arr(2), arr(3).toInt, arr(4).toFloat)).toDF
-product.registerTempTable("product_mine")
-sqlContext.sql("CREATE TABLE retail_cca174.product_orc STORED AS ORC AS SELECT * from product_mine")
-sqlContext.sql("CREATE TABLE retail_cca174.product_parquet STORED AS PARQUET AS SELECT * from product_mine")
-sqlContext.sql("select * from product_orc").show
-sqlContext.sql("select * from product_parquet").show
+$ hdfs dfs -put -f /home/cloudera/files/product.csv /user/cloudera/files
+
+$ spark-shell
+val product = sc.textFile("/user/cloudera/files/product.csv").map(line => line.split(",")).filter(r => r(0) != "productID").map(r => (r(0).toInt,r(1),r(2),r(3).toInt,r(4).toFloat)).toDF("productID","productCode","name","quantity","price")
+product.repartition(1).write.orc("/user/hive/warehouse/pruebas.db/product_orc")
+
+//orc table
+sqlContext.sql("use pruebas")
+sqlContext.sql("""CREATE TABLE t_product_orc(productID int,productCode string,name string,quantity int,price float) STORED AS ORC LOCATION "/user/hive/warehouse/pruebas.db/product_orc" """)
+sqlContext.sql("show tables").show()
+sqlContext.sql("""select * from t_product_orc""").show()
+
+//parquet table
+product.repartition(1).write.parquet("/user/hive/warehouse/pruebas.db/product_parquet")
+sqlContext.sql("""CREATE TABLE t_product_parquet(productID int,productCode string,name string,quantity int,price float) STORED AS PARQUET LOCATION "/user/hive/warehouse/pruebas.db/product_parquet" """)
+sqlContext.sql("show tables").show()
+sqlContext.sql("""select * from t_product_parquet""").show()
