@@ -1,0 +1,3 @@
+Recently I got certified as Hadoop and Spark Developer - CCA175 and I wanted to share my experience about the test and training in this repository.
+
+With all those that want to try it I share a huge part of the theory and especially a lot of hands-on, more than 150 which will surely be helpful for those who want to try the test or just learn about all the technologies around the test which are part of the Big Data ecosystem.
