@@ -195,5 +195,94 @@
 			- Creates a new DStream by executing function on RDDs in the current DStream
 
 				val distinctDS = myDS.transform(rdd => rdd.distinct())
-
+				
 * DStream Output Operations
+
+	- Console output
+		- print() prints out the first 10 elements of each RDD, optionally pass an integer to print another number of elements
+	- File output
+		- saveAsTextFiles saves data as text
+		- saveAsObjectFiles saves as serialized object files(SequenceFiles)
+	- Executing other functions
+		- foreachRDD(functions) performs a function on each RDD in the DStream
+		- Function input parameters
+			- The RDD on which to perform the function
+			- The time stamp of the RDD (optional)
+
+* Saving DStream Results as Files
+
+	userreqs.saveAsTextFiles(".../outdir/reqcounts")
+
+	* reqcounts-timestamp1/part-00000...
+	* reqcounts-timestamp2/part-00000...
+	* reqcounts-timestamp3/part-00000...
+
+* Scala Example: Find Top Users
+	
+	// Transfom each RDD: swap userID/cout, sort by count	
+	
+	val userreqs = mystream.map(line => line.split(' ')(2), 1).reduceByKey( (x, y) => x + y)
+	userreqs.saveAsTextFiles(path)
+	
+	val sortedreqs = userreqs.map(pair => pair.swap).transform(rdd => rdd.sortByKey)
+
+	// Print out the top 5 users as "User: userID(cout)"
+	
+	sortedreqs.foreachRDD( (rdd,time) => {
+		println("Top users @ " + time)
+		
+		rdd.take(5).foreach(pair => printf("User: %s (%s)\n", pair._2, pair._1"))
+	})
+
+* Example: Find Top Users-Output
+	- t1(2 seconds after ssc.start)
+
+	Top users @ 1401219545000 ms
+	User: 16261 (8)
+	User: 22232 (7)
+	User: 66652 (4)
+	User: 21205 (2)
+	User: 24358 (2)
+
+	- t2(2 seconds later)
+	
+	Top users @ 1401219547000 ms
+	User: 53667 (4)
+	User: 35600 (4)
+	User: 62 (2)
+	User: 165 (2)
+	User: 40 (2)
+	
+	- t3(2 seconds later)
+
+	Top users @ 1401219547000 ms
+	User: 31 (12)
+	User: 6734 (10)
+	User: 14986 (10)
+	User: 72760 (2)
+	User: 65335 (2)
+
+	- Continues until termination....
+
+* DEVELOPING STREAMING APPLICATIONS
+
+* Building and Running Spark Streaming Applications
+	
+	- Building Spark Streaming applications
+		- Link with the main Spark Streaming library(included with Spark)
+		- Link with additional Spark Streaming libraries if necessary, for example, Kafka, Flume, Twitter
+
+	- Running Spark Streaming applications
+		- Use at least two threads if running locally
+		- Adding operations after the Streaming context has been started is unsupported
+		- Stopping and restarting the Streaming context is unsupported
+
+* Using Spark Streaming with Spark Shell
+
+	- Spark Streaming is designed for batch applications, not interactive use
+	- The Spark shell can be used for limited testing
+		- Not intended for production use!
+		- Be sure to run the shell on a cluster with at least 2 cores, or locally with at least 2 threads.
+			$ spark-shell --master yarn
+			$ spark-shell --master 'local[2]'				
+
