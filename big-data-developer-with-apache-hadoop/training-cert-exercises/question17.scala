@@ -1,72 +1,86 @@
-/**
- * Problem Scenario 28 : You need to implement near real time solutions for collecting
- * information when submitted in file with below
- * Data
- * echo "IBM,100,20160104" >> /tmp/spooldir2/.bb.txt
- * echo "IBM,103,20160105" >> /tmp/spooldir2/.bb.txt
- * mv /tmp/spooldir2/.bb.txt /tmp/spooldir2/bb.txt
- * After few mins
- * echo "IBM,100.2,20160104" >> /tmp/spooldir2/.dr.txt
- * echo "IBM,103.1,20160105" >> /tmp/spooldir2/.dr.txt
- * mv /tmp/spooldir2/.dr.txt /tmp/spooldir2/dr.txt
- * You have been given below directory location (if not available than create it) /tmp/spooldir2
- * As soon as file committed in this directory that needs to be available in hdfs in
- * /tmp/flume/primary as well as /tmp/flume/secondary location.
- * However, note that/tmp/flume/secondary is optional, if transaction failed which writes in
- * this directory need not to be rollback.
- * Write a flume configuration file named flume8.conf and use it to load data in hdfs with following additional properties .
- * 1. Spool /tmp/spooldir2 directory
- * 2. File prefix in hdfs sholuld be events
- * 3. File suffix should be .log
- * 4. If file is not committed and in use than it should have _ as prefix.
- * 5. Data should be written as text to hdfs
- */
-//Explanation: Solution : 
-//Step 1 : Create directory 
-$ mkdir /tmp/spooldir2 
-//Step 2 : Create flume configuration file, with below configuration for source, sink and channel and save it in flume8.conf. 
-$ mkdir /home/cloudera/flumeconf
-$ gedit /home/cloudera/flumeconf/flume8.conf &
+/** Question 17
+  * Problem Scenario 28 : You need to implement near real time solutions for collecting
+  * information when submitted in file with below
+  * Data
+  * echo "IBM,100,20160104" >> /tmp/spooldir2/.bb.txt
+  * echo "IBM,103,20160105" >> /tmp/spooldir2/.bb.txt
+  * mv /tmp/spooldir2/.bb.txt /tmp/spooldir2/bb.txt
+  * After few mins
+  * echo "IBM,100.2,20160104" >> /tmp/spooldir2/.dr.txt
+  * echo "IBM,103.1,20160105" >> /tmp/spooldir2/.dr.txt
+  * mv /tmp/spooldir2/.dr.txt /tmp/spooldir2/dr.txt
+  * You have been given below directory location (if not available than create it) /tmp/spooldir2
+  * As soon as file committed in this directory that needs to be available in hdfs in
+  * /tmp/flume/primary as well as /tmp/flume/secondary location.
+  * However, note that/tmp/flume/secondary is optional, if transaction failed which writes in
+  * this directory need not to be rollback.
+  * Write a flume configuration file named flumeS.conf and use it to load data in hdfs with following additional properties .
+  * 1. Spool /tmp/spooldir2 directory
+  * 2. File prefix in hdfs sholuld be events
+  * 3. File suffix should be .log
+  * 4. If file is not committed and in use than it should have _ as prefix.
+  * 5. Data should be written as text to hdfs
+  */
 
-agent1.sources = source1
-agent1.sinks = sink1a sink1b
-agent1.channels = channel1a channel1b
+$ mkdir /tmp/spooldir2
+  $ gedit /home/cloudera/flume/flumeS.conf
 
-agent1.sources.source1.channels = channel1a channel1b
-agent1.sources.source1.selector.type = replicating
-agent1.sources.source1.selector.optional = channel1b
-agent1.sources.source1.type = spooldir
-agent1.sources.source1.spoolDir = /tmp/spooldir2
+# flumeS.conf: A single-node Flume configuration
 
-agent1.sinks.sink1a.channel = channel1a
-agent1.sinks.sink1a..type = hdfs  
-agent1.sinks.sink1a.hdfs.path = /tmp/flume/primary
-agent1.sinks.sink1a.hdfs.filePrefix = events
-agent1.sinks.sink1a.hdfs.fileSuffix = .log
-agent1.sinks.sink1a.fileType = DataStream
-  
-agent1.sinks.sink1b.channel = channel1b 
-agent1.sinks.sink1b.type = hdfs
-agent1.sinks.sink1b.hdfs.path = /tmp/flume/secondary
-agent1.sinks.sink1b.filePrefix = events
-agent1.sinks.sink1b.fileSuffix = .log
-agent1.sinks.sink1b.fileType = DataStream
+# Name the components on this agent
+  a1.sources = r1
+a1.sinks = k1 k2
+  a1.channels = c1 c2
 
-agent1.channels.channel1a.type = file
-agent1.channels.channel1b.type = memory
-  
-//step 4 : Run below command which will use this configuration file and append data in hdfs. 
-//Start flume service: 
-$ flume-ng agent --conf /home/cloudera/flumeconf --conf-file /home/cloudera/flumeconf/flume8.conf --name agent1
-//another option with logs
-$ flume-ng agent --conf /home/cloudera/flumeconf --conf-file /home/cloudera/flumeconf/flume8.conf --name agent1 -Dflume.root.logger=INFO, console
-//step 5: Open another terminal and create a file in /tmp/spooldir2/
-$ echo "IBM.100.2,20160104" >> /tmp/spooldir2/.bb.txt
-$ echo "IBM,103.1,20160105" >> /tmp/spooldir2/.bb.txt
+# Describe/configure the source
+a1.sources.r1.type = spooldir
+a1.sources.r1.spoolDir = /tmp/spooldir2
+
+a1.sources.r1.selector.type = replicating
+a1.sources.r1.selector.optional = c2
+
+# Describe the sink
+a1.sinks.k1.type = hdfs
+a1.sinks.k1.hdfs.path = /tmp/flume/primary
+  a1.sinks.k1.hdfs.fileType = DataStream
+a1.sinks.k1.hdfs.filePrefix = events
+a1.sinks.k1.hdfs.fileSuffix = .log
+a1.sinks.k1.hdfs.inUsePrefix = _
+
+a1.sinks.k2.type = hdfs
+a1.sinks.k2.hdfs.path = /tmp/flume/secondary
+  a1.sinks.k2.hdfs.fileType = DataStream
+a1.sinks.k2.hdfs.filePrefix = events
+a1.sinks.k2.hdfs.fileSuffix = .log
+a1.sinks.k2.hdfs.inUsePrefix = _
+
+# Use a channel which buffers events in memory
+  a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+a1.channels.c2.type = file
+
+# Bind the source and sink to the channel
+  a1.sources.r1.channels = c1 c2
+  a1.sinks.k1.channel = c1
+a1.sinks.k2.channel = c2
+
+$ bin/flume-ng agent --conf /home/cloudera/flume --conf-file /home/cloudera/flume/flumeS.conf --name a1 -Dflume.root.logger=INFO,console
+
+
+$ echo "IBM,100,20160104" >> /tmp/spooldir2/.bb.txt
+$ echo "IBM,103,20160105" >> /tmp/spooldir2/.bb.txt
 $ mv /tmp/spooldir2/.bb.txt /tmp/spooldir2/bb.txt
-//After few mins
-$ echo "IBM,100,20160104" >> /tmp/spooldir2/.dr.txt
-$ echo "BM,103,20160105" >> /tmp/spooldir2/.dr.txt
+// After few mins
+$ echo "IBM,100.2,20160104" >> /tmp/spooldir2/.dr.txt
+$ echo "IBM,103.1,20160105" >> /tmp/spooldir2/.dr.txt
 $ mv /tmp/spooldir2/.dr.txt /tmp/spooldir2/dr.txt
+
+$ hdfs dfs -ls /tmp/flume/primary
+$ hdfs dfs -cat /tmp/flume/primary/*
+
+$ hdfs dfs -ls /tmp/flume/secondary
+$ hdfs dfs -cat /tmp/flume/secondary/*
 
   
