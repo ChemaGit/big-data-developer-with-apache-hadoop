@@ -1,50 +1,58 @@
-/**
- * Problem Scenario 23 : You have been given log generating service as below.
- * Start_logs (It will generate continuous logs)
- * Tail_logs (You can check , what logs are being generated)
- * Stop_logs (It will stop the log service)
- * Path where logs are generated using above service : /opt/gen_logs/logs/access.log
- * Now write a flume configuration file named flume3.conf , using that configuration file dumps
- * logs in HDFS file system in a directory called flume3/%Y/%m/%d/%H/%M
- * Means every minute new directory should be created). Please us the interceptors to
- * provide timestamp information, if message header does not have header info.
- * And also note that you have to preserve existing timestamp, if message contains it. Flume
- * channel should have following property as well. After every 100 message it should be
- * committed, use non-durable/faster channel and it should be able to hold maximum 1000 events.
- */
+/** Question 25
+  * Problem Scenario 23 : You have been given log generating service as below.
+  * Start_logs (It will generate continuous logs)
+  * Tail_logs (You can check , what logs are being generated)
+  * Stop_logs (It will stop the log service)
+  * Path where logs are generated using above service : /opt/gen_logs/logs/access.log
+  * Now write a flume configuration file named flume3.conf , using that configuration file dumps
+  * logs in HDFS file system in a directory called /user/cloudera/flume3/%Y/%m/%d/%H/%M
+  * Means every minute new directory should be created). Please us the interceptors to
+  * provide timestamp information, if message header does not have header info.
+  * And also note that you have to preserve existing timestamp, if message contains it. Flume
+  * channel should have following property as well. After every 100 message it should be
+  * committed, use non-durable/faster channel and it should be able to hold maximum 1000 events.
+  */
 
-//Explanation: Solution : 
-//Step 1 : Create flume configuration file, with below configuration for source, sink and channel. 
-#Define source , sink , channel and agent, 
-agent1.sources = source1 
-agent1.sinks = sink1 
-agent1.channels = channel1 
+$ cd /flume_demo
+  $ gedit flume3.conf &
 
-# Describe/configure source1 
-agent1.sources.source1.type = exec 
-agent1.sources.source1.command = tail -F /opt/gen_logs/logs/access.log 
-agent1.sources.source1.channels = channel1
+# example.conf: A single-node Flume configuration
 
-#Define interceptors 
-agent1.sources.source1.interceptors = i1 
-agent1.sources.source1.interceptors.i1.type = timestamp 
-agent1.sources.source1.interceptors.i1.preserveExisting = true 
+# Name the components on this agent
+  a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
 
-# Describe sink1 
-agent1.sinks.sink1.channel = channel1 
-agent1.sinks.sink1.type = hdfs 
-agent1.sinks.sink1.hdfs.path = flume3/%Y/%m/%d/%H/%M 
-agent1.sinks.sink1.hdfs.fileType = DataStream 
+# Describe/configure the source
+a1.sources.r1.type = exec
+a1.sources.r1.command = tail -F /opt/gen_logs/logs/access.log
+a1.sources.r1.interceptors = i1
+a1.sources.r1.interceptors.i1.type = timestamp
+a1.sources.r1.interceptors.i1.preserveExisting = true
 
-# Now we need to define channel1 property. 
-agent1.channels.channel1.type = memory 
-agent1.channels.channel1.capacity = 1000 
-agent1.channels.channel1.transactionCapacity = 100 
+# Describe the sink
+a1.sinks.k1.type = hdfs
+a1.sinks.k1.hdfs.path = /user/cloudera/flume3/%Y/%m/%d/%H/%M
+  a1.sinks.k1.hdfs.fileSuffix = .log
+a1.sinks.k1.hdfs.fileType = DataStream
 
-//Step 2 : Run below command which will use this configuration file and append data in hdfs. Start log service using : 
-$ start_logs 
-//Start flume service: 
-$ flume-ng agent --conf /home/cloudera/flumeconf --conf-file /home/cloudera/flumeconf/flume3.conf --name agent1
-$ flume-ng agent --conf /home/cloudera/flumeconf --conf-file /home/cloudera/flumeconf/flume3.conf --name agent1 -Dflume.root.logger=DEBUG,INFO,console
-//Wait for few mins and than stop log service. 
+# Use a channel which buffers events in memory
+  a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+# Bind the source and sink to the channel
+  a1.sources.r1.channels = c1
+a1.sinks.k1.channel = c1
+
+
+$ flume-ng agent --conf /home/cloudera/flume_demo --conf-file /home/cloudera/flume_demo/flume3.conf --name a1 -Dflume.root.logger=INFO,console
+
+$ start_logs
+
+// after a few minutes
+
 $ stop_logs
+
+$ hdfs dfs -ls /user/cloudera/flume3/2019/05/14/15
+$ hdfs dfs -cat /user/cloudera/flume3/2019/05/14/15/40/FlumeData*
