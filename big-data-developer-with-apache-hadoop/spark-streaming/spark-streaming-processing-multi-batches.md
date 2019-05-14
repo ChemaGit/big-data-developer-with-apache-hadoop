@@ -78,15 +78,19 @@
 
 
 		val ssc = new StreamingContext(new SparkConf(), Seconds(2))
+		
 		val logs = ssc.socketTextStream(hostname, port)
+		
 		// Every 30 seconds, count requests by user over the last five minutes
 		val reqcountsByWindow = logs.map(line => line.split(' ')(2), 1).reduceByKeyAndWindow( (v1: Int, v2: Int) => v1 + v2, Minutes(5), Seconds(30))
 
 		//Sort and print the top users for every RDD (every 30 seconds)
 		val topreqsByWindow = reqcountsByWindow.map(pair => pair.swap).transform(rdd => rdd.sortByKey(false))
+		
 		topreqsByWindow.map(pair => pair.swap).print()
 
 		ssc.start()
+		
 		ssc.awaitTermination()
 		
 
