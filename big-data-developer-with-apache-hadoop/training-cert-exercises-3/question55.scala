@@ -1,70 +1,34 @@
-/**
- * Problem Scenario 90 : You have been given below two files
- * course.txt
- * id,course
- * 1,Hadoop
- * 2,Spark
- * 3,HBase
- * fee.txt
- * id,fee
- * 2,3900
- * 3,4200
- * 4,2900
- * Accomplish the following activities.
- * 1. Select all the courses and their fees , whether fee is listed or not.
- * 2. Select all the available fees and respective course. If course does not exists still list the fee
- * 3. Select all the courses and their fees , whether fee is listed or not. However, ignore records having fee as null.
- */
+/** Question 55
+  * Problem Scenario 90 : You have been given below two files
+  * course.txt
+  * id,course
+  * 1,Hadoop
+  * 2,Spark
+  * 3,HBase
+  * fee.txt
+  * id,fee
+  * 2,3900
+  * 3,4200
+  * 4,2900
+  * Accomplish the following activities.
+  * 1. Select all the courses and their fees , whether fee is listed or not.
+  * 2. Select all the available fees and respective course. If course does not exists still list the fee
+  * 3. Select all the courses and their fees , whether fee is listed or not. However, ignore records having fee as null.
+  */
+$ gedit /home/cloudera/files/course.txt &
+  $ gedit /home/cloudera/files/fee.txt &
+  $ hdfs dfs -put /home/cloudera/files/course.txt /user/cloudera/files
+$ hdfs dfs -put /home/cloudera/files/fee.txt /user/cloudera/files
 
-//Answer : See the explanation for Step by Step Solution and configuration.
+val course = sc.textFile("/user/cloudera/files/course.txt").map(line => line.split(",")).map(r => (r(0).toInt,r(1))).toDF("idC","course")
+val fee = sc.textFile("/user/cloudera/files/fee.txt").map(line => line.split(",")).map(r => (r(0).toInt,r(1).toInt)).toDF("idF","fee")
 
-//Explanation: Solution : 
-//Step 1: 
-hdfs dfs -mkdir sparksql4 
-hdfs dfs -put course.txt sparksql4/ 
-hdfs dfs -put fee.txt sparksql4/ 
+course.registerTempTable("course")
+fee.registerTempTable("fee")
 
-//Step 2 : Now in spark shell 
-// load the data into a new RDD 
-val course = sc.textFile("sparksql4/course.txt") 
-val fee = sc.textFile("sparksql4/fee.txt") 
-// Return the first element in this RDD 
-course.first() 
-fee.first() 
-//define the schema using a case class 
-case class Course(id: Int, name: String) 
-case class Fee(id: Int, fee: Int) 
-// create an RDD of Course objects 
-val courseRDD = course.map(_.split(",")).map(c => Course(c(0).toInt,c(1))) 
-val feeRDD = fee.map(_.split(",")).map(c => Fee(c(0).toInt,c(1).toInt)) 
-courseRDD.first() 
-courseRDD.count() 
-feeRDD.first() 
-feeRDD.count() 
-// change RDD of Course objects to a DataFrame 
-val courseDF = courseRDD.toDF() 
-val feeDF = feeRDD.toDF() 
-// register the DataFrame as a temp table 
-courseDF.registerTempTable("course") 
-feeDF.registerTempTable("fee") 
-// Select data from table 
-//Step 1: Select all the courses and their fees , whether fee is listed or not.
-val results = sqlContext.sql("""SELECT * FROM course""" ) 
-results.show() 
-val results = sqlContext.sql("""SELECT * FROM fee""") 
-results.show() 
-val results = sqlContext.sql("""SELECT * FROM course LEFT JOIN fee ON course.id = fee.id""") 
-results.show() 
-
-//Step 2: Select all the available fees and respective course. If course does not exists still list the fee
-val results = sqlContext.sql("""SELECT * FROM course RIGHT JOIN fee ON course.id = fee.id""") 
-results.show() 
-
-//Step 3: Select all the courses and their fees , whether fee is listed or not. However, ignore records having fee as null.
-val results = sqlContext.sql("""SELECT * FROM course LEFT JOIN fee ON course.id = fee.id where fee.id IS NOT NULL""")
-//Another way 
-val results = sqlContext.sql("""SELECT * FROM course JOIN fee ON course.id = fee.id""")
-results.show()
+sqlContext.sql("""select course, fee from course left outer join fee on(idC = idF)""").show()
+sqlContext.sql("""select course, fee from course right outer join fee on(idC = idF)""").show()
+sqlContext.sql("""select course, fee from course join fee on(idC = idF)""").show()
 
 /********ANOTHER SOLUTION WITH PAIR RDD***************************/
 
