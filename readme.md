@@ -14,3 +14,11 @@ From my own experience I suggest studying the following subjects:
 1) Import and export using Sqoop and in both cases you have to consider using and changing of field delimiters as well as line delimiters.
 
 2) In the particular case of importing be aware of compression (e.g. gzip, snappy, etc) and format files (text, avro, parquet, etc...), at the same time to know how and when to use the arguments: -m, --split-by --where, --query, --columns, --warehouse-dir, --target-dir, to mention some of them.
+
+3) Create a Hive table which data source will be text files, or data that are serialized in parquet, orc or avro format.
+
+4) CTAS (Create table as select) and export from Hive a file to HDFS as well as to local file system as a query result.
+
+5) Using Spark to read data in several formats (Text, JSON, ORC, Parquet, Avro or Sequence) or even compressed and from them undertake a data transformation and export the result to one of the possible formats that were mentioned previously.
+
+6) The Cloudera virtual machine has Eclipse and Sublime installed, I suggest you to do scripts in Sublime and save them to return to them in the case it were neccesary.
