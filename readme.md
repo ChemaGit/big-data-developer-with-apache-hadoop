@@ -22,3 +22,9 @@ From my own experience I suggest studying the following subjects:
 5) Using Spark to read data in several formats (Text, JSON, ORC, Parquet, Avro or Sequence) or even compressed and from them undertake a data transformation and export the result to one of the possible formats that were mentioned previously.
 
 6) The Cloudera virtual machine has Eclipse and Sublime installed, I suggest you to do scripts in Sublime and save them to return to them in the case it were neccesary.
+
+7) In the case of Spark, since I have more experience with Scala, what I did was to launch the scripts with spark-shell with the following spark-shell command: -i <file>.scala as well as from the console using :load <file>.scala
+
+8) In the case of Spark, since the Spark version was 1.6, I preferred to work with Dataframes instead of having to do the operations with RDDs.
+
+9) Do a lot of exercises. In my case I created a GitHub repository where I did some exercises, some made up by me and others from the website ITversity.
