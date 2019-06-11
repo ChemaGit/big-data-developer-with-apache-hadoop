@@ -1,93 +1,46 @@
 /** Question 90
- * Problem Scenario 75 : You have been given MySQL DB with following details.
- * user=retail_dba
- * password=cloudera
- * database=retail_db
- * table=retail_db.orders
- * table=retail_db.order_items
- * jdbc URL = jdbc:mysql://quickstart:3306/retail_db
- * Please accomplish following activities.
- * 1. Copy "retail_db.order_items" table to hdfs in respective directory p90_order_items .
- * 2. Do the summation of entire revenue in this table using pyspark.
- * 3. Find the maximum and minimum revenue as well.
- * 4. Calculate average revenue
- * Columns of orde_items table : (order_item_id , order_item_order_id ,order_item_product_id, order_item_quantity,order_item_subtotal,order_item_product_price)
- */
-
-//Answer : See the explanation for Step by Step Solution and configuration.
-
-//Explanation: Solution : 
-
-//Step 1 : Import Single table . 
-$ sqoop import \
---connect jdbc:mysql://quickstart:3306/retail_db \ 
---username retail_dba \
---password cloudera \ 
---table order_items \ 
---target-dir p90_order_items \
---num-mappers 1  
-
-//Step 2 : Read the data from one of the partition, created using above command. 
-$ hadoop fs -cat p90_order_items/part-m-00000 
-
-//Step 3 : In pyspark, get the total revenue across all days and orders. 
-$ pyspark
-> entireTableRDD = sc.textFile("p90_order_items") 
-#Cast string to float 
-> extractedRevenueColumn = entireTableRDD.map(lambda line: float(line.split(",")[4])) 
-
-//Step 4 : Verify extracted data 
-> for revenue in extractedRevenueColumn.collect(): print revenue 
-
-#use reduce'function to sum a single column value 
-> totalRevenue = extractedRevenueColumn.reduce(lambda a, b: a + b) 
-
-//Step 5 : Calculate the maximum revenue 
-> maximumRevenue = extractedRevenueColumn.reduce(lambda a, b: (a if a>=b else b)) 
-
-//Step 6 : Calculate the minimum revenue 
-> minimumRevenue = extractedRevenueColumn.reduce(lambda a, b: (a if a<=b else b)) 
-
-//Step 7 : Caclculate average revenue 
-> count=extractedRevenueColumn.count() 
-> averageRev=totalRevenue/count
-
-/******SOLUTION IN SPARK SQL**********/
-
-//Check database reail_db
-$ mysql -u training -p training
-mysql> use retail_db;
-mysql> show tables;
-mysql> source order_items.sql
-
-//Step 1: Copy "retail_db.order_items" table to hdfs in respective directory p90_order_items . 
-$ sqoop import \
---connect jdbc:mysql://localhost/retail_db \
---username training \
---password training \
---table order_items \
---target-dir /files/p90_order_items \
---delete-target-dir \
---outdir /home/training/Desktop/outdir \
---bindir /home/training/Desktop/bindir \
+  * Problem Scenario 75 : You have been given MySQL DB with following details.
+  * user=retail_dba
+  * password=cloudera
+  * database=retail_db
+  * table=retail_db.orders
+  * table=retail_db.order_items
+  * jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+  * Please accomplish following activities.
+  * 1. Copy "retail_db.order_items" table to hdfs in respective directory question90/order_items .
+  * 2. Do the summation of entire revenue in this table using scala
+  * 3. Find the maximum and minimum revenue as well.
+  * 4. Calculate average revenue
+  * Columns of orde_items table : (order_item_id , order_item_order_id ,order_item_product_id, order_item_quantity,order_item_subtotal,order_item_product_price)
+  * Save results in one file, in directory /user/cloudera/question90
+  */
+sqoop import \
+--connect jdbc:mysql://quickstart:3306/retail_db \
+  --username root \
+  --password cloudera \
+  --table order_items \
+  --delete-target-dir \
+  --target-dir /user/cloudera/question90/order_items \
+  --outdir /home/cloudera/outdir \
+--bindir /home/cloudera/bindir \
 --num-mappers 1
 
-//Check the import in hdfs
-$ hdfs dfs -ls /files/p90_order_items
-$ hdfs dfs -cat /files/p90_order_items/p*
+val orderItems = sc.textFile("/user/cloudera/question90/order_items").map(line => line.split(",")).map(r => (r(0).toInt,r(1).toInt,r(2).toInt,r(3).toInt,r(4).toFloat,r(5).toFloat))
 
-//Step 2: Do the summation of entire revenue in this table using pyspark.
-$ pyspark
-> from pyspark.sql.types import *
-> fields = [StructField("id", IntegerType(), True), StructField("id_order", IntegerType(), True), StructField("id_product", IntegerType(), True), StructField("quantity", IntegerType(), True), StructField("subtotal", IntegerType(), True), StructField("price", IntegerType(), True)]
-> schema = StructType(fields)
-> orderItems = sc.textFile("/files/p90_order_items/*").map(lambda lines: lines.split(",")).map(lambda arr: (int(arr[0]), int(arr[1]),int(arr[2]),int(arr[3]),int(arr[4]),int(arr[5])) ).toDF(schema)
-> orderItems.registerTempTable("order_items")
-> sqlContext.sql("select * from order_items").show()
-> sqlContext.sql("select sum(subtotal) as `Sum Revenue` from order_items").show()
+// SPARK RDD SOLUTION
+val orderItemsRdd = orderItems.map(t => (t._5,1))
+val agg = orderItemsRdd.aggregate(0.0F,0.0F,9999.0F,0)( ( (i:(Float,Float,Float,Int),v:(Float,Int)) => (i._1 + v._1,i._2.max(v._1),i._3.min(v._1),i._4 + v._2) ), ( (v:(Float,Float,Float,Int),c:(Float,Float,Float,Int)) => (v._1 + c._1,v._2.max(c._2),v._3.min(c._3),v._4 + c._4) ))
+val format = sc.parallelize(List(agg)).map({case(sum,max,min,total) => (sum,max,min,sum / total)}).map({case(sum,max,min,avg) => "%f,%f,%f,%f".format(sum,max,min,avg)})
+format.repartition(1).saveAsTextFile("/user/cloudera/question90/order_items/result_rdd")
 
-//Step 3: Find the maximum and minimum revenue as well.
-> sqlContext.sql("select max(subtotal) as `Max Revenue`, min(subtotal) as `Min Revenue` from order_items").show()
+$ hdfs dfs -cat /user/cloudera/question90/order_items/result_rdd/par*
+// 34326256.000000,1999.989990,9.990000,199.341782
 
-//Step 4: Calculate average revenue
-> sqlContext.sql("select avg(subtotal) as `Average Revenue` from order_items").show()
+// SPARK SQL SOLUTION
+val orderItemsDF = orderItems.toDF("order_item_id" , "order_item_order_id" ,"order_item_product_id", "order_item_quantity","order_item_subtotal","order_item_product_price")
+orderItemsDF.registerTempTable("order_items")
+val resultSql = sqlContext.sql("""SELECT SUM(order_item_subtotal),max(order_item_subtotal),min(order_item_subtotal),avg(order_item_subtotal) FROM order_items""")
+resultSql.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/question90/order_items/result_sql")
+
+$ hdfs dfs -cat /user/cloudera/question90/order_items/result_sql/par*
+// 3.432262059842491E7,1999.99,9.99,199.32066922046081
