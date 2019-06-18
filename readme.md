@@ -28,3 +28,11 @@ From my own experience I suggest studying the following subjects:
 8) In the case of Spark, since the Spark version was 1.6, I preferred to work with Dataframes instead of having to do the operations with RDDs.
 
 9) Do a lot of exercises. In my case I created a GitHub repository where I did some exercises, some made up by me and others from the website ITversity.
+
+10) It is important to do a good time schedule, so I suggest taking a couple of minutes to read the questions and going after the easy ones to start and if at any moment you get stuck, you have to take the next one immediately.
+
+11) In the same way, while an operation is running (it can take one minute more or less), take some time at least to read the next question.
+
+12) It's very important to be extremely careful with the data source and if possible, do a data backup.
+
+13) The virtual machine console has a letter font size that is quite small, so it would be a good idea to do a zoom in.
