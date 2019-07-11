@@ -36,3 +36,5 @@ From my own experience I suggest studying the following subjects:
 12) It's very important to be extremely careful with the data source and if possible, do a data backup.
 
 13) The virtual machine console has a letter font size that is quite small, so it would be a good idea to do a zoom in.
+
+So, that's all and good luck with your exam.
