@@ -63,9 +63,18 @@ print(str(sumLambda(5, 10, lambda i: i * i)))
 print(str(sumLambda(5, 10, lambda i: i if(i%2==0) else 0)))
 
 # Collections and Map Reduce APIs 
+l = [1,2,3,4]
+type(l)
+d = {1:"Hello",2:"World"}
+s = {1,1,1,2,2,3,4,5}
+type(s)
+d[1]
+help(s)
+help(d)
+help(l)
 
 
-# Video Progress 34:00 minutes
+# Video Progress 1:10:00 minutes
 
 
 
