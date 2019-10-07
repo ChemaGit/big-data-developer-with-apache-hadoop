@@ -1,3 +1,4 @@
+````
 #Configuring Apache Spark Properties
   Spark Application Configuration
     - Spark provides numerous properties for configuring your application
@@ -127,5 +128,5 @@
     
     -You can also override the current setting temporarily by calling sc.setLogLevel with your preferred setting.
     	> sc.setLogLevel("ERROR")	   		     	 
-			
+````			
 	    		  	     

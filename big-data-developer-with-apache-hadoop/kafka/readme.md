@@ -1,3 +1,4 @@
+````
 # What is Apache Kafka?
 	- Apache Kafka is a distributed commit log service
 		* Widely used for data ingest
@@ -203,6 +204,6 @@
 			--zookeeper zkhost1:2181,zkhost2:2181,zkhost3:2181 \
 			--topic device_status \
 			--from-beginning				 					  				
-		
+````		
 		
 					            																														
