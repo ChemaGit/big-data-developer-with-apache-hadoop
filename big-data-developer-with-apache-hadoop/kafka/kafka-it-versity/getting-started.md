@@ -1,3 +1,4 @@
+````
 KAFKA - GETTING STARTED
 
 kafka-topics --create \
@@ -73,3 +74,4 @@ SETTING UP NETCAT
 		$ nc -lk localhost 44444 
 		and on other console
 		$ nc  localhost 44444 > nc_demo.txt or nc  localhost 4444
+````		

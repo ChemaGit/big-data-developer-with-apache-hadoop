@@ -1,3 +1,4 @@
+````
 TOPICS, PARTITIONS AND OFFSETS
 	- Topics: a particular stream of data
 		Similar to a table in a database (without constraints)
@@ -161,10 +162,11 @@ Kafka		Kafka		Kafka		Kafka		Kafka
 Broker 1	Broker 2	Broker 3	Broker 4	Broker 5
 
 KAFKA GUARANTEES
-	- Messges are appended to a topic-partition in the order they are sent
+	- Messages are appended to a topic-partition in the order they are sent
 	- Consumers read messages in the order stored in a topic-partition
 	- With a replication factor of N, producers and consumers can tolerate up to N-1 brokers being down
 	- This is why a replication factor of 3 is a good idea:
 		- Allows for one broker to be taken down for maintenance
 		- Allows for another broker to be taken down unexpectedly
 	- As long as the number of partitions remains constant for a topic (no new partitions), the same key will always go to the same partition
+````

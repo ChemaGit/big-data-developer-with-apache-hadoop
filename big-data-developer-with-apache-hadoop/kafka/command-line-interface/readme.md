@@ -1,3 +1,4 @@
+````
 - KAFKA-TOPICS
 
     $ kafka-topics
@@ -69,5 +70,6 @@
     $ kafka-consumer-groups --bootstrap-server localhost:9092 --topic first_topic --group my-first-application
 
 - KAFKA-TOOL-UI
+````
 
 
