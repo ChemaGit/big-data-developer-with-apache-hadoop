@@ -26,7 +26,7 @@ sqoop import \
 --target-dir /user/cloudera/question72/categories_subset \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset/part*
 
@@ -41,7 +41,7 @@ sqoop import \
 --target-dir /user/cloudera/question72/categories_subset_2 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset_2/part*
 
@@ -56,7 +56,7 @@ sqoop import \
 --target-dir /user/cloudera/question72/categories_subset_3 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset_3/part*
 
@@ -71,7 +71,7 @@ sqoop import \
 --target-dir /user/cloudera/question72/categories_subset_4 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset_4/part*
 
@@ -87,7 +87,7 @@ sqoop import \
 --target-dir /user/cloudera/question72/categories_subset_5 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset_5/part*
 
@@ -112,7 +112,7 @@ sqoop import \
   --target-dir /user/cloudera/question72/categories_subset_6 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/question72/categories_subset_6/part*
 

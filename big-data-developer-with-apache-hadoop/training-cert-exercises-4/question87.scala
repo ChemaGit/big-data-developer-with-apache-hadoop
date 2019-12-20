@@ -18,7 +18,7 @@ sqoop job \
   --target-dir /user/cloudera/question87/categories_targetJob \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ sqoop job --exec categories_job
 

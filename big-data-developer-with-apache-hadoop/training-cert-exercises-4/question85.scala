@@ -43,7 +43,7 @@ sqoop export \
   --input-lines-terminated-by '\n' \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ mysql -u root -p
 mysql> use retail_db;
@@ -64,7 +64,7 @@ sqoop export \
   --input-lines-terminated-by '\n' \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> select * from departments;
 mysql> exit;

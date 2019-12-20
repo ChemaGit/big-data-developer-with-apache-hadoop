@@ -38,7 +38,7 @@ sqoop export \
   --input-null-non-string -999 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ mysql -u root -p
 mysql> use hadoopexam;

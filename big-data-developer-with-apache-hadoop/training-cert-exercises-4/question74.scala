@@ -26,6 +26,6 @@ $ hdfs dfs -put /user/cloudera/files/salary.txt /user/cloudera/files
 val tech = sc.textFile("/user/cloudera/files/technology.txt").map(line => line.split(",")).map(r => ( (r(0),r(1)),r(2) ))
 val  salary = sc.textFile("/user/cloudera/files/salary.txt").map(line => line.split(",")).map(r => ( (r(0),r(1)),r(2) ))
 val joined = tech.join(salary).map({case( ( (f,l),(t,s)) ) => "%s,%s,%s,%s".format(f,l,t,s)})
-joined.repartition(1).saveAsTextFile("/user/cloudera/question74/result")
+joined.saveAsTextFile("/user/cloudera/question74/result")
 
 $ hdfs dfs -cat /user/cloudera/question74/result/part*

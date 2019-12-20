@@ -48,6 +48,6 @@ val f3 = List( (n3,sc.textFile("/user/cloudera/files/file_3.txt").flatMap(line =
 val f4 = List( (n4,sc.textFile("/user/cloudera/files/file_4.txt").flatMap(line => line.split("\\W")).filter(w => !filt.contains(w)).map(w => (w,1)).reduceByKey( (v,c) => v + c).sortBy(t => t._2,false).first) )
 
 val result = sc.parallelize(f1.union(f2).union(f3).union(f4)).map({case( (f,(w,c)) ) => "file: %s ==> word: %s ==> count: %d".format(f,w,c)})
-result.repartition(1).saveAsTextFile("/user/cloudera/question86")
+result.saveAsTextFile("/user/cloudera/question86")
 
 $ hdfs dfs -cat /user/cloudera/question86/part*

@@ -24,6 +24,6 @@ val remove = sc.textFile("/user/cloudera/files/Remove.txt").map(line => line.spl
 val broadcast = sc.broadcast(remove(0).toList.map(v => v.trim))
 val content = sc.textFile("/user/cloudera/files/Content.txt").flatMap(line => line.split(" ")).filter(w => !l.contains(w)).filter(w => !broadcast.value.contains(w))
 val wordCount = content.map(w => (w,1)).reduceByKey( (v,c) => v + c).sortBy(t => t._2, false)
-wordCount.repartition(1).saveAsTextFile("/user/cloudera/question71/result")
+wordCount.saveAsTextFile("/user/cloudera/question71/result")
 
 $ hdfs dfs -cat /user/cloudera/question71/result/part*

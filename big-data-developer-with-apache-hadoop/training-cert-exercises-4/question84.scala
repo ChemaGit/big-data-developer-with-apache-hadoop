@@ -37,7 +37,7 @@ val emp = sc.textFile("/user/cloudera/files/EmployeeName.csv").map(line => line.
 val sal = sc.textFile("/user/cloudera/files/EmployeeSalary.csv").map(line => line.split(",")).map(r => (r(0),r(1)))
 val joined = emp.join(sal).map({case( (id,(name, salary)) ) => (salary,name)}).groupByKey().collect
 val format = joined.map({case( (salary, name) ) => (sc.makeRDD(List("%s ==> %s".format(salary,name.mkString("[",",","]")))),salary) })
-format.foreach({case( (rdd, salary) ) => rdd.repartition(1).saveAsTextFile("/user/cloudera/question84/salary_" + salary)})
+format.foreach({case( (rdd, salary) ) => rdd.saveAsTextFile("/user/cloudera/question84/salary_" + salary)})
 
 $ hdfs dfs -ls /user/cloudera/question84/
   $ hdfs dfs -cat /user/cloudera/question84/salary_10000/part*
