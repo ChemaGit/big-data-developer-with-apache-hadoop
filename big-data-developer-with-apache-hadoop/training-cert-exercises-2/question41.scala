@@ -14,7 +14,7 @@ val filtered = List("", " ")
 val content = sc.textFile("/user/cloudera/files/Content.txt").flatMap(line => line.split("\\W")).filter(w => !filtered.contains(w))
 val result = content.map(w => (w, 1)).reduceByKey( (v, c) => v + c).sortBy(t => t._2, false)
 
-result.repartition(1).saveAsTextFile("/user/cloudera/question41/result")
+result.saveAsTextFile("/user/cloudera/question41/result")
 
 $ hdfs dfs -ls hdfs dfs -ls /user/cloudera/question41/result/
   $ hdfs dfs -cat /user/cloudera/question41/result/part-*

@@ -24,7 +24,7 @@ sqoop import \
   --target-dir /user/cloudera/question46/orders \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
@@ -36,7 +36,7 @@ sqoop import \
   --target-dir /user/cloudera/question46/order_items \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 // SPARK-RDD SOLUTION
 val orders = sc.textFile("/user/cloudera/question46/orders").map(line => line.split(",")).map(r => (r(0).toInt,r(1)))

@@ -28,7 +28,7 @@ sqoop import \
   --target-dir /user/cloudera/question48/orders \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orders = sc.textFile("/user/cloudera/question48/orders").map(line => line.split(",")).map(r => (r(3), 1))
 val countByKey = orders.countByKey()
@@ -37,7 +37,7 @@ sc.parallelize(countByKey.toList).repartition(1).saveAsTextFile("/user/cloudera/
 
 val groupByKey = orders.groupByKey().mapValues(v => v.size)
 groupByKey.collect.foreach(println)
-groupByKey.repartition(1).saveAsTextFile("/user/cloudera/question48/groupByKey")
+groupByKey.saveAsTextFile("/user/cloudera/question48/groupByKey")
 
 val reduceByKey = orders.reduceByKey( (v,c) => v + c)
 reduceByKey.collect.foreach(println)
@@ -45,11 +45,11 @@ reduceByKey.repartition(1).saveAsTextFile("/user/cloudera/question48/reduceByKey
 
 val aggregateByKey = orders.aggregateByKey(0)( ( (z: Int,v: Int) =>  z + v) , ( (c: Int, v: Int) => c + v) )
 aggregateByKey.collect.foreach(println)
-aggregateByKey.repartition(1).saveAsTextFile("/user/cloudera/question48/aggregateByKey")
+aggregateByKey.saveAsTextFile("/user/cloudera/question48/aggregateByKey")
 
 val combineByKey = orders.combineByKey( ( (v: Int) => v) , ( (v: Int, c: Int) => v + c) , ( (v: Int, c: Int) => v + c))
 combineByKey.collect.foreach(println)
-combineByKey.repartition(1).saveAsTextFile("/user/cloudera/question48/combineByKey")
+combineByKey.saveAsTextFile("/user/cloudera/question48/combineByKey")
 
 $ hdfs dfs -ls /user/cloudera/question48/countByKey
 $ hdfs dfs -cat /user/cloudera/question48/countByKey/part-00000
