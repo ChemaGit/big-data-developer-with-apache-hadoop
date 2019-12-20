@@ -34,6 +34,7 @@ object GetDailyProductRevenue {
 
     val outputBaseDir = envProps.getString("output.base.dir")
     dailyProductRevenue.write.json(outputBaseDir + "/daily_product_revenue")
+
   }
 
 }
