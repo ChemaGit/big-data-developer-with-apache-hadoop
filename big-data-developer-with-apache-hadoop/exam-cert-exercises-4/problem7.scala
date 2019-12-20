@@ -44,7 +44,7 @@ sqoop import \
   --target-dir /user/cloudera/practice4_ques6/order_items/ \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect "jdbc:mysql://localhost/retail_db" \
@@ -55,7 +55,7 @@ sqoop import \
   --target-dir /user/cloudera/practice4_ques6/products/ \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 case class Products(pId:Integer,name:String)
 case class Orders(prodId:Integer,order_total:Float)
@@ -66,7 +66,7 @@ val products = sc.textFile("/user/cloudera/practice4_ques6/products/").map(line 
 orderItems.registerTempTable("oi")
 products.registerTempTable("p")
 val result = sqlContext.sql("""SELECT pId, ROUND(SUM(order_total), 2) as total_revenue FROM p JOIN oi ON(p.pId = oi.prodId) GROUP BY pId ORDER BY total_revenue DESC LIMIT 10""")
-result.rdd.map(r => r.mkString(":")).repartition(1).saveAsTextFile("/user/cloudera/practice4_ques6/output")
+result.rdd.map(r => r.mkString(":")).saveAsTextFile("/user/cloudera/practice4_ques6/output")
 
 $ hdfs dfs -ls /user/cloudera/practice4_ques6/output
 $ hdfs dfs -cat /user/cloudera/practice4_ques6/output/p*

@@ -30,7 +30,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/customers_selected/avrodata \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/customers_selected/avrodata
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/customers_selected/avrodata/part-m-00000.avro

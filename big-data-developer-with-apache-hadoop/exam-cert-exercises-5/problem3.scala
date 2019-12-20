@@ -31,7 +31,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/orders/parquetdata \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/orders/parquetdata
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/problem1/orders/parquetdata/5f94d536-3e3e-4fcc-97af-7b75e65579b5.parquet

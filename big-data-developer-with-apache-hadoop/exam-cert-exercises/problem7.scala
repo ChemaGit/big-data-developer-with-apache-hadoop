@@ -34,12 +34,12 @@ sqoop import \
   --as-avrodatafile \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 import com.databricks.spark.avro._
 val customers = sqlContext.read.avro("/user/cloudera/practice1/problem7/customer/avro")
 customers.show()
-customers.rdd.map(r => r.mkString("\t")).repartition(1).saveAsTextFile("/user/cloudera/practice1/problem7/customer_text_gzip", classOf[org.apache.hadoop.io.compress.GzipCodec])
+customers.rdd.map(r => r.mkString("\t")).saveAsTextFile("/user/cloudera/practice1/problem7/customer_text_gzip", classOf[org.apache.hadoop.io.compress.GzipCodec])
 
 $ hdfs dfs -ls /user/cloudera/practice1/problem7/customer_text_gzip
 $ hdfs dfs -text /user/cloudera/practice1/problem7/customer_text_gzip/part-00000.gz

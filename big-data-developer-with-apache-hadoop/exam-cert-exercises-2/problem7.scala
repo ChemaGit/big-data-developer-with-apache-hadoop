@@ -35,13 +35,13 @@ sqoop import \
   --columns "customer_id,customer_fname,customer_state" \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val customers = sc.textFile("/user/cloudera/problem2/customer/tab").map(line => line.split("\t")).map(r => (r(0).toInt,r(1),r(2))).toDF("id","name","state")
 customers.registerTempTable("customers")
 sqlContext.sql("""SELECT state, COUNT(id) as total_customers FROM customers WHERE name LIKE("M%") GROUP BY state""").show()
 val result = sqlContext.sql("""SELECT state, COUNT(id) as total_customers FROM customers WHERE name LIKE("M%") GROUP BY state""")
-result.toJSON.repartition(1).saveAsTextFile("/user/cloudera/problem2/customer_json_new")
+result.toJSON.saveAsTextFile("/user/cloudera/problem2/customer_json_new")
 
 $ hdfs dfs -ls /user/cloudera/problem2/customer_json_new
 $ hdfs dfs -cat /user/cloudera/problem2/customer_json_new/part-00000 | head -n 50

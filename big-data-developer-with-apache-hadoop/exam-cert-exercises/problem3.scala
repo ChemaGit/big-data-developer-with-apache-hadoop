@@ -31,7 +31,7 @@ sqoop import \
   --target-dir /user/cloudera/problem2/avro \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 import org.apache.avro._
 import com.databricks.spark.avro._
@@ -39,7 +39,7 @@ import com.databricks.spark.avro._
 val orders = sqlContext.read.avro("/user/cloudera/problem2/avro")
 orders.show(10)
 sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
-orders.repartition(1).write.parquet("/user/cloudera/problem2/parquet-snappy")
+orders.write.parquet("/user/cloudera/problem2/parquet-snappy")
 
 $ hdfs dfs -ls /user/cloudera/problem2/parquet-snappy
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/problem2/parquet-snappy/part-r-00000-c98c1300-857d-40ea-bda4-92b24b7ea937.snappy.parquet

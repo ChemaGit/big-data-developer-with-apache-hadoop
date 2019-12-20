@@ -44,7 +44,7 @@ sqoop import \
   --columns "customer_id,customer_fname,customer_city" \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ mysql -u root -p cloudera
   mysql> create table retail_db.customer_new(id int,lname varchar(255),city varchar(255));
@@ -61,7 +61,7 @@ sqoop export \
   --input-lines-terminated-by '\n' \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> use retail_db;
 mysql> select * from customer_new limit 20;

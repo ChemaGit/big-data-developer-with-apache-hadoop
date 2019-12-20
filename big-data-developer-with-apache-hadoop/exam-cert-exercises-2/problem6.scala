@@ -39,7 +39,7 @@ sqoop import \
 --hive-table customers_hive \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hive
   hive> use default;
@@ -50,7 +50,7 @@ hive> exit;
 
 sqlContext.sql("use default")
 val result = sqlContext.sql("""SELECT CONCAT(customer_fname,"\t",customer_lname,":",customer_city) as result FROM customers_hive WHERE customer_fname LIKE("%Rich%")""")
-result.rdd.map(r => r.mkString("")).repartition(1).saveAsTextFile("/user/cloudera/practice2/problem4/customers/output")
+result.rdd.map(r => r.mkString("")).saveAsTextFile("/user/cloudera/practice2/problem4/customers/output")
 
 $ hdfs dfs -ls /user/cloudera/practice2/problem4/customers/output
 $ hdfs dfs -cat /user/cloudera/practice2/problem4/customers/output/par* | head -n 20

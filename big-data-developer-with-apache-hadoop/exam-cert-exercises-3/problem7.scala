@@ -31,13 +31,13 @@ sqoop import \
   --as-avrodatafile \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/outdir \
---num-mappers 1
+--num-mappers 8
 
 import com.databricks.spark.avro._
 val customers = sqlContext.read.avro("/user/cloudera/problem8/customer-avro")
 customers.show(10)
 sqlContext.setConf("spark.sql.parquet.compression.codec","gzip")
-customers.repartition(1).write.parquet("/user/cloudera/problem8/customer-parquet-hive")
+customers.write.parquet("/user/cloudera/problem8/customer-parquet-hive")
 sqlContext.sql("""create table customer_parquet_avro(customer_id int,customer_fname string,customer_city string) STORED AS PARQUET LOCATION "/user/cloudera/problem8/customer-parquet-hive" TBLPROPERTIES("parquet.compression"="gzip")""")
 
 $ hive

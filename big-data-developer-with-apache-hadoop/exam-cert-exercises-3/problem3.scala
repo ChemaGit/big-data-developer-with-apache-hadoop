@@ -27,10 +27,10 @@ sqoop import \
   --target-dir /user/cloudera/problem3/all/customer/input \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val customers = sc.textFile("/user/cloudera/problem3/all/customer/input").map(line => line.split('\t')).map(r => (r(0),r(1),r(2),r(3))).map(t => "%s|%s|%s|%s".format(t._1.toString,t._2,t._3,t._4))
-customers.repartition(1).saveAsTextFile("/user/cloudera/problem3/all/customer/output")
+customers.saveAsTextFile("/user/cloudera/problem3/all/customer/output")
 
 $ hdfs dfs -ls /user/cloudera/problem3/all/customer/output
 $ hdfs dfs -cat /user/cloudera/problem3/all/customer/output/p* | tail -n 50

@@ -35,7 +35,7 @@ sqoop export \
 --hcatalog-table product_new \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> select * from product_hive limit 10;
 mysql> exit;

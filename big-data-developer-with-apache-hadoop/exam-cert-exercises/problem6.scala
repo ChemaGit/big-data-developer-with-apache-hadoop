@@ -35,13 +35,13 @@ sqoop import \
   --target-dir /user/cloudera/problem6/customer/text \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 case class Customer(id: Int,name: String,city: String)
 val customers = sc.textFile("/user/cloudera/problem6/customer/text").map(line => line.split('\t')).map(r => Customer(r(0).toInt,r(1),r(2))).toDF
 customers.show(10)
 val custFilter = customers.filter("city = 'Brownsville'")
 custFilter.show(10)
-custFilter.repartition(1).toJSON.saveAsTextFile("/user/cloudera/problem6/customer_Brownsville")
+custFilter.toJSON.saveAsTextFile("/user/cloudera/problem6/customer_Brownsville")
 
 $ hdfs dfs -cat /user/cloudera/problem6/customer_Brownsville/part-00000 | head -n 50

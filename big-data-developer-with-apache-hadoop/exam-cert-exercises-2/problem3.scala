@@ -27,7 +27,7 @@ sqoop import \
   --hive-table product_new \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 // Explanation
 // Use localhost or quickstart while running on CDH, "-m 1" is used because product table does not have any primary key.You can use either "split-by" or "-m 1" if table does not have any primary key.

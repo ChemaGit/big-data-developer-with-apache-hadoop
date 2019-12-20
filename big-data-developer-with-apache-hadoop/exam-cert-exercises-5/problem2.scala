@@ -33,7 +33,7 @@ sqoop import \
   --target-dir  /user/cloudera/problem1/customers/textdata \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/customers/textdata
 $ hdfs dfs -cat /user/cloudera/problem1/customers/textdata/p* | tail -n 20

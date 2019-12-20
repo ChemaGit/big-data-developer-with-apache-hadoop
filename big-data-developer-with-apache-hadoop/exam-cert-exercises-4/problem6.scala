@@ -63,7 +63,7 @@ sqoop import \
   --target-dir /user/cloudera/practice3/problem3/orders \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect "jdbc:mysql://localhost/retail_db" \
@@ -75,7 +75,7 @@ sqoop import \
   --target-dir /user/cloudera/practice3/problem3/order_items \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect "jdbc:mysql://localhost/retail_db" \
@@ -87,7 +87,7 @@ sqoop import \
   --target-dir /user/cloudera/practice3/problem3/customers \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orders = sc.textFile("/user/cloudera/practice3/problem3/orders").map(line => line.split('\t')).map(r => (r(0).toInt,r(1),r(2).toInt,r(3))).toDF("order_id","order_date","order_customer_id","order_status")
 val orderItems = sc.textFile("/user/cloudera/practice3/problem3/order_items").map(line => line.split('\t')).map(r => (r(0).toInt,r(1).toInt,r(2).toInt,r(3).toInt,r(4).toFloat,r(5).toFloat)).toDF("item_id","item_order_id","order_item_product_id","item_quantity","item_subtotal","item_product_price")
@@ -103,7 +103,7 @@ joined.registerTempTable("j")
 
 val result = sqlContext.sql("""SELECT customer_city, count(customer_id) as total_customers from j where total_revenue > 100 group by customer_city""")
 
-result.rdd.map(r => r.mkString("\t")).repartition(1).saveAsTextFile("/user/cloudera/practice3/problem3/joinResults")
+result.rdd.map(r => r.mkString("\t")).saveAsTextFile("/user/cloudera/practice3/problem3/joinResults")
 
 $ hdfs dfs -ls /user/cloudera/practice3/problem3/joinResults
 $ hdfs dfs -cat /user/cloudera/practice3/problem3/joinResults/p* | head -n 50

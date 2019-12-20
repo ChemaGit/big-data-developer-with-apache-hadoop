@@ -28,7 +28,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/orders_new/order_bzip \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/orders_new/order_bzip
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/orders_new/order_bzip/part-m-00000.avro

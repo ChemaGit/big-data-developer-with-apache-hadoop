@@ -32,13 +32,13 @@ sqoop import \
   --as-parquetfile \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val customer = sqlContext.read.parquet("/user/cloudera/problem5/customer/parquet")
 customer.registerTempTable("customer")
 sqlContext.sql("""select customer_city, customer_fname, count(customer_id) as total_customers from customer where customer_fname like("%Mary%") group by customer_city,customer_fname order by customer_fname""").show(10)
 val result = sqlContext.sql("""select customer_city, customer_fname, count(customer_id) as total_customers from customer where customer_fname like("%Mary%") group by customer_city,customer_fname order by customer_fname""")
-result.repartition(1).rdd.map(r => r.mkString("|")).saveAsTextFile("/user/cloudera/problem5/customer_grouped")
+result.rdd.map(r => r.mkString("|")).saveAsTextFile("/user/cloudera/problem5/customer_grouped")
 
 $ hdfs dfs -ls /user/cloudera/problem5/customer_grouped
 $ hdfs dfs -cat /user/cloudera/problem5/customer_grouped/part-00000 | tail -n 20

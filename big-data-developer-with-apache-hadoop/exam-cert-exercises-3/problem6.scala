@@ -34,7 +34,7 @@ sqoop import \
 --hive-table product_ranked \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
--m 1
+-m 8
 
 $ hive
   hive> show tables;
@@ -50,7 +50,7 @@ product_id          	int
 
 val rank = sqlContext.sql("""SELECT product_category_id, product_name,product_price, rank() over(partition by product_category_id order by product_price desc) as rank FROM product_ranked order by product_category_id, rank""")
 val result = rank.filter("rank = 1")
-result.rdd.map(r => r.mkString("|")).repartition(1).saveAsTextFile("/user/cloudera/pratice4/output/")
+result.rdd.map(r => r.mkString("|")).saveAsTextFile("/user/cloudera/pratice4/output/")
 
 $ hdfs dfs -ls /user/cloudera/pratice4/output/
   $ hdfs dfs -cat /user/cloudera/pratice4/output/part-00000 | head -n 50

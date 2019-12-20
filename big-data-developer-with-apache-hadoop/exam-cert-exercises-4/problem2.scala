@@ -32,13 +32,13 @@ sqoop import \
 --hive-table product_ranked_new \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
--m 1
+-m 8
 
 sqlContext.sql("use default")
 val ranked = sqlContext.sql("""SELECT product_id,product_name,product_price,product_category_id, rank() over(partition by product_category_id order by product_price desc) as rank FROM product_ranked_new order by product_category_id desc, rank""")
 ranked.registerTempTable("ranked")
 val result = sqlContext.sql("""SELECT product_id,product_name,product_price,product_category_id FROM ranked WHERE rank = 1 order by product_category_id""")
-result.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/pratice4/question2/output")
+result.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/pratice4/question2/output")
 
 $ hdfs dfs -ls /user/cloudera/pratice4/question2/output
 $ hdfs dfs -cat /user/cloudera/pratice4/question2/output/part* | head -n 50

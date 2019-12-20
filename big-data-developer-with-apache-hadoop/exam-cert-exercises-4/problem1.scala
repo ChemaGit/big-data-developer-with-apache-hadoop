@@ -28,7 +28,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/customers/text2 \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/customers/text2
 $ hdfs dfs -text /user/cloudera/problem1/customers/text2/part-m-00000.deflate | head -n 50

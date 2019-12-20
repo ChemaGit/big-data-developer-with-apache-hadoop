@@ -37,11 +37,11 @@ sqoop import \
 --hive-table product_replica \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
--m 1
+-m 8
 
 sqlContext.setConf("spark.sql.parquet.compression.codec","gzip")
 val result = sqlContext.sql("""select * from product_replica where product_price > 100""")
-result.repartition(1).write.parquet("/user/cloudera/practice1/problem8/product/output")
+result.write.parquet("/user/cloudera/practice1/problem8/product/output")
 
 $ hdfs dfs -ls /user/cloudera/practice1/problem8/product/output
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/practice1/problem8/product/output/part-r-00000-cf53ab19-c40b-4e9c-9c97-57831eaa6a55.gz.parquet

@@ -31,7 +31,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/customers/avrodata \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 // 5. Read avro file data and metadata using avro tools: avro-tools tojson | getmeta part*00*.avro
 

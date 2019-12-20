@@ -26,10 +26,10 @@ sqoop import \
   --as-parquetfile \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orders = sqlContext.read.parquet("/user/cloudera/problem4_ques6/input")
-orders.rdd.map(r => (r(0).toString,r.mkString(","))).repartition(1).saveAsSequenceFile("/user/cloudera/problem4_ques6/output")
+orders.rdd.map(r => (r(0).toString,r.mkString(","))).saveAsSequenceFile("/user/cloudera/problem4_ques6/output")
 
 $ hdfs dfs -ls /user/cloudera/problem4_ques6/output
 $ hdfs dfs -text /user/cloudera/problem4_ques6/output/part-00000 | head -n 20

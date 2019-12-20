@@ -25,12 +25,12 @@ sqoop import \
   --target-dir /user/cloudera/problem1/orders_new/parquet \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orders = sqlContext.read.parquet("/user/cloudera/problem1/orders_new/parquet")
 orders.show()
 sqlContext.setConf("spark.sql.parquet.compression.codec","gzip")
-orders.repartition(1).write.parquet("/user/cloudera/problem1/orders_new/parquetdata")
+orders.write.parquet("/user/cloudera/problem1/orders_new/parquetdata")
 
 $ hdfs dfs -ls /user/cloudera/problem1/orders_new/parquetdata
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/problem1/orders_new/parquetdata/part-r-00000-d5c9e54b-4b9d-4653-aa75-914b34aca8ae.gz.parquet

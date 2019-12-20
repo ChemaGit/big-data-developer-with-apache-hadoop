@@ -28,7 +28,7 @@ sqoop import \
   --create-hive-table \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hive
   hive> use default;

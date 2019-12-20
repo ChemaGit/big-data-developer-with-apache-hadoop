@@ -33,11 +33,11 @@ sqoop import \
   --target-dir /user/cloudera/problem3/parquet \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orders = sqlContext.read.parquet("/user/cloudera/problem3/parquet")
 val pending = orders.filter("order_status like('%PENDING%')")
-pending.toJSON.repartition(1).saveAsTextFile("/user/cloudera/problem3/orders_pending",classOf[org.apache.hadoop.io.compress.GzipCodec])
+pending.toJSON.saveAsTextFile("/user/cloudera/problem3/orders_pending",classOf[org.apache.hadoop.io.compress.GzipCodec])
 
 $ hdfs dfs -ls /user/cloudera/problem3/orders_pending
 $ hdfs dfs -text /user/cloudera/problem3/orders_pending/part-00000.gz | tail -n 20

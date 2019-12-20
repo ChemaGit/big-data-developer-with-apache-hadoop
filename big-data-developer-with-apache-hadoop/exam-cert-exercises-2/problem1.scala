@@ -38,13 +38,13 @@ sqoop import \
   --target-dir /user/cloudera/problem9/customer_text \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 //USING SPARK + HIVE
 val customers = sc.textFile("/user/cloudera/problem9/customer_text").map(line => line.split('\t')).map(r => (r(0).toInt,r(1),r(2))).toDF("customer_id","customer_fname","customer_city")
 customers.show()
 sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
-customers.repartition(1).write.parquet("/user/cloudera/problem9/customer-hive")
+customers.write.parquet("/user/cloudera/problem9/customer-hive")
 
 sqlContext.sql("""create table customer_parquet_compressed(customer_id int,customer_fname string,customer_city string) stored as parquet location '/user/cloudera/problem9/customer-hive' tblproperties("parquet.compression"="snappy")""")
 
