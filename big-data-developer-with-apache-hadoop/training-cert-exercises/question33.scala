@@ -42,7 +42,7 @@ sqoop import \
 --hive-overwrite \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 hive> show tables;
 hive> select * from departments_hive01;

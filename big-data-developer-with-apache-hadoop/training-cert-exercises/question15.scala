@@ -22,7 +22,7 @@ sqoop import \
   --target-dir /user/cloudera/question15/products \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val filt = List("", " ")
 val products = sc.textFile("/user/cloudera/question15/products").map(line => line.split(",")).filter(r => !filt.contains(r(4))).map(r => ( (r(1).toInt,r(4).toFloat), r.mkString(",")))

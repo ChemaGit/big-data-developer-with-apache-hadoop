@@ -25,7 +25,7 @@ sqoop import \
 --hive-table departments_hive \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 hive> select * from departments_hive;
 hive> exit;

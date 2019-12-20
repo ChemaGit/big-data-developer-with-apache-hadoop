@@ -94,7 +94,7 @@ sqlContext.sql("show tables").show()
 sqlContext.sql("""select * from t_product_orc""").show()
 
 //parquet table
-product.repartition(1).write.parquet("/user/hive/warehouse/pruebas.db/product_parquet")
+product.write.parquet("/user/hive/warehouse/pruebas.db/product_parquet")
 sqlContext.sql("""CREATE TABLE t_product_parquet(productID int,productCode string,name string,quantity int,price float) STORED AS PARQUET LOCATION "/user/hive/warehouse/pruebas.db/product_parquet" """)
 sqlContext.sql("show tables").show()
 sqlContext.sql("""select * from t_product_parquet""").show()

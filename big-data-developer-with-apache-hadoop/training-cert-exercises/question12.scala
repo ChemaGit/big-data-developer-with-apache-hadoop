@@ -30,7 +30,7 @@ sqoop import \
   --target-dir /user/cloudera/question12/departments_new \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question12/departments_new
 $ hdfs dfs -cat /user/cloudera/question12/departments_new/part*
@@ -52,7 +52,7 @@ sqoop import \
   --target-dir  /user/cloudera/question12/departments_new \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question12/departments_new
 $ hdfs dfs -cat /user/cloudera/question12/departments_new/part*

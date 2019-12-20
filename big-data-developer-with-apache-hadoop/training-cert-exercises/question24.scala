@@ -26,7 +26,7 @@ sqoop export \
   --input-lines-terminated-by '\n' \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> SELECT * FROM departments_export LIMIT 10;
 mysql> exit;

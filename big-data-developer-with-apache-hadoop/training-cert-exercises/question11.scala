@@ -33,7 +33,7 @@ sqoop import \
   --target-dir /user/cloudera/question11/departments_enclosedby \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question11/departments_enclosedby
 $ hdfs dfs -cat /user/cloudera/question11/departments_enclosedby/part* | head -n 50

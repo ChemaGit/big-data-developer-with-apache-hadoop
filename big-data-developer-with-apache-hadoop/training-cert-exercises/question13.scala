@@ -38,7 +38,7 @@ val file = sc.textFile("/user/cloudera/files/file1.txt,/user/cloudera/files/file
 val filterWord = file.filter(w => !filtered.contains(w))
 val countWord = filterWord.map(w => (w, 1)).reduceByKey( (v,t) => v + t)
 val sortDesc = countWord.sortBy(t => t._2, false)
-sortDesc.repartition(1).saveAsTextFile("/user/cloudera/question13/result",classOf[org.apache.hadoop.io.compress.GzipCodec])
+sortDesc.saveAsTextFile("/user/cloudera/question13/result",classOf[org.apache.hadoop.io.compress.GzipCodec])
 
 $ hdfs dfs -ls /user/cloudera/question13/result
 $ hdfs dfs -text /user/cloudera/question13/result/part-00000.gz

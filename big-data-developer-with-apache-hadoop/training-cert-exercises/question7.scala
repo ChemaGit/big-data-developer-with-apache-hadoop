@@ -22,7 +22,7 @@ sqoop import \
   --table categories \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera
 $ hdfs dfs -cat /user/cloudera/categories/part*
@@ -36,7 +36,7 @@ sqoop import \
 --target-dir categories_target \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -cat /user/cloudera/categories_target/part*
 
@@ -48,7 +48,7 @@ sqoop import \
   --warehouse-dir categories_warehouse \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/categories_warehouse
 $ hdfs dfs -cat /user/cloudera/categories_warehouse/categories/part*

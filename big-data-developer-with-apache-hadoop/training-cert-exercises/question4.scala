@@ -12,7 +12,7 @@ b.groupByKey().collect
 // res0: Array[(Int, Iterable[String])] = Array((4,CompactBuffer(lion)), (6,CompactBuffer(spider)), (3,CompactBuffer(dog, cat)), (5,CompactBuffer(tiger, eagle)))
 
 //output
-b.map({case(k,i) => "%d -->%s".format(k,i.mkString("(","",")"))}).repartition(1).saveAsTextFile("/user/cloudera/question4/result_text")
+b.map({case(k,i) => "%d -->%s".format(k,i.mkString("(","",")"))}).saveAsTextFile("/user/cloudera/question4/result_text")
 
 $ hdfs dfs -ls /user/cloudera/question4/result_text
 $ hdfs dfs -cat /user/cloudera/question4/result_text/part*

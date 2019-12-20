@@ -22,7 +22,7 @@ sqoop import \
   --target-dir /user/cloudera/question3/departments_text \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question3/departments_text
 $ hdfs dfs -cat /user/cloudera/question3/departments_text/part* | tail -n 20
@@ -38,7 +38,7 @@ sqoop import \
   --target-dir /user/cloudera/question3/departments_sequence \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question3/departments_sequence
 $ hdfs dfs -cat /user/cloudera/question3/departments_sequence/part-m-00000 | tail -n 20
@@ -54,7 +54,7 @@ sqoop import \
   --target-dir /user/cloudera/question3/departments_avro \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question3/departments_avro
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/question3/departments_avro/part-m-00000.avro
@@ -71,7 +71,7 @@ sqoop import \
   --target-dir /user/cloudera/question3/departments_parquet \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question3/departments_parquet
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/question3/departments_parquet/645d8bc2-c7fb-4d66-ba9c-a03d1a52b06f.parquet
