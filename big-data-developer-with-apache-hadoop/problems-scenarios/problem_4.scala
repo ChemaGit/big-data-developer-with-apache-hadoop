@@ -32,7 +32,7 @@ sqoop import \
 	--target-dir /user/cloudera/problem5/text \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem5/text
 $ hdfs dfs -tail /user/cloudera/problem5/text/part-m-00000
@@ -48,7 +48,7 @@ sqoop import \
 	--target-dir /user/cloudera/problem5/avro \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem5/avro
 $ avro-tools tojson hdfs://quickstart.cloudera/user/cloudera/problem5/avro/part-m-00000.avro | head -n 10
@@ -64,7 +64,7 @@ sqoop import \
 	--target-dir /user/cloudera/problem5/parquet \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem5/parquet
 $ parquet-tools cat hdfs://quickstart.cloudera/user/cloudera/problem5/parquet/3538ab90-0e57-4e4d-89db-706d397c1f7c.parquet | head -n 10
@@ -76,11 +76,11 @@ val orders = sqlContext.read.avro("/user/cloudera/problem5/avro")
 sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
 orders.write.parquet("/user/cloudera/problem5/parquet-snappy-compress")
 //	-save the data to hdfs using gzip compression as text file at /user/cloudera/problem5/text-gzip-compress
-orders.repartition(1).rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/text-gzip-compress",classOf[org.apache.hadoop.io.compress.GzipCodec])
+orders.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/text-gzip-compress",classOf[org.apache.hadoop.io.compress.GzipCodec])
 //	-save the data to hdfs using no compression as sequence file at /user/cloudera/problem5/sequence
-orders.repartition(1).rdd.map(r => (r(0).toString,r.mkString(","))).saveAsSequenceFile("/user/cloudera/problem5/sequence")
+orders.rdd.map(r => (r(0).toString,r.mkString(","))).saveAsSequenceFile("/user/cloudera/problem5/sequence")
 //	-save the data to hdfs using snappy compression as text file at /user/cloudera/problem5/text-snappy-compress
-orders.repartition(1).rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/text-snappy-compress",classOf[org.apache.hadoop.io.compress.SnappyCodec])
+orders.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/text-snappy-compress",classOf[org.apache.hadoop.io.compress.SnappyCodec])
 // if the line above fails you may try the same with sqoop
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
@@ -94,7 +94,7 @@ sqoop import \
 	--target-dir /user/cloudera/problem5/text-snappy-compress \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 // check the outputs
 $ hdfs dfs -ls /user/cloudera/problem5/parquet-snappy-compress
@@ -114,11 +114,11 @@ $ hdfs dfs -text /user/cloudera/problem5/text-snappy-compress/part-m-00000.snapp
 val orders = sqlContext.read.parquet("/user/cloudera/problem5/parquet-snappy-compress")
 //	-save the data to hdfs using no compression as parquet file at /user/cloudera/problem5/parquet-no-compress
 sqlContext.setConf("spark.sql.parquet.compression.codec","uncompressed")
-orders.repartition(1).write.parquet("/user/cloudera/problem5/parquet-no-compress")
+orders.write.parquet("/user/cloudera/problem5/parquet-no-compress")
 //	-save the data to hdfs using snappy compression as avro file at /user/cloudera/problem5/avro-snappy
 import com.databricks.spark.avro._
 sqlContext.setConf("spark.sql.avro.compression.codec","snappy")
-orders.repartition(1).write.avro("/user/cloudera/problem5/avro-snappy")
+orders.write.avro("/user/cloudera/problem5/avro-snappy")
 // check the outputs
 $ hdfs dfs -ls /user/cloudera/problem5/parquet-no-compress
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/problem5/parquet-no-compress/part-r-00000-e9b32bb9-47be-4994-819e-4b350276ba99.parquet
@@ -132,9 +132,9 @@ $ avro-tools tojson hdfs://quickstart.cloudera/user/cloudera/problem5/avro-snapp
 import com.databricks.spark.avro._
 val orders = sqlContext.read.avro("/user/cloudera/problem5/avro-snappy")
 //	-save the data to hdfs using no compression as json file at /user/cloudera/problem5/json-no-compress
-orders.repartition(1).toJSON.saveAsTextFile("/user/cloudera/problem5/json-no-compress")
+orders.toJSON.saveAsTextFile("/user/cloudera/problem5/json-no-compress")
 //	-save the data to hdfs using gzip compression as json file at /user/cloudera/problem5/json-gzip
-orders.repartition(1).toJSON.saveAsTextFile("/user/cloudera/problem5/json-gzip",classOf[org.apache.hadoop.io.compress.GzipCodec])
+orders.toJSON.saveAsTextFile("/user/cloudera/problem5/json-gzip",classOf[org.apache.hadoop.io.compress.GzipCodec])
 // check the outputs
 $ hdfs dfs -ls /user/cloudera/problem5/json-no-compress
 $ hdfs dfs -text /user/cloudera/problem5/json-no-compress/part-00000 | tail -n 20
@@ -145,7 +145,7 @@ $ hdfs dfs -text /user/cloudera/problem5/json-gzip/part-00000.gz | tail -n 20
 // 7. Transform/Convert data-files at  /user/cloudera/problem5/json-gzip and store the converted file at the following locations and file formats
 val orders = sqlContext.read.json("/user/cloudera/problem5/json-gzip")
 //	-save the data to as comma separated text using gzip compression at   /user/cloudera/problem5/csv-gzip
-orders.repartition(1).rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/csv-gzip", classOf[org.apache.hadoop.io.compress.GzipCodec])
+orders.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem5/csv-gzip", classOf[org.apache.hadoop.io.compress.GzipCodec])
 
 $ hdfs dfs -ls /user/cloudera/problem5/csv-gzip
 $ hdfs dfs -text /user/cloudera/problem5/csv-gzip/part-00000.gz | tail -n 20
@@ -153,7 +153,7 @@ $ hdfs dfs -text /user/cloudera/problem5/csv-gzip/part-00000.gz | tail -n 20
 // 8. Using spark access data at /user/cloudera/problem5/sequence and stored it back to hdfs using no compression as ORC file to HDFS to destination /user/cloudera/problem5/orc
 val ordersSequence = sc.sequenceFile("/user/cloudera/problem5/sequence",classOf[org.apache.hadoop.io.Text],classOf[org.apache.hadoop.io.Text])
 val orders = ordersSequence.map(t => t._2.toString).map(line => line.split(",")).map(r => (r(0).toInt,r(1).toLong,r(2).toInt,r(3).toString)).toDF
-orders.repartition(1).write.orc("/user/cloudera/problem5/orc")
+orders.write.orc("/user/cloudera/problem5/orc")
 
 $ hdfs dfs -ls /user/cloudera/problem5/orc
 $ hdfs dfs -text /user/cloudera/problem5/orc/part-r-00000-9026d0fd-6074-413e-ad56-c4e6f7776c4b.orc

@@ -29,7 +29,7 @@ sqoop import \
 	--target-dir /user/cloudera/products \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/products
 $ hdfs dfs -cat /user/cloudera/products/part-m-00000 | head -n 10
@@ -71,11 +71,11 @@ val resultRDD = aggByKey.selectExpr("category_id","max_price","total_products","
 import com.databricks.spark.avro._
 sqlContext.setConf("spark.sql.avro.compression.codec","snappy")
 //	- /user/cloudera/problem2/products/result-df
-resultDF.repartition(1).write.avro("/user/cloudera/problem2/products/result-df")
+resultDF.write.avro("/user/cloudera/problem2/products/result-df")
 //	- /user/cloudera/problem2/products/result-sql
-resultSQL.repartition(1).write.avro("/user/cloudera/problem2/products/result-sql")
+resultSQL.write.avro("/user/cloudera/problem2/products/result-sql")
 //	- /user/cloudera/problem2/products/result-rdd
-resultRDD.repartition(1).write.avro("/user/cloudera/problem2/products/result-rdd")
+resultRDD.write.avro("/user/cloudera/problem2/products/result-rdd")
 
 // 6.Check the output
 $ hdfs dfs -ls /user/cloudera/problem2/products/result-df

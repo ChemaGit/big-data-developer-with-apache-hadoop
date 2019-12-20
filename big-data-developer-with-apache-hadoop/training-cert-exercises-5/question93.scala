@@ -19,7 +19,7 @@ $ hdfs dfs -put /home/cloudera/files/data.csv /user/cloudera/files
 
 val data = sc.textFile("/user/cloudera/files/data.csv").map(line => line.split(",")).map(r => (r(0),r(1))).groupByKey()
 val format = data.map({case( (id, names)) => (id , names.toList.mkString("(",",",")"))})
-format.repartition(1).saveAsTextFile("/user/cloudera/question93")
+format.saveAsTextFile("/user/cloudera/question93")
 
 $ spark-shell -i probe.scala
 

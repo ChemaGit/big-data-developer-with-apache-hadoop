@@ -23,7 +23,7 @@ sqoop import \
   --target-dir /user/cloudera/question90/order_items \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 val orderItems = sc.textFile("/user/cloudera/question90/order_items").map(line => line.split(",")).map(r => (r(0).toInt,r(1).toInt,r(2).toInt,r(3).toInt,r(4).toFloat,r(5).toFloat))
 
@@ -40,7 +40,7 @@ $ hdfs dfs -cat /user/cloudera/question90/order_items/result_rdd/par*
 val orderItemsDF = orderItems.toDF("order_item_id" , "order_item_order_id" ,"order_item_product_id", "order_item_quantity","order_item_subtotal","order_item_product_price")
 orderItemsDF.registerTempTable("order_items")
 val resultSql = sqlContext.sql("""SELECT SUM(order_item_subtotal),max(order_item_subtotal),min(order_item_subtotal),avg(order_item_subtotal) FROM order_items""")
-resultSql.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/question90/order_items/result_sql")
+resultSql.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/question90/order_items/result_sql")
 
 $ hdfs dfs -cat /user/cloudera/question90/order_items/result_sql/par*
 // 3.432262059842491E7,1999.99,9.99,199.32066922046081

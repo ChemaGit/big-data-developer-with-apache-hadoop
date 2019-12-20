@@ -26,7 +26,7 @@ sqoop import \
 	--as-avrodatafile \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem7/prework/
 	$ avro-tools tojson hdfs://quickstart.cloudera/user/cloudera/problem7/prework/part-m-00000.avro | head -n 20

@@ -178,7 +178,7 @@ sqoop job --create products_replica \
 	--target-dir /user/cloudera/problem5/products-incremental \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ sqoop job --exec products_replica
 	$ hdfs dfs -ls /user/cloudera/problem5/products-incremental
@@ -228,7 +228,7 @@ sqoop job --create products_replica_hive \
 	--check-column "product_id" \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ sqoop job --exec products_replica_hive
 	hive> select * from products_hive;
@@ -283,7 +283,7 @@ sqoop export \
 	--input-null-string "IMPAGE" \
 	--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> select * from products_external;
 mysql> select count(*) from products_external;

@@ -35,7 +35,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/orders \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/orders
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/orders/part-m-00000.avro
@@ -53,7 +53,7 @@ sqoop import \
   --target-dir /user/cloudera/problem1/order_items \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/problem1/order_items
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/order_items/part-m-00000.avro
@@ -89,26 +89,26 @@ val resultRDD = rddDF.selectExpr("from_unixtime(order_date / 1000,'yyyy-MM-dd') 
 // 5.Store the result as parquet file into hdfs using gzip compression under folder
 sqlContext.setConf("spark.sql.parquet.compression.codec","gzip")
 // /user/cloudera/problem1/result4a-gzip
-resultDF.repartition(1).write.parquet("/user/cloudera/problem1/result4a-gzip")
+resultDF.write.parquet("/user/cloudera/problem1/result4a-gzip")
 // /user/cloudera/problem1/result4b-gzip
-resultSQL.repartition(1).write.parquet("/user/cloudera/problem1/result4b-gzip")
+resultSQL.write.parquet("/user/cloudera/problem1/result4b-gzip")
 // /user/cloudera/problem1/result4c-gzip
-resultRDD.repartition(1).write.parquet("/user/cloudera/problem1/result4c-gzip")
+resultRDD.write.parquet("/user/cloudera/problem1/result4c-gzip")
 // 6.Store the result as parquet file into hdfs using snappy compression under folder
 sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
 // /user/cloudera/problem1/result4a-snappy
-resultDF.repartition(1).write.parquet("/user/cloudera/problem1/result4a-snappy")
+resultDF.write.parquet("/user/cloudera/problem1/result4a-snappy")
 // /user/cloudera/problem1/result4b-snappy
-resultSQL.repartition(1).write.parquet("/user/cloudera/problem1/result4b-snappy")
+resultSQL.write.parquet("/user/cloudera/problem1/result4b-snappy")
 // /user/cloudera/problem1/result4c-snappy
-resultRDD.repartition(1).write.parquet("/user/cloudera/problem1/result4c-snappy")
+resultRDD.write.parquet("/user/cloudera/problem1/result4c-snappy")
 // 7.Store the result as CSV file into hdfs using No compression under folder
 // /user/cloudera/problem1/result4a-csv
-resultDF.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/problem1/result4a-csv")
+resultDF.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem1/result4a-csv")
 // /user/cloudera/problem1/result4b-csv
-resultSQL.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/problem1/result4b-csv")
+resultSQL.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem1/result4b-csv")
 // /user/cloudera/problem1/result4c-csv
-resultRDD.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/problem1/result4c-csv")
+resultRDD.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/problem1/result4c-csv")
 // 8.create a mysql table named result and load data from /user/cloudera/problem1/result4a-csv to mysql table named result
 $ mysql -u root -p
 mysql> use retail_db;
@@ -124,7 +124,7 @@ sqoop export \
   --input-lines-terminated-by '\n' \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 mysql> select * from result limit 10;
 
@@ -132,7 +132,7 @@ mysql> select * from result limit 10;
 val props = new java.util.Properties()
 props.setProperty("user", "root")
 props.setProperty("password", "cloudera")
-resultSQL.repartition(1).write.jdbc("jdbc:mysql://quickstart:3306/retail_db","result_jdbc", props)
+resultSQL.write.jdbc("jdbc:mysql://quickstart:3306/retail_db","result_jdbc", props)
 
 $ mysql -u root -p
 mysql> use retail_db;

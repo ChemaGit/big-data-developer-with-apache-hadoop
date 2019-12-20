@@ -23,7 +23,7 @@ sqoop import \
   --target-dir /user/cloudera/question97/orders \
   --outdir /home/cloudera/outdir \
 --outdir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 +-------------------+-------------+------+-----+---------+----------------+
 | Field             | Type        | Null | Key | Default | Extra          |
@@ -43,7 +43,7 @@ sqoop import \
   --target-dir /user/cloudera/question97/order_items \
   --outdir /home/cloudera/outdir \
 --outdir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 +--------------------------+------------+------+-----+---------+----------------+
 | Field                    | Type       | Null | Key | Default | Extra          |
@@ -65,7 +65,7 @@ sqoop import \
   --target-dir /user/cloudera/question97/products \
   --outdir /home/cloudera/outdir \
 --outdir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 +---------------------+--------------+------+-----+---------+----------------+
 | Field               | Type         | Null | Key | Default | Extra          |
@@ -96,9 +96,9 @@ val result = sqlContext.sql("""SELECT date,name,ROUND(SUM(subtotal),2) AS daily_
 result.show()
 // HDFS location-avro format /user/cloudera/question97/daily_revenue_avro_scala
 import com.databricks.spark.avro._
-result.repartition(1).write.avro("/user/cloudera/question97/daily_revenue_avro_scala")
+result.write.avro("/user/cloudera/question97/daily_revenue_avro_scala")
 // HDFS location-text format /user/cloudera/question97/daily_revenue_txt_scala
-result.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/question97/daily_revenue_txt_scala")
+result.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/question97/daily_revenue_txt_scala")
 
 $ hdfs dfs -ls /user/cloudera/question97/daily_revenue_avro_scala
 $ hdfs dfs -text /user/cloudera/question97/daily_revenue_avro_scala/part-r-00000-bd34e6ad-39f9-44e0-b677-162031ccfc41.avro

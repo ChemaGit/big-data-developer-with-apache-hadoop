@@ -15,7 +15,7 @@ sqoop import \
   --target-dir /user/cloudera/question99/order_items \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 
 val orderItems = sc.textFile("/user/cloudera/question99/order_items").map(line => line.split(","))
