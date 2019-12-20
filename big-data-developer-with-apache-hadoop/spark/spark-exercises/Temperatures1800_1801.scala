@@ -1,6 +1,6 @@
 /**
-  * En esta versión hay que sacar la temperatura media por estación y por año. La
-  * diferencia con lo anterior es que ahora puede haber más años aparte del 1800. Por ejemplo.
+  * En esta versiï¿½n hay que sacar la temperatura media por estaciï¿½n y por aï¿½o. La
+  * diferencia con lo anterior es que ahora puede haber mï¿½s aï¿½os aparte del 1800. Por ejemplo.
   * 1800_1801.csv
   * ITE00100554,18000101,TMAX,-75,,,E,
   * ITE00100554,18000101,TMIN,-148,,,E,
@@ -25,7 +25,7 @@ val sumRdd = groupRdd.mapValues({case(v) => ((v.sum / v.size) * 0.1) * (9.0 / 5.
 val pattern = sumRdd.map({case(((e,y),t)) => y + "\t" + e + "\t" + "%.2fF".format(t)})
 
 /**
- * Calcular la media de las temperaturas mínimas por estación y año
+ * Calcular la media de las temperaturas mï¿½nimas por estaciï¿½n y aï¿½o
  */
  val dirTemp = "/files/1800_1801.csv"
  val rddTemp = sc.textFile(dirTemp).map(line => line.split(",")).map({case(arr) => ( ( arr(0), arr(1).substring(0, 4)) , arr(2), arr(3).toDouble) })
@@ -33,9 +33,9 @@ val pattern = sumRdd.map({case(((e,y),t)) => y + "\t" + e + "\t" + "%.2fF".forma
  val rddGroup = rddFilt.groupByKey()
  val rddSum = rddGroup.mapValues(v => ((v.sum / v.size) * 0.1) * (9.0 / 5.0) + 32 )
  val pattern = rddSum.map({case(k,t) => k._2 + " " + k._1 + " " + "%.2fF".format(t)})
- pattern.repartition(1).saveAsTextFile("/loudacre/temperatures/minMedia")
+ pattern.saveAsTextFile("/loudacre/temperatures/minMedia")
  /**
-  * Calcular la media de las temperaturas máximas por estación y año
+  * Calcular la media de las temperaturas mï¿½ximas por estaciï¿½n y aï¿½o
   */
   val dirTemp = "/files/1800_1801.csv"
   val rddTemp = sc.textFile(dirTemp).map(line => line.split(",")).map({case(arr) => ( (arr(0), arr(1).substring(0,4)), arr(2),arr(3).toDouble )})
@@ -43,4 +43,4 @@ val pattern = sumRdd.map({case(((e,y),t)) => y + "\t" + e + "\t" + "%.2fF".forma
   val rddP = rddFilter.mapValues({case( ( (k), p, t) ) => t})
   val rddGroup = rddP.groupByKey().mapValues({case(it) => ((it.sum * 0.1) / it.size) * (9.0 / 5.0) + 32 })
   val rddPattern = rddGroup.map({case( ( (e,y),t ) ) => y + "\t" + e + "\t" + "%.2fF".format(t)})
-  rddPattern.repartition(1).saveAsTextFile("/loudacre/temperatures/maxMedia")
+  rddPattern.saveAsTextFile("/loudacre/temperatures/maxMedia")

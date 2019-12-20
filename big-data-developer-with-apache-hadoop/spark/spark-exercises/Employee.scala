@@ -25,8 +25,8 @@
 
  val rddJoin = rddE.join(rddS).join(rddJ).sortByKey()
  val pattern = rddJoin.map({case( (idEmp,((emp, sal),boss) )) => idEmp + " " + emp + " " + sal + " " + boss})
- pattern.repartition(1).saveAsTextFile("/loudacre/employee/res")
+ pattern.saveAsTextFile("/loudacre/employee/res")
 
  val rddJoinB = rddE.join(rddS).join(rddJ).map({case( (id,((emp,sal),boss)) ) => (id,emp,sal.toInt,boss) }).sortBy(p => p._3, ascending=false)
  val patternB = rddJoinB.map({case(id,emp,sal,boss) => id + " " + emp + " " + sal + " " + boss})
- patternB.repartition(1).saveAsTextFile("/loudacre/employee/res1")
+ patternB.saveAsTextFile("/loudacre/employee/res1")

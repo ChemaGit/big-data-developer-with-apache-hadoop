@@ -20,7 +20,7 @@ object Hits {
             val res = join.map(pair => pair._2)
     	//Print the results of res.toDebugString and review the output.
     	res.toDebugString
-    	res.repartition(1).saveAsTextFile("/loudacre/hits")
+    	res.saveAsTextFile("/loudacre/hits")
     	sc.stop()
    }
 }

@@ -14,5 +14,5 @@ sqoop import \
 --password training \
 --table accountdevice \
 --where "account_id between 1 and 22" \
--m 1 \
+-m 8 \
 --hive-import

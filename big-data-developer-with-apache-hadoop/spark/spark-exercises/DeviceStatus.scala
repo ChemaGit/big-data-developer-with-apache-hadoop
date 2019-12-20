@@ -19,4 +19,4 @@
  val extract = filt.map(line => (line(0),line(1),line(2),line(12),line(13)))
  val mod = extract.map(l => (l._1, l._2.split(" ")(0),l._3,l._4,l._5))
  val text = mod.map(l => l._1 + "," + l._2 + "," + l._3 + "," + l._4 + "," + l._5)
- text.repartition(1).saveAsTextFile("/loudacre/devicestatus_etl")
+ text.saveAsTextFile("/loudacre/devicestatus_etl")

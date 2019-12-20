@@ -11,4 +11,4 @@ mydata.saveAsTextFile("/user/training/res.txt")
 fil.saveAsTextFile("/user/training/resFil.txt") 
 upper.toDebugString
 upper.saveAsTextFile("/user/training/resUpper.txt") 
-upper.repartition(1).saveAsTextFile("/user/training/upper")
+upper.saveAsTextFile("/user/training/upper")

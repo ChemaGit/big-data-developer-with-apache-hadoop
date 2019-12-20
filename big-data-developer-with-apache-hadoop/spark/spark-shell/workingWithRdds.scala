@@ -27,4 +27,4 @@ val rdd = sc.textFile(dir)
             .map(line => (line(0), line(2)))
 rdd.collect().foreach(tuple => println(tuple._1 + "/" + tuple._2)) 
 
-rdd.map(line => line._1 + "/" + line._2).repartition(1).saveAsTextFile("/loudacre/ipIdList")
+rdd.map(line => line._1 + "/" + line._2).saveAsTextFile("/loudacre/ipIdList")

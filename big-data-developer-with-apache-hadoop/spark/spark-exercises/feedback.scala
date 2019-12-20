@@ -34,13 +34,13 @@ val good1 = feedback.filter( el =>  dateOk1( el(1) ) ).map( _.mkString("|") )
 val good2 = feedback.filter( el =>  dateOk2( el(1) ) ).map( _.mkString("|") )
 val good3 = feedback.filter( el =>  dateOk3( el(1) ) ).map( _.mkString("|") )
 val good = good1.union(good2).union(good3)
-good.repartition(1).saveAsTextFile( "/files/good")
+good.saveAsTextFile( "/files/good")
 
 val bad1 = feedback.filter( el =>  ! dateOk1( el(1) ) ).map( _.mkString("|") )
 val bad2 = bad1.map(_.split('|')).filter( el =>  ! dateOk2( el(1) ) ).map( _.mkString("|") )
 val bad3 = bad2.map(_.split('|')).filter( el =>  ! dateOk3( el(1) ) ).map( _.mkString("|") )
 //val bad = bad1.union(bad2).union(bad3)
-bad3.repartition(1).saveAsTextFile( "/files/bad")
+bad3.saveAsTextFile( "/files/bad")
 
 /****Other solution*****/
 //Answer : See the explanation for Step by Step Solution and configuration. Explanation: Solution : 
@@ -65,5 +65,5 @@ val badRecords = feedbackSplit.filter(x => !(reg1.pattern.matcher(x(1).trim).mat
 val valid = validRecords.map(e => e.mkString("|")) 
 val bad =badRecords.map(e => e.mkString("|")) 
 //Step 7 : Save the output as a Text file and output must be written in a single tile, 
-valid.repartition(1).saveAsTextFile("spark9/good") 
-bad.repartition(1).saveAsTextFile("spark9/bad")
+valid.saveAsTextFile("spark9/good")
+bad.saveAsTextFile("spark9/bad")

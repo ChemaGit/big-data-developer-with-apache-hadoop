@@ -23,4 +23,4 @@ val dir = "/loudacre/activations"
 val records = sc.wholeTextFiles(dir)
 val nodes = records.flatMap(file => getActivations(file._2))
 val result = nodes.map(record => getAccount(record) + ":" + getModel(getModel))
-result.repartition(1).saveAsTextFile("/loudacre/account-models")
+result.saveAsTextFile("/loudacre/account-models")

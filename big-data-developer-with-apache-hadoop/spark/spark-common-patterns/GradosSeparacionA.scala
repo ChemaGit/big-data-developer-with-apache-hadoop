@@ -12,19 +12,19 @@ import org.apache.spark.SparkConf
  * Ejercio Marvel Graph
  * Todas las lineas tienen numeros
  * El primer numero es la identificacion de un heroe de Marvel
- * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peli­cula con el
+ * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peliï¿½cula con el
  * Hay que calcular para un heroe la distancia que hay con el resto de heroes
  * Implementar un algoritmo: Breadth-first search
  */
 
 /**
- * En el anterior damos un origen y tenemos que calcular la distancia a otro id. En éste
+ * En el anterior damos un origen y tenemos que calcular la distancia a otro id. En ï¿½ste
  * tenemos que calcular la distancia de todos los puntos. Es decir, damos un origen y
  * calculamos la distancia de todos los puntos al origen.
- * Hay que hacer iteraciones hasta que no quede ningún vértice de color gris. Al final
- * por cada distancia, hay que imprimir la cantidad de ids que están a esa distancia del origen.
- * Después de cada reduce, hay que usar la función noHayGrises que devuelve True si
- * no queda más grises en el RDD.
+ * Hay que hacer iteraciones hasta que no quede ningï¿½n vï¿½rtice de color gris. Al final
+ * por cada distancia, hay que imprimir la cantidad de ids que estï¿½n a esa distancia del origen.
+ * Despuï¿½s de cada reduce, hay que usar la funciï¿½n noHayGrises que devuelve True si
+ * no queda mï¿½s grises en el RDD.
  */
 object GradosSeparacionA {
   val B = "BLANCO"
@@ -145,7 +145,7 @@ object GradosSeparacionA {
     printMap(buildMap(heroes.collect))
 
     val mapHeroes = heroes.map(tuple => tuple._1 + "," + tuple._2._1.mkString(",") + "," + tuple._2._2 + "," + tuple._2._3)
-    mapHeroes.repartition(1).saveAsTextFile("/loudacre/heroes/")
+    mapHeroes.saveAsTextFile("/loudacre/heroes/")
     sc.stop()
   }
 }

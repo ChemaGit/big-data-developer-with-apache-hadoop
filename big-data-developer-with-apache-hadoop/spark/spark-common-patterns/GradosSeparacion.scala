@@ -12,7 +12,7 @@ import org.apache.spark.SparkConf
  * Ejercio Marvel Graph
  * Todas las lineas tienen numeros
  * El primer numero es la identificacion de un heroe de Marvel
- * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peli­cula con el
+ * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peliï¿½cula con el
  * Hay que calcular para un heroe la distancia que hay con el resto de heroes
  * Implementar un algoritmo: Breadth-first search
  */
@@ -105,7 +105,7 @@ object GradosSeparacion {
     
     val heroes = iterar(sc.textFile(myFile).map(l => (l.split(' ')(0), (l.split(' ').tail, infinity, B))).map(l => setInit(l)))
     val mapHeroes = heroes.map(tuple => tuple._1 + "," + tuple._2._1.mkString(",") + "," + tuple._2._2 + "," + tuple._2._3)
-    mapHeroes.repartition(1).saveAsTextFile("/loudacre/heroes/")
+    mapHeroes.saveAsTextFile("/loudacre/heroes/")
     sc.stop()
   }
 }

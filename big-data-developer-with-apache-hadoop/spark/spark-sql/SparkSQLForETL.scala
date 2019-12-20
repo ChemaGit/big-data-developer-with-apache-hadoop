@@ -12,7 +12,7 @@ sqoop import \
 --target-dir /loudacre/webpage \
 --outdir /home/training/Desktop/outdir/ \
 --bindir /home/training/Desktop/bindir/ \
---num-mappers 1
+--num-mappers 8
 
 //Review the import
 hdfs dfs -get /loudacre/webpage/1006a7c4-8c4c-4f07-868c-e1911d6a94c3.parquet /home/training/Desktop/files/webpage.parquet

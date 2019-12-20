@@ -67,7 +67,7 @@ sqoop import \
 --table accounts \
 --columns "acct_num, acct_create_dt, first_name, last_name" \
 --target-dir /loudacre/accounts \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
@@ -80,7 +80,7 @@ sqoop import \
 --null-non-string "0" \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
---num-mappers 1
+--num-mappers 8
 #import only matching rows from a single table
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
@@ -101,7 +101,7 @@ sqoop import \
 --null-non-string "0" \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
---num-mappers 1
+--num-mappers 8
 
 #import from a query
 sqoop import \
@@ -109,7 +109,7 @@ sqoop import \
 --username training \
 --password training \
 --query "select * from accounts a, accountdevice b where a.acct_num = b.account_id and \$CONDITIONS" \
--m 1 \
+-m 8 \
 --target-dir /loudacre/accounts/join \
 --delete-target-dir
 
@@ -118,7 +118,7 @@ sqoop import \
 --username training \
 --password training \
 --query "select * from accounts where acct_num between 1 and 22 and \$CONDITIONS" \
--m 1 \
+-m 8 \
 --target-dir /loudacre/accounts/problem \
 --delete-target-dir
 
@@ -129,7 +129,7 @@ sqoop import \
 --password training \
 --table accountdevice \
 --where "account_id between 1 and 22" \
--m 1 \
+-m 8 \
 --hive-import
 
 sqoop import \
@@ -164,7 +164,7 @@ sqoop import \
 --enclosed-by '\"' \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
---num-mappers 1
+--num-mappers 8
 
 #storing data in a compressed file
 sqoop import --table accounts \
@@ -183,7 +183,7 @@ sqoop import \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
 --compression-codec org.apache.hadoop.io.compress.GzipCodec \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
@@ -193,7 +193,7 @@ sqoop import \
 --compress \  #compression in default mode .gz
 --delete-target-dir \
 --target-dir /loudacre/compress \
---num-mappers 1
+--num-mappers 8
 
 #sqoop supports importing data as Parquet or Avro files
 sqoop import --table accounts \
@@ -223,7 +223,7 @@ sqoop import \
 --last-value 1000 \
 --as-avrodatafile \
 --target-dir /loudacre/accounts \
---num-mappers 1
+--num-mappers 8
 
 import \
 --connect jdbc:mysql://localhost/loudacre \
@@ -245,7 +245,7 @@ sqoop import \
 --check-column acct_num \
 --last-value 10 \
 --target-dir /loudacre/accounts \
--m 1
+-m 8
 
 #Sqoop supports export data from Hadoop to RDBMS with the export tool
 sqoop export \
@@ -264,7 +264,7 @@ sqoop export \
 --export-dir /loudacre/test \
 --input-null-string "null" \
 --input-null-non-string "0" \
--m 1
+-m 8
 
 $ sqoop export \
 --connect jdbc:mysql://localhost/test \
@@ -280,7 +280,7 @@ $ sqoop export \
 --outdir /home/training/Desktop/outdir \
 --bindir /home/training/Desktop/bindir \
 --validate \
---num-mappers 1
+--num-mappers 8
 
 #create a hive table, only metastore data with a definition for a table based on a database table previously imported to HDFS, or one planned to be imported.
 sqoop create-hive-table \
@@ -300,7 +300,7 @@ $ sqoop job \
 --warehouse-dir /categories_target_job \
 --outdir /home/training/Desktop/outdir \
 --bindir /home/training/Desktop/bindir \
---num-mappers 1
+--num-mappers 8
 
 #The merge tool allows you to combine two datasets where entries in one dataset should overwrite entries of an older dataset. 
 #For example, an incremental import run in last-modified mode will generate multiple datasets in HDFS where successively newer data appears in each dataset. 

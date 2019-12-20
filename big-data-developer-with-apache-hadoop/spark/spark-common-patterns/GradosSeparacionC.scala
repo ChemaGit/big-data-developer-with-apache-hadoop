@@ -13,34 +13,34 @@ import org.apache.spark.Accumulator
  * Ejercio Marvel Graph
  * Todas las lineas tienen numeros
  * El primer numero es la identificacion de un heroe de Marvel
- * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peli­cula con el
+ * El resto de numeros son id's de heroes de marvel que han salido alguna vez en alguna peliï¿½cula con el
  * Hay que calcular para un heroe la distancia que hay con el resto de heroes
  * Implementar un algoritmo: Breadth-first search
  */
 
 /**
- * En el anterior damos un origen y tenemos que calcular la distancia a otro id. En éste
+ * En el anterior damos un origen y tenemos que calcular la distancia a otro id. En ï¿½ste
  * tenemos que calcular la distancia de todos los puntos. Es decir, damos un origen y
  * calculamos la distancia de todos los puntos al origen.
- * Hay que hacer iteraciones hasta que no quede ningún vértice de color gris. Al final
- * por cada distancia, hay que imprimir la cantidad de ids que están a esa distancia del origen.
- * Después de cada reduce, hay que usar la función noHayGrises que devuelve True si
- * no queda más grises en el RDD.
+ * Hay que hacer iteraciones hasta que no quede ningï¿½n vï¿½rtice de color gris. Al final
+ * por cada distancia, hay que imprimir la cantidad de ids que estï¿½n a esa distancia del origen.
+ * Despuï¿½s de cada reduce, hay que usar la funciï¿½n noHayGrises que devuelve True si
+ * no queda mï¿½s grises en el RDD.
  */
 
 /**
  * Lo mismo que el 2a excepto que ahora para detectar el final del ciclo no usamos la
- * función noHayGrises. Tenemos un acumulador, numGrises, que incializamos a
- * cero. Luego cuando la función bfsMap crea un nuevo nodo de color gris incrementa el acumulador.
- * Después de hacer el map/reduce en el main comprobamos el valor del acumulador. Si
+ * funciï¿½n noHayGrises. Tenemos un acumulador, numGrises, que incializamos a
+ * cero. Luego cuando la funciï¿½n bfsMap crea un nuevo nodo de color gris incrementa el acumulador.
+ * Despuï¿½s de hacer el map/reduce en el main comprobamos el valor del acumulador. Si
  * es mayor que 0, lo ponemos a 0 y seguimos en el bucle. Si es 0 el bucle ha terminado.
- * En el main, después de hacer el reduce, ejecutamos take(1) para provcar una
- * acción. Si no lo hacemos, no se ejecuta el map ni el reduce ya que Spark trabaja en
+ * En el main, despuï¿½s de hacer el reduce, ejecutamos take(1) para provcar una
+ * acciï¿½n. Si no lo hacemos, no se ejecuta el map ni el reduce ya que Spark trabaja en
  * modo lazy. Y entonces el programa se termina.
  *
  * grados-de-separacion/grados-de-separacionC.scala
- * Como grados-de-separación.scala pero para calcular el final comprobramos si ya lo ha
- * encontrado o si no hay más grises. Ambas cosas las hacemos con un acumulador.
+ * Como grados-de-separaciï¿½n.scala pero para calcular el final comprobramos si ya lo ha
+ * encontrado o si no hay mï¿½s grises. Ambas cosas las hacemos con un acumulador.
  *
  *************EJERCICIO RESUELTO CON ACUMULADOR***********************
  * Los acumuladores son variables globales para su ejecucion paralela distribuida.
@@ -179,7 +179,7 @@ def mixValues(v1: (Array[String], Int, String) ,v2: (Array[String], Int, String)
     printMap(buildMap(heroes.collect))
 
     val mapHeroes = heroes.map(tuple => tuple._1 + "," + tuple._2._1.mkString(",") + "," + tuple._2._2 + "," + tuple._2._3)
-    mapHeroes.repartition(1).saveAsTextFile("/loudacre/heroes/")
+    mapHeroes.saveAsTextFile("/loudacre/heroes/")
     sc.stop()
   }
 }
