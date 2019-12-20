@@ -35,6 +35,6 @@ val bigrams = joined.map(line => line.split("\\W").filter(w => !l.contains(w))).
 bigrams.collect.foreach(println)
 val bigramsCount = bigrams.reduceByKey( (v,c) => v + c).sortBy(t => t._2, false)
 bigramsCount.collect.foreach(println)
-bigramsCount.repartition(1).saveAsTextFile("/user/cloudera/question68/result")
+bigramsCount.saveAsTextFile("/user/cloudera/question68/result")
 
 $ hdfs dfs -cat /user/cloudera/question68/result/part*

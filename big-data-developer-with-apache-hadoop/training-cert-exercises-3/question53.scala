@@ -12,7 +12,7 @@
   */
 val filt = List("", " ")
 val content = sc.textFile("/user/cloudera/files/Content.txt").flatMap(line => line.split(" ")).filter(w => !filt.contains(w)).filter(w => w.length > 2)
-content.repartition(1).saveAsTextFile("/user/cloudera/question53")
+content.saveAsTextFile("/user/cloudera/question53")
 
 $ hdfs dfs -ls /user/cloudera/question53
 $ hdfs dfs -cat /user/cloudera/question53/part-00000

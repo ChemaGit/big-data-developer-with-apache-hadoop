@@ -21,7 +21,7 @@ val emp = sqlContext.read.json("/user/cloudera/files/employee.json")
 emp.registerTempTable("employee")
 sqlContext.sql("""select date_format(current_date,'dd/MM/yyyy') as date, first_name, last_name, concat(first_name,",",last_name) as full_name from employee""").show()
 val result = sqlContext.sql("""select date_format(current_date,'dd/MM/yyyy') as date, first_name, last_name, concat(first_name,",",last_name) as full_name from employee""")
-result.toJSON.repartition(1).saveAsTextFile("/user/cloudera/question57/json")
+result.toJSON.saveAsTextFile("/user/cloudera/question57/json")
 
 $ hdfs dfs -ls /user/cloudera/question57/json
 $ hdfs dfs -cat /user/cloudera/question57/json/part-00000

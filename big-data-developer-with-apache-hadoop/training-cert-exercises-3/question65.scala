@@ -20,9 +20,9 @@ $ gedit /home/cloudera/files/employee.json &
 val employee = sqlContext.read.json("/user/cloudera/files/employee.json")
 employee.registerTempTable("employee")
 sqlContext.sql("""select * from employee""").show()
-employee.repartition(1).write.orc("/user/cloudera/question65/orc")
+employee.write.orc("/user/cloudera/question65/orc")
 sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
-employee.repartition(1).write.parquet("/user/cloudera/question65/parquet-snappy")
+employee.write.parquet("/user/cloudera/question65/parquet-snappy")
 
 $ hdfs dfs -ls /user/cloudera/question65/orc
 $ hdfs dfs -text /user/cloudera/question65/orc/part-r-00000-1321d325-f0e1-4742-9d5f-5cf5daebabf0.orc

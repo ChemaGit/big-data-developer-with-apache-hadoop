@@ -21,7 +21,7 @@ sqoop import \
   --target-dir /user/cloudera/question67/departments \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
@@ -35,7 +35,7 @@ sqoop import \
   --target-dir /user/cloudera/question67/departments \
   --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
---num-mappers 1
+--num-mappers 8
 
 $ hdfs dfs -ls /user/cloudera/question67/departments
 $ hdfs dfs -cat /user/cloudera/question67/departments/part*

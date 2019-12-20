@@ -57,7 +57,7 @@ empSalary.registerTempTable("salary")
 
 val result = sqlContext.sql("""SELECT idMan,name,salary,managerName FROM employee JOIN manager ON(idEmp = idMan) JOIN salary ON(idEmp = idSal) ORDER BY idMan""")
 
-result.rdd.map(r => r.mkString(",")).repartition(1).saveAsTextFile("/user/cloudera/question60/output")
+result.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/question60/output")
 
 $ hdfs dfs -ls /user/cloudera/question60/output
 $ hdfs dfs -cat /user/cloudera/question60/output/part-00000
