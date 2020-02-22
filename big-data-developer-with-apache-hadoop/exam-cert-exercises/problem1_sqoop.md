@@ -1,4 +1,5 @@
-/*Question 1: Correct
+# Question 1: Correct
+````text
 Instructions:
 
 Connect to mySQL database using sqoop, import all customers that lives in 'CA' state.
@@ -15,8 +16,8 @@ Output Requirement:
 Place the customers files in HDFS directory "/user/cloudera/problem1/customers/avrodata"
 Use avro format with pipe delimiter and snappy compression.
 Load every customer record completely
-*/
-
+````
+````properties
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
   --username root \
@@ -30,10 +31,10 @@ sqoop import \
   --delete-target-dir \
   --target-dir /user/cloudera/problem1/customers/avrodata \
   --outdir /home/cloudera/outdir \
---bindir /home/cloudera/bindir \
---num-mappers 8
+--bindir /home/cloudera/bindir
 
 // 5. Read avro file data and metadata using avro tools: avro-tools tojson | getmeta part*00*.avro
 
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/customers/avrodata/part-m-00000.avro
 $ avro-tools tojson hdfs://quickstart.cloudera/user/cloudera/problem1/customers/avrodata/part-m-00000.avro
+````
