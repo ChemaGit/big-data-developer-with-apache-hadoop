@@ -6,14 +6,23 @@
   * scala.collection.Map[Int,Long] = Map(5 -> 1, 8 -> 1, 3 -> 1, 6 -> 1, 1 -> 6, 2 -> 3, 4 -> 2, 7 ->1)
   */
 
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql._
 
 object exercise_1 {
 
-  val spark = SparkSession.builder().appName("exercise_1").master("local").getOrCreate()
+  val spark = SparkSession
+    .builder()
+    .appName("exercise_1")
+    .master("local[*]")
+    .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
+    .config("spark.app.id", "exercise_1")  // To silence Metrics warning
+    .getOrCreate()
+
   val sc = spark.sparkContext
 
   def main(args: Array[String]): Unit = {
+    Logger.getRootLogger.setLevel(Level.ERROR)
 
     try {
       val b = sc

@@ -22,18 +22,29 @@ object GetDailyProductRevenue {
 
     import spark.implicits._
 
-    val inputBaseDir = envProps.getString("input.base.dir")
-    val orders = spark.read.json(inputBaseDir + "/orders")
-    val orderItems = spark.read.json(inputBaseDir + "/order_items")
+    try {
+      val inputBaseDir = envProps.getString("input.base.dir")
+      val orders = spark.read.json(inputBaseDir + "/orders")
+      val orderItems = spark.read.json(inputBaseDir + "/order_items")
 
-    val dailyProductRevenue = orders.where("order_status in ('CLOSED', 'COMPLETE')").
-      join(orderItems, $"order_id" === $"order_item_order_id").
-      groupBy("order_date", "order_item_product_id").
-      agg(sum($"order_item_subtotal").alias("revenue")).
-      orderBy($"order_date", $"revenue" desc)
+      val dailyProductRevenue = orders.where("order_status in ('CLOSED', 'COMPLETE')").
+        join(orderItems, $"order_id" === $"order_item_order_id").
+        groupBy("order_date", "order_item_product_id").
+        agg(sum($"order_item_subtotal").alias("revenue")).
+        orderBy($"order_date", $"revenue" desc)
 
-    val outputBaseDir = envProps.getString("output.base.dir")
-    dailyProductRevenue.write.json(outputBaseDir + "/daily_product_revenue")
+      val outputBaseDir = envProps.getString("output.base.dir")
+      dailyProductRevenue.write.json(outputBaseDir + "/daily_product_revenue")
+
+      // To have the opportunity to view the web console of Spark: http://localhost:4040/
+      println("Type whatever to the console to exit......")
+      scala.io.StdIn.readLine()
+    } finally {
+      sc.stop()
+      println("SparkContext stopped.")
+      spark.stop()
+      println("SparkSession stopped.")
+    }
 
   }
 
