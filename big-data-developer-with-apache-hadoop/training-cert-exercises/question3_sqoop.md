@@ -12,9 +12,8 @@ Now accomplish following activities.
 3. Import departments table from mysql to hdfs as avro file in departments_avro directory.
 4. Import departments table from mysql to hdfs as parquet file in departments_parquet directory.
 ````
-
-# 1. Import departments table from mysql to hdfs as textfile in departments_text directory.
 ````properties
+# 1. Import departments table from mysql to hdfs as textfile in departments_text directory.
 sqoop import \
 --connect jdbc:mysql://quickstart.cloudera:3306/retail_db \
   --username root \
