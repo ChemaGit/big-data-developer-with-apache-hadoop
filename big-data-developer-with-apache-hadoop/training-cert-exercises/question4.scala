@@ -12,14 +12,14 @@
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql._
 
-object exercise_3 {
+object question4 {
 
   val spark = SparkSession
     .builder()
-    .appName("exercise 3")
+    .appName("question4")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_8")  // To silence Metrics warning
+    .config("spark.app.id", "question4")  // To silence Metrics warning
     .getOrCreate()
   val sc = spark.sparkContext
 

@@ -25,17 +25,17 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql._
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField, StructType}
 
-object exercise_2 {
+object question2 {
 
   val warehouseLocation = "/user/hive/warehouse"
   val path = "hdfs://quickstart.cloudera/user/cloudera/"
   val spark = SparkSession.builder()
-    .appName("exercise_2")
+    .appName("question2")
     .master("local")
     .enableHiveSupport()
     .config("spark.sql.warehouse.dir",warehouseLocation)
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_2")  // To silence Metrics warning
+    .config("spark.app.id", "question2")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
