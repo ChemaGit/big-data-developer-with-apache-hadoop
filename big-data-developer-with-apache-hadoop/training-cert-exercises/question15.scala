@@ -31,13 +31,13 @@ hdfs dfs -ls /user/cloudera/exercise_10/products
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql._
 
-object exercise_1 {
+object question15{
   val spark = SparkSession
     .builder()
-    .appName("exercise 1")
+    .appName("question15")
     .master("local")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_1")  // To silence Metrics warning
+    .config("spark.app.id", "question15")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
