@@ -1,16 +1,19 @@
-/** Question 16
-  * Problem Scenario 10 : You have been given following mysql database details as well as
-  * other info.
-  * user=retail_dba
-  * password=cloudera
-  * database=retail_db
-  * jdbc URL = jdbc:mysql://quickstart:3306/retail_db
-  * Please accomplish following.
-  * 1. Create a database named hadoopexam and then create a table named departments in it, with following fields. department_id int, department_name string
-  * e.g. location should be hdfs://quickstart.cloudera:8020/user/hive/warehouse/hadoopexam.db/departments
-  * 2. Please import data in existing table created above from retaidb.departments into hive table hadoopexam.departments.
-  * 3. Please import data in a non-existing table, means while importing create hive table named hadoopexam.departments_new
-  */
+# Question 16
+````text
+ Problem Scenario 10 : You have been given following mysql database details as well as
+ other info.
+ user=retail_dba
+ password=cloudera
+ database=retail_db
+ jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+ Please accomplish following.
+ 1. Create a database named hadoopexam and then create a table named departments in it, with following fields. department_id int, department_name string
+ e.g. location should be hdfs://quickstart.cloudera:8020/user/hive/warehouse/hadoopexam.db/departments
+ 2. Please import data in existing table created above from retaidb.departments into hive table hadoopexam.departments.
+ 3. Please import data in a non-existing table, means while importing create hive table named hadoopexam.departments_new
+````
+
+````properties  
 $ hive
   hive> CREATE DATABASE hadoopexam;
 hive> use hadoopexam;
@@ -29,7 +32,7 @@ sqoop import \
 --bindir /home/cloudera/bindir \
 --num-mappers 8
 
-hive> select * from departments;
+hive> select  from departments;
 
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
@@ -46,4 +49,5 @@ sqoop import \
 --num-mappers 8
 
 hive> show tables;
-hive> select * from departments_new;
+hive> select  from departments_new;
+````
