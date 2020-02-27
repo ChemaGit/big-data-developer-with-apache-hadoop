@@ -16,14 +16,14 @@ import org.apache.spark.sql.SparkSession
   * Array[(String, Array[Int])] = Array((a,Array(1, 2)), (b,Array(1, 2)), (a(Array(3)), (b,Array(2)))
   */
 
-object exercise_5 {
+object question22 {
 
   val spark = SparkSession
     .builder()
-    .appName("exercise_5")
+    .appName("question22")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_5")  // To silence Metrics warning
+    .config("spark.app.id", "question22")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
