@@ -42,5 +42,5 @@ bad.map(r => r.mkString("|")).repartition(1).saveAsTextFile("/user/cloudera/ques
 
 $ hdfs dfs -ls /user/cloudera/question37/good
 $ hdfs dfs -cat /user/cloudera/question37/good/part*
-  $ hdfs dfs -ls /user/cloudera/question37/bad
+$ hdfs dfs -ls /user/cloudera/question37/bad
 $ hdfs dfs -cat /user/cloudera/question37/bad/part*
