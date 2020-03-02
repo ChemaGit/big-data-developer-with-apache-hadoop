@@ -40,16 +40,16 @@ import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructFi
   * 3. Find all the products , which are supplied by ABC Traders.
   */
 
-object exercise_10 {
+object question49 {
 
   val warehouseLocation = "/home/hive/warehouse"
 
   val spark = SparkSession
     .builder()
-    .appName("exercise_10")
+    .appName("question49")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_10")  // To silence Metrics warning
+    .config("spark.app.id", "question49")  // To silence Metrics warning
     .enableHiveSupport()
     .config("spark.sql.warehouse.dir",warehouseLocation)
     .getOrCreate()
