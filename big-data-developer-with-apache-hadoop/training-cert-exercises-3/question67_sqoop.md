@@ -1,15 +1,17 @@
-/** Question 67
-  * Problem Scenario 9 : You have been given following mysql database details as well as other info.
-  * user=retail_dba
-  * password=cloudera
-  * database=retail_db
-  * jdbc URL = jdbc:mysql://quickstart:3306/retail_db
-  * Please accomplish following.
-  * 1. Import departments table in a directory.
-  * 2. Again import departments table same directory (However, directory already exist hence it should not overrride and append the results)
-  * 3. Also make sure your results fields are terminated by '|' and lines terminated by '\n\
-  */
+# Question 67
+````text
+   Problem Scenario 9 : You have been given following mysql database details as well as other info.
+   user=retail_dba
+   password=cloudera
+   database=retail_db
+   jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+   Please accomplish following.
+   1. Import departments table in a directory.
+   2. Again import departments table same directory (However, directory already exist hence it should not overrride and append the results)
+   3. Also make sure your results fields are terminated by '|' and lines terminated by '\n\
+````
 
+````properties
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
   --username root \
@@ -39,3 +41,4 @@ sqoop import \
 
 $ hdfs dfs -ls /user/cloudera/question67/departments
 $ hdfs dfs -cat /user/cloudera/question67/departments/part*
+````
