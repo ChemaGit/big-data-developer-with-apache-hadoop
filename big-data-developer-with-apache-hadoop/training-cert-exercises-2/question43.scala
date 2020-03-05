@@ -128,8 +128,6 @@ object question43 {
         .take(10)
         .foreach(println)
 
-      joined.unpersist()
-
       println("********************************")
 
       // SPARK-SQL SOLUTION
@@ -139,13 +137,9 @@ object question43 {
         .toDF("id_order","date")
         .cache()
 
-      orders.unpersist()
-
       val orderItemsDF = orderItems
         .toDF("item_id_order", "subtotal")
         .cache()
-
-      orderItems.unpersist()
 
       // create temporary view
       ordersDF.createOrReplaceTempView("orders")
@@ -168,9 +162,6 @@ object question43 {
                								|GROUP BY date
                								|ORDER BY date """.stripMargin)
         .show()
-
-      ordersDF.unpersist()
-      orderItemsDF.unpersist()
 
       // To have the opportunity to view the web console of Spark: http://localhost:4040/
       println("Type whatever to the console to exit......")
