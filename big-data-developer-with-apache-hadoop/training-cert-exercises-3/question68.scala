@@ -76,9 +76,6 @@ object question68 {
 
       bigramsCount.saveAsTextFile(output)
 
-      bigrams.unpersist()
-      bigramsCount.unpersist()
-
       /**
         * check the results
         * $ hdfs dfs -cat /user/cloudera/bigrams/result/part*

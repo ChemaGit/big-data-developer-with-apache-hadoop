@@ -69,8 +69,6 @@ object question65 {
         .write
         .parquet(s"${outPath}parquet-snappy")
 
-      employee.unpersist()
-
       /**
         * Check the files
         * $ hdfs dfs -ls /user/cloudera/exercise_3/orc

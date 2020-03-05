@@ -50,8 +50,6 @@ object question53 {
       content
         .saveAsTextFile("hdfs://quickstart.cloudera/user/cloudera/exercise_4")
 
-      content.unpersist()
-
       // check the results
       // hdfs dfs -ls /user/cloudera/exercise_4
       // hdfs dfs -cat /user/cloudera/exercise_4/part-00000

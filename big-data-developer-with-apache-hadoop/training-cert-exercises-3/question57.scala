@@ -69,8 +69,6 @@ object question57 {
         .rdd
         .saveAsTextFile(output)
 
-      emp.unpersist()
-
       /**
         * Check the results
         * $ hdfs dfs -ls /user/cloudera/question_57/

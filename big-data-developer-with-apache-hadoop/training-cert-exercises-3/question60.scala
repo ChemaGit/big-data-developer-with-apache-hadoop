@@ -124,10 +124,6 @@ object question60 {
         .map(r => r.mkString(","))
         .saveAsTextFile(pathOut)
 
-      empManager.unpersist()
-      empName.unpersist()
-      empSalary.unpersist()
-
       /**
         * Check the results
         * $ hdfs dfs -ls /user/cloudera/exercise_10/output
