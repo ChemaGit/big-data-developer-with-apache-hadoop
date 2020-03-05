@@ -78,8 +78,6 @@ object question37 {
               .map(r => r.mkString("|"))
               .saveAsTextFile(s"${output}bad")
 
-            data.unpersist()
-
             //      check the results
             //      $ hdfs dfs -ls /user/cloudera/question37/good
             //      $ hdfs dfs -cat /user/cloudera/question37/good/part*

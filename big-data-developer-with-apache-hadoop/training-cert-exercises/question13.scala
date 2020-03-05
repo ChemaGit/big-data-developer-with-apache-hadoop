@@ -66,8 +66,6 @@ object question13 {
         .sortBy(t => t._2, false)
         .saveAsTextFile(output, classOf[org.apache.hadoop.io.compress.GzipCodec])
 
-      filtered.unpersist()
-
       // check out the results
       // hdfs dfs -ls /user/cloudera/exercise_9
       // hdfs dfs -text /user/cloudera/exercise_9/part-00000.gz
@@ -100,8 +98,6 @@ val filterWord = file.filter(w => !bcv.value.contains(w)).cache()
 val countWord = filterWord.map(w => (w, 1)).reduceByKey( (v,t) => v + t)
 val sortDesc = countWord.sortBy(t => t._2, false)
 sortDesc.saveAsTextFile("/user/cloudera/question13/result",classOf[org.apache.hadoop.io.compress.GzipCodec])
-
-filterWord.unpersist()
 
 $ hdfs dfs -ls /user/cloudera/question13/result
 $ hdfs dfs -text /user/cloudera/question13/result/part-00000.gz

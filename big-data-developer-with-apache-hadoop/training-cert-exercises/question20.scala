@@ -107,8 +107,6 @@ object question20 {
             |WHERE price BETWEEN 1.0 and 2.0 AND quantity BETWEEN 1000 AND 2000""".stripMargin)
         .show()
 
-      products.unpersist()
-
       // To have the opportunity to view the web console of Spark: http://localhost:4040/
       println("Type whatever to the console to exit......")
       scala.io.StdIn.readLine()

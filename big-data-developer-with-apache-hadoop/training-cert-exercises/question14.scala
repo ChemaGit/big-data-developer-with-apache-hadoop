@@ -112,9 +112,6 @@ object question14 {
         .foreach(x => println(x.mkString(",")))
       println()
 
-      products.unpersist()
-      productsPrice.unpersist()
-
       // To have the opportunity to view the web console of Spark: http://localhost:4040/
       println("Type whatever to the console to exit......")
       scala.io.StdIn.readLine()
@@ -154,5 +151,4 @@ sortByKeyDesc.take(10).foreach(r => println(r._1 + "--" + r._2))
 val sortByKeyAsc = products.map(r => ( (r(1).toInt,r(4).toFloat), r.mkString(","))).sortByKey()
 sortByKeyAsc.take(10).foreach(r => println(r._1 + "--" + r._2))
 
-products.unpersist()
  */
