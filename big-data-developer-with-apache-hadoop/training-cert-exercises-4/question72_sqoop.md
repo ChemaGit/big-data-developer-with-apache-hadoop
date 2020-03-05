@@ -1,20 +1,23 @@
-/** Question 72
-  * Problem Scenario 3: You have been given MySQL DB with following details.
-  * user=retail_dba
-  * password=cloudera
-  * database=retail_db
-  * table=retail_db.categories
-  * jdbc URL = jdbc:mysql://quickstart:3306/retail_db
-  * Please accomplish following activities.
-  * 1. Import data from categories table, where category_id=22 (Data should be stored in categories subset)
-  * 2. Import data from categories table, where category_id>22 (Data should be stored in categories_subset_2)
-  * 3. Import data from categories table, where category_id between 1 and 22 (Data should be stored in categories_subset_3)
-  * 4. While importing catagories data change the delimiter to '|' (Data should be stored in categories_subset_4)
-  * 5. Importing data from catagories table and restrict the import to category_name,category id columns only with delimiter as '|' (In categories_subset_5 directory)
-  * 6. Add null values in the table using below SQL statement ALTER TABLE categories modify category_department_id int(11); INSERT INTO categories values (NULL,'TESTING');
-  * 7. Importing data from catagories table (In categories_subset_6 directory) using '|' delimiter and category_id between 1 and 61 and encode null values for both string and non string columns.
-  * 8. Import entire schema retail_db in a directory categories_subset_all_tables
-  */
+# Question 72
+````text
+   Problem Scenario 3: You have been given MySQL DB with following details.
+   user=retail_dba
+   password=cloudera
+   database=retail_db
+   table=retail_db.categories
+   jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+   Please accomplish following activities.
+   1. Import data from categories table, where category_id=22 (Data should be stored in categories subset)
+   2. Import data from categories table, where category_id>22 (Data should be stored in categories_subset_2)
+   3. Import data from categories table, where category_id between 1 and 22 (Data should be stored in categories_subset_3)
+   4. While importing catagories data change the delimiter to '|' (Data should be stored in categories_subset_4)
+   5. Importing data from catagories table and restrict the import to category_name,category id columns only with delimiter as '|' (In categories_subset_5 directory)
+   6. Add null values in the table using below SQL statement ALTER TABLE categories modify category_department_id int(11); INSERT INTO categories values (NULL,'TESTING');
+   7. Importing data from catagories table (In categories_subset_6 directory) using '|' delimiter and category_id between 1 and 61 and encode null values for both string and non string columns.
+   8. Import entire schema retail_db in a directory categories_subset_all_tables
+````   
+
+````properties
 // 1. Import data from categories table, where category_id=22 (Data should be stored in categories_subset)
 sqoop import \
 --connect jdbc:mysql://quickstart.cloudera/retail_db \
@@ -127,3 +130,4 @@ sqoop import-all-tables \
 --autoreset-to-one-mapper
 
 $ hdfs dfs -ls /user/cloudera/question72/categories_subset_all_tables
+````
