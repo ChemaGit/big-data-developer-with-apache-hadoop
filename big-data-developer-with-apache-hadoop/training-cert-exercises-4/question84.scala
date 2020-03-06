@@ -62,11 +62,13 @@ object question84 {
         .textFile(s"${path}EmployeeName.csv")
         .map(line => line.split(","))
         .map(arr => (arr(0),arr(1)))
+        .cache()
 
       val salary = sc
         .textFile(s"${path}EmployeeSalary.csv")
         .map(line => line.split(","))
         .map(arr => (arr(0), arr(1)))
+        .cache()
 
       val joined = salary
         .join(emp)
