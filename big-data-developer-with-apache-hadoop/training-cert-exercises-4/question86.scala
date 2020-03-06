@@ -26,10 +26,90 @@
   * (spark11/file_4.txt)
   * Write a Spark program, which will give you the highest occurring words in each file. With their file name and highest occurring words.
   */
+
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
+
+object question86 {
+
+  val spark = SparkSession
+    .builder()
+    .appName("question86")
+    .master("local[*]")
+    .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
+    .config("spark.app.id", "question86")  // To silence Metrics warning
+    .getOrCreate()
+
+  val sc = spark.sparkContext
+
+  val path = "hdfs://quickstart.cloudera/user/cloudera/files/"
+
+  val output = "hdfs://quickstart.cloudera/user/cloudera/exercises/question_86"
+
+  def main(args: Array[String]): Unit = {
+
+    Logger.getRootLogger.setLevel(Level.ERROR)
+
+    try {
+      val n1 = "file_1.txt ==> "
+      val n2 = "file_2.txt ==> "
+      val n3 = "file_3.txt ==> "
+      val n4 = "file_4.txt ==> "
+
+      val file1 = sc
+        .textFile(s"${path}file_1.txt")
+        .flatMap(line => line.split("\\W"))
+        .filter(w => !w.isEmpty)
+        .map(w => (w, 1))
+        .reduceByKey( (v,c) => v + c)
+        .sortBy(t => t._2, false)
+
+      val file2 = sc
+        .textFile(s"${path}file_2.txt")
+        .flatMap(line => line.split("\\W"))
+        .filter(w => !w.isEmpty)
+        .map(w => (w, 1))
+        .reduceByKey( (v,c) => v + c)
+        .sortBy(t => t._2, false)
+
+      val file3 = sc
+        .textFile(s"${path}file_3.txt")
+        .flatMap(line => line.split("\\W"))
+        .filter(w => !w.isEmpty)
+        .map(w => (w, 1))
+        .reduceByKey( (v,c) => v + c)
+        .sortBy(t => t._2, false)
+
+      val file4 = sc
+        .textFile(s"${path}file_4.txt")
+        .flatMap(line => line.split("\\W"))
+        .filter(w => !w.isEmpty)
+        .map(w => (w, 1))
+        .reduceByKey( (v,c) => v + c)
+        .sortBy(t => t._2, false)
+
+      val lHighestWords = sc
+        .parallelize(List( (n1,file1.first()), (n2,file2.first()), (n3,file3.first()), (n4,file4.first()) ))
+        .saveAsTextFile(output)
+
+      // To have the opportunity to view the web console of Spark: http://localhost:4040/
+      println("Type whatever to the console to exit......")
+      scala.io.StdIn.readLine()
+    } finally {
+      sc.stop()
+      println("SparkContext stopped.")
+      spark.stop()
+      println("SparkSession stopped.")
+    }
+  }
+}
+
+
+/*SOLUTION IN THE SPARK REPL
 $ gedit /home/cloudera/files/file_1.txt &
-  $ gedit /home/cloudera/files/file_2.txt &
-  $ gedit /home/cloudera/files/file_3.txt &
-  $ gedit /home/cloudera/files/file_4.txt &
+$ gedit /home/cloudera/files/file_2.txt &
+$ gedit /home/cloudera/files/file_3.txt &
+$ gedit /home/cloudera/files/file_4.txt &
 
 $ hdfs dfs -put /home/cloudera/files/file_1.txt /user/cloudera/files
 $ hdfs dfs -put /home/cloudera/files/file_2.txt /user/cloudera/files
@@ -51,3 +131,4 @@ val result = sc.parallelize(f1.union(f2).union(f3).union(f4)).map({case( (f,(w,c
 result.saveAsTextFile("/user/cloudera/question86")
 
 $ hdfs dfs -cat /user/cloudera/question86/part*
+*/
