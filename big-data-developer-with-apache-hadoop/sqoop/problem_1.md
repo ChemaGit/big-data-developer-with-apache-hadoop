@@ -1,3 +1,4 @@
+````text
 #Para este ejercicio hay que seguir los siguientes pasos en orden:
 #1. Crear el fichero 01_comando_sqoop.sql cuyo contenido sea un comando sqoop que:
 #a. Lea de la tabla accounts de loudacre
@@ -7,6 +8,8 @@
 #e. El fichero java que se produce tiene que situarse en el directorio /tmp. 
 #f. Esto se puede hacer mediante la opci�n --outdir /tmp.
 #g. El resultado del comando sqoop debe almacenarse en un solo fichero.
+````
+````properties
 spoop import \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -18,3 +21,4 @@ spoop import \
 --target-dir /loudacre/accountsD \
 --outdir /tmp \
 --num-mappers 8
+````

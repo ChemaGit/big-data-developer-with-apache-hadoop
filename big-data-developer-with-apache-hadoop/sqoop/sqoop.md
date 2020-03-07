@@ -1,3 +1,5 @@
+````properties
+#!/usr/bin/env bash
 #to see a list of available tools run
 sqoop help
 #list all tables in the loudacre database in MySQL
@@ -319,3 +321,4 @@ $ sqoop job --list
 $ sqoop job --show myjob
 #Step 4: Execute the job
 $ sqoop job --exec myjob
+````

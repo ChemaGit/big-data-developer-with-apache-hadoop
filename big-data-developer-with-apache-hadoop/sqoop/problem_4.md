@@ -1,3 +1,4 @@
+````text
 #Problem Scenario 4: You have been given MySQL DB with following details.
 #user=training
 #password=training
@@ -7,7 +8,8 @@
 #Please accomplish following activities.
 #Import Single table accountdevice (Subset data} to hive managed table , where account_id
 #between 1 and 22
-
+````
+````properties
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -16,3 +18,4 @@ sqoop import \
 --where "account_id between 1 and 22" \
 -m 8 \
 --hive-import
+````
