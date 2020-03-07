@@ -1,4 +1,4 @@
-#Examples in Sqoop
+# Examples in Sqoop
 ````text
     - Importing/exporting Relational Data with Apache Sqoop
     - Sqoop exchanges data between a database and HDFS
