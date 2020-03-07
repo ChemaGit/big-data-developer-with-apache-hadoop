@@ -13,18 +13,100 @@
   * 4. Calculate average revenue
   * Columns of orde_items table : (order_item_id , order_item_order_id ,order_item_product_id, order_item_quantity,order_item_subtotal,order_item_product_price)
   * Save results in one file, in directory /user/cloudera/question90
+  *
+  * $ sqoop import \
+  * --connect jdbc:mysql://quickstart.cloudera/retail_db \
+  * --username retail_dba \
+  * --password cloudera \
+  * --table order_items \
+  * --as-textfile \
+  * --delete-target-dir \
+  * --target-dir /user/cloudera/tables/order_items \
+  * --bindir /home/cloudera/bindir \
+  * --outdir /home/cloudera/outdir
+  *
+  * $ hdfs dfs -ls /user/cloudera/tables/order_items/
+  * $ hdfs dfs -cat /user/cloudera/tables/order_items/part* | head -n 20
   */
-sqoop import \
---connect jdbc:mysql://quickstart:3306/retail_db \
-  --username root \
-  --password cloudera \
-  --table order_items \
-  --delete-target-dir \
-  --target-dir /user/cloudera/question90/order_items \
-  --outdir /home/cloudera/outdir \
---bindir /home/cloudera/bindir \
---num-mappers 8
 
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
+
+object question90 {
+
+  val spark = SparkSession
+    .builder()
+    .appName("question90")
+    .master("local[*]")
+    .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
+    .config("spark.app.id", "question90")  // To silence Metrics warning
+    .getOrCreate()
+
+  val sc = spark.sparkContext
+
+  val sqlContext = spark.sqlContext
+
+  val input = "hdfs://quickstart.cloudera/user/cloudera/tables/order_items/"
+  val output = "hdfs://quickstart.cloudera/user/cloudera/exercises/question_90/"
+
+  def main(args: Array[String]): Unit = {
+
+    Logger.getRootLogger.setLevel(Level.ERROR)
+
+    try {
+      /**
+        * SPARK RDD
+        */
+      val order_items_rdd = sc
+        .textFile(input)
+        .map(line => line.split(","))
+        .map(arr => arr(4).toDouble)
+        .cache()
+
+      val sumTotalRevenue = order_items_rdd.sum()
+      val maxRevenue = order_items_rdd.max()
+      val minRevenue = order_items_rdd.min()
+      val averageRevenue = order_items_rdd.sum() / order_items_rdd.count()
+
+      println(s"Total revenue: $sumTotalRevenue")
+      println(s"Max Revenue: $maxRevenue")
+      println(s"Min Revenue: $minRevenue")
+      println(s"Average Revenue: $averageRevenue")
+
+      sc
+        .parallelize(List(s"Total revenue: $sumTotalRevenue", s"Max Revenue: $maxRevenue",s"Min Revenue: $minRevenue",s"Average Revenue: $averageRevenue"))
+        .saveAsTextFile(s"${output}rdd")
+
+      /**
+        * SPARK DATAFRAMES
+        */
+
+      import spark.implicits._
+
+      val order_items_df = order_items_rdd.toDF("revenue")
+      order_items_df.createOrReplaceTempView("t_revenue")
+
+      sqlContext
+        .sql(
+          """SELECT ROUND(SUM(revenue),2) AS SumRevenue, MAX(revenue) AS MaxRevenue, MIN(revenue) AS MinRevenue, ROUND(AVG(revenue),2) AS AverageRevenue
+            |FROM t_revenue""".stripMargin)
+        .rdd
+        .saveAsTextFile(s"${output}dataframes")
+
+      // To have the opportunity to view the web console of Spark: http://localhost:4040/
+      println("Type whatever to the console to exit......")
+      scala.io.StdIn.readLine()
+    } finally {
+      sc.stop()
+      println("SparkContext stopped.")
+      spark.stop()
+      println("SparkSession stopped.")
+    }
+  }
+}
+
+
+/*SOLUTION IN THE SPARK REPL
 val orderItems = sc.textFile("/user/cloudera/question90/order_items").map(line => line.split(",")).map(r => (r(0).toInt,r(1).toInt,r(2).toInt,r(3).toInt,r(4).toFloat,r(5).toFloat))
 
 // SPARK RDD SOLUTION
@@ -44,3 +126,4 @@ resultSql.rdd.map(r => r.mkString(",")).saveAsTextFile("/user/cloudera/question9
 
 $ hdfs dfs -cat /user/cloudera/question90/order_items/result_sql/par*
 // 3.432262059842491E7,1999.99,9.99,199.32066922046081
+*/
