@@ -1,13 +1,16 @@
 ````properties
 #!/usr/bin/env bash
-#to see a list of available tools run
+
+# to see a list of available tools run
 sqoop help
-#list all tables in the loudacre database in MySQL
+
+# list all tables in the loudacre database in MySQL
 sqoop list-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
 --password training
-#perform a database query using the eval tool
+
+# perform a database query using the eval tool
 sqoop eval \
 --query "SELECT * FROM device LIMIT 20" \
 --connect jdbc:mysql://localhost/loudacre \
@@ -19,19 +22,20 @@ sqoop eval \
 --username training -P \
 -e "INSERT INTO test VALUES(194765,129762, 'Pinto', '17/07/1969', 'Happy Man')"
 
-#List database schemas present on a server.
+# List database schemas present on a server.
 sqoop list-databases \
 --connect jdbc:mysql://localhost/loudacre \
 --username training -P
 
-#imports an entire database
-#The option --autoreset-to-one-mapper is typically used with the import-all-tables tool to automatically handle tables without a primary key in a schema.
+# imports an entire database
+# The option --autoreset-to-one-mapper is typically used with the import-all-tables tool to automatically handle tables without a primary key in a schema.
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
 --password training \
 --autoreset-to-one-mapper
-#we can exclude some tables
+
+# we can exclude some tables
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training -P \
@@ -41,20 +45,21 @@ sqoop import-all-tables \
 --exclude-tables "test,webpage,device,accountdevice,accounts" \
 --autoreset-to-one-mapper
 
-#use the --warehouse-dir option to specify a different base directory
+# use the --warehouse-dir option to specify a different base directory
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
 --password training
 --warehouse-dir /loudacre
 
-#import a single table
+# import a single table
 sqoop import --table accounts \
 --connnect jdbc:mysql://localhost/loudacre \
 --username training
 --password training
 --warehouse-dir /loudacre
-#import only specified columns from a single table
+
+# import only specified columns from a single table
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
@@ -83,7 +88,8 @@ sqoop import \
 --delete-target-dir \
 --target-dir /loudacre/accounts \
 --num-mappers 8
-#import only matching rows from a single table
+
+# import only matching rows from a single table
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -105,7 +111,7 @@ sqoop import \
 --target-dir /loudacre/accounts \
 --num-mappers 8
 
-#import from a query
+# import from a query
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -124,7 +130,7 @@ sqoop import \
 --target-dir /loudacre/accounts/problem \
 --delete-target-dir
 
-#import from MYSQL to a HIVE table
+# import from MYSQL to a HIVE table
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -141,14 +147,15 @@ sqoop import \
 --hive-import \
 --hive-table hiveweb
 
-#we can specify an altenate location
+# we can specify an altenate location
 sqoop import-all-tables \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
 --password training \
 --autoreset-to-one-mapper \
 --target-dir /loudacre/customer_accounts
-#specifying an alternate delimiter
+
+# specifying an alternate delimiter
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
@@ -168,7 +175,7 @@ sqoop import \
 --target-dir /loudacre/accounts \
 --num-mappers 8
 
-#storing data in a compressed file
+# storing data in a compressed file
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training
@@ -197,7 +204,7 @@ sqoop import \
 --target-dir /loudacre/compress \
 --num-mappers 8
 
-#sqoop supports importing data as Parquet or Avro files
+# sqoop supports importing data as Parquet or Avro files
 sqoop import --table accounts \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -212,7 +219,7 @@ sqoop import --table accounts \
 --as-avrodatafile \
 --target-dir /loudacre/customer_accounts
 
-#sqoop provides an incremental import mode which can be used to retrieve only rows newer than some previously-imported set of rows.
+# sqoop provides an incremental import mode which can be used to retrieve only rows newer than some previously-imported set of rows.
 sqoop import \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -249,7 +256,7 @@ sqoop import \
 --target-dir /loudacre/accounts \
 -m 8
 
-#Sqoop supports export data from Hadoop to RDBMS with the export tool
+# Sqoop supports export data from Hadoop to RDBMS with the export tool
 sqoop export \
 --connect jdbc:mysql://localhost/loudacre \
 --username training \
@@ -284,14 +291,16 @@ $ sqoop export \
 --validate \
 --num-mappers 8
 
-#create a hive table, only metastore data with a definition for a table based on a database table previously imported to HDFS, or one planned to be imported.
+# create a hive table, only metastore data with a definition for a table based on a database table previously imported to HDFS, 
+# or one planned to be imported.
 sqoop create-hive-table \
 --connect jdbc:mysql://localhost/loudacre \
 --username training  -P \
 --table accounts \
 --hive-table accounts
 
-#The job tool allows you to create and work with saved jobs. Saved jobs remember the parameters used to specify a job, so they can be re-executed by invoking the job by its handle.
+# The job tool allows you to create and work with saved jobs. 
+# Saved jobs remember the parameters used to specify a job, so they can be re-executed by invoking the job by its handle.
 $ sqoop job \
 --create myjob \
 -- import \
@@ -304,9 +313,9 @@ $ sqoop job \
 --bindir /home/training/Desktop/bindir \
 --num-mappers 8
 
-#The merge tool allows you to combine two datasets where entries in one dataset should overwrite entries of an older dataset. 
-#For example, an incremental import run in last-modified mode will generate multiple datasets in HDFS where successively newer data appears in each dataset. 
-#The merge tool will "flatten" two datasets into one, taking the newest available records for each primary key.
+# The merge tool allows you to combine two datasets where entries in one dataset should overwrite entries of an older dataset. 
+# For example, an incremental import run in last-modified mode will generate multiple datasets in HDFS where successively newer data appears in each dataset. 
+# The merge tool will "flatten" two datasets into one, taking the newest available records for each primary key.
 $ sqoop merge \
 --class-name products_replica \
 --jar-file /home/training/Desktop/bindir/products_replica.jar \
@@ -315,10 +324,10 @@ $ sqoop merge \
 --target-dir /user/cloudera/problem5/products-text-both-parts \
 --merge-key product_id
 
-#Step 2: list the jobs
+# Step 2: list the jobs
 $ sqoop job --list
-#Step 3: Describe the job
+# Step 3: Describe the job
 $ sqoop job --show myjob
-#Step 4: Execute the job
+# Step 4: Execute the job
 $ sqoop job --exec myjob
 ````
