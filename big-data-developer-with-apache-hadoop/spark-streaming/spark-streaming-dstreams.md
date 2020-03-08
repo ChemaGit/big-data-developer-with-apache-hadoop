@@ -45,14 +45,17 @@
 			ssc.awaitTermination()
 		}
 	}
-````	
+````
+
 ````text	
 * Example: Configuring StreamingContext
 ````
+
 ````scala
 	val sc = new SparkContext()
 	val ssc = new SparkStreamingContext(sc, Seconds(2))
 ````	
+
 ````text
 	- A StreamingContext is the main entry point for Spark Streaming apps
 	- Equivalent to SparkContext in core Spark
@@ -61,9 +64,11 @@
 
 * Streaming Example: Creating a DStream
 ````
+
 ````scala
 	val mystream = ssc.socketTextStream(hostname, port)
-````	
+````
+
 ````text
 	- Get a DStream("Discretized Stream") from a streaming data source, for example, text from a socket
 
@@ -72,24 +77,29 @@
 ````scala
 	val userreqs = mystream.map(line => line.split(' ')(2), 1).reduceByKey( (x, y) => x + y)
 ````	
+
 ````text
 	- DStream operations applied to each batch RDD in the stream
 	- Similar to RDD operations-filter, map, reduce, joinByKey, and so on.
 
 * Streaming Example: DStream Result Output
 ````
+
 ````scala
 	userreqs.print()
 ````	
+
 ````text
 	- Print out the first 10 elements of each RDD
 
 * Streaming Example: Starting the Streams
 ````
+
 ````scala
 	ssc.start()
 	ssc.awaitTermination()
 ````
+
 ````text
 	- start: Starts the execution of all DStreams
 	- awaitTermination: waits for all background threads to complete before ending the main thread
@@ -165,7 +175,7 @@
 
 * DStream Data Sources
 	- DStreams are defined for a given input stream (suc as Unix socket)
-		- Created by the Streaming context
+		- Created by the Streaming context		
 			ssc.socketTextStream(hostname, port)
 		- Similar to how RDDs are created by the Spark context
 		- Out-of-the-box data sources
@@ -217,6 +227,7 @@
 
 * Scala Example: Find Top Users
 ````
+
 ````scala
 	// Transfom each RDD: swap userID/cout, sort by count		
 	val userreqs = mystream.map(line => line.split(' ')(2), 1).reduceByKey( (x, y) => x + y)
@@ -229,6 +240,7 @@
 		rdd.take(5).foreach(pair => printf("User: %s (%s)\n", pair._2, pair._1"))
 	})
 ````
+
 ````text
 * Example: Find Top Users-Output
 	- t1(2 seconds after ssc.start)
