@@ -1,10 +1,10 @@
 # APACHE SPARK STREAMING: DATA SOURCES
 
 ````text
-	* How data sources are integrated with Spark Streaming
-	* How receiver-based integration differs from direct integration
-	* How Apache Flume and Apache Kafka are integrated with Spark Streaming
-	* How to use direct Kafka integration to create a DStream
+* How data sources are integrated with Spark Streaming
+* How receiver-based integration differs from direct integration
+* How Apache Flume and Apache Kafka are integrated with Spark Streaming
+* How to use direct Kafka integration to create a DStream
 
 * STREAMING DATA SOURCE OVERVIEW
 	- Basic Data sources
@@ -84,27 +84,27 @@
 ````scala
 // Scala Example: Direct Kafka Integration
 
-	import org.apache.spark.SparkContext
-	import org.apache.spark.streaming.StreamingContext
-	import org.apache.spark.streaming.Seconds
-	import org.apache.spark.streaming.kafka._
-	import kafka.serializer.StringDecoder
+import org.apache.spark.SparkContext
+import org.apache.spark.streaming.StreamingContext
+import org.apache.spark.streaming.Seconds
+import org.apache.spark.streaming.kafka._
+import kafka.serializer.StringDecoder
 
-	object StreamingRequestCount {
-		def main(args: Array[String]) {
-			val sc = new SparkContext()
-			val ssc = new StreamingContext(sc, Seconds(2))
-			val kafkaStream = KafkaUitls
-			.createDirectStream[String,String,StringDecoder,StringDecoder](ssc,Map("metadata.broker.list" -> "broker1:port,broker2:port"),Set("mytopic"))
+object StreamingRequestCount {
+    def main(args: Array[String]) {
+        val sc = new SparkContext()
+        val ssc = new StreamingContext(sc, Seconds(2))
+        val kafkaStream = KafkaUitls
+        .createDirectStream[String,String,StringDecoder,StringDecoder](ssc,Map("metadata.broker.list" -> "broker1:port,broker2:port"),Set("mytopic"))
 
-			val logs = kafkaStream.map(pair => pair._2)
-			val userreqs = logs.map(line => (line.split(' ')(2),1)).reduceByKey( (x, y) => x + y)
-			userreqs.print()
+        val logs = kafkaStream.map(pair => pair._2)
+        val userreqs = logs.map(line => (line.split(' ')(2),1)).reduceByKey( (x, y) => x + y)
+        userreqs.print()
 
-			ssc.start()
-			ssc.awaitTermination()
-		}
-	}
+        ssc.start()
+        ssc.awaitTermination()
+    }
+}
 ````
 
 
