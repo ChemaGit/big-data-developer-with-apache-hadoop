@@ -58,12 +58,12 @@
 
 # Creating DataFrames
 ````text
-	-DataFrames can be created
-		* From an existing structured data source
-			Such as a Hive table, Parquet file, or JSON file
-		* From an existing RDD
-		* By performing an operation or query on another DataFrame
-		* By programmatically defining a schema
+    -DataFrames can be created
+        * From an existing structured data source
+            Such as a Hive table, Parquet file, or JSON file
+        * From an existing RDD
+        * By performing an operation or query on another DataFrame
+        * By programmatically defining a schema
     - Creating a DataFrame from a Data Source
         - sqlContext.read returns a DataFrameReader object
         - DataFrameReader provides the functionality to load data into a DataFrame
@@ -73,7 +73,8 @@
             orc(filename)
             table(hive-tablename)
             jdbc(url, table, options)
-````            
+````       
+     
 ````scala    
     // Example: Creating a DataFrame from a JSON File
     val sqlContext = new HiveContext(sc)
@@ -85,6 +86,7 @@
     import sqlContext.implicits._
     val customerDF = sqlContext.read.table("customers")	
 ````      
+
 ````text  				
     - Loading from a Data Source Manually
         -You can specify settings for the DataFrameReader
@@ -93,6 +95,7 @@
             * schema: Specify a schema instead of inferring from the data source
 	-Then call the generic base function load
 ````	
+
 ````scala	
     sqlContext.read.format("com.databricks.spark.avro").load("/loudacre/accounts_avro")		
     sqlContext.read.format("jdbc")
@@ -101,7 +104,9 @@
                    .option("user","training")
                    .option("password","training")
                    .load()	
-````		               				
+````
+		
+````text               				
     - Data Sources		             
         - Spark SQL built-in data source types
             * table
