@@ -73,32 +73,34 @@
             orc(filename)
             table(hive-tablename)
             jdbc(url, table, options)
-    - Example: Creating a DataFrame from a JSON File
+````            
 ````scala    
-        val sqlContext = new HiveContext(sc)
-        import sqlContext.implicits._
-        val peopleDF = sqlContext.read.json("people.json")	
-````        
-    - Example: Creating a DataFrame from a Hive/Impala Table
-````scala    
-        val sqlContext = new HiveContext(sc)
-        import sqlContext.implicits._
-        val customerDF = sqlContext.read.table("customers")	
-````        				
+    // Example: Creating a DataFrame from a JSON File
+    val sqlContext = new HiveContext(sc)
+    import sqlContext.implicits._
+    val peopleDF = sqlContext.read.json("people.json")	
+
+    // Example: Creating a DataFrame from a Hive/Impala Table  
+    val sqlContext = new HiveContext(sc)
+    import sqlContext.implicits._
+    val customerDF = sqlContext.read.table("customers")	
+````      
+````text  				
     - Loading from a Data Source Manually
         -You can specify settings for the DataFrameReader
             * format: Specify a data source type
             * option: a key/value setting for the underlying data source
             * schema: Specify a schema instead of inferring from the data source
 	-Then call the generic base function load
+````	
 ````scala	
-		sqlContext.read.format("com.databricks.spark.avro").load("/loudacre/accounts_avro")		
-		sqlContext.read.format("jdbc")
-		               .option("url","jdbc:mysql://localhost/loudacre")
-		               .option("dbtable", "accounts")
-		               .option("user","training")
-		               .option("password","training")
-		               .load()	
+    sqlContext.read.format("com.databricks.spark.avro").load("/loudacre/accounts_avro")		
+    sqlContext.read.format("jdbc")
+                   .option("url","jdbc:mysql://localhost/loudacre")
+                   .option("dbtable", "accounts")
+                   .option("user","training")
+                   .option("password","training")
+                   .load()	
 ````		               				
     - Data Sources		             
         - Spark SQL built-in data source types
@@ -115,21 +117,25 @@
 ````            
             
 # DataFrame Basic Operations(1)
+````text
 	-Basic operations deal with DataFrame metadata(rather than its data)
 	-Some examples
-		*schema -> returns a schema object describing the data
-		*printSchema -> diplays the schema as a visual tree
-		*cache / persist -> persist the DataFrame to disk or memory
-		*columns -> returns an array containing the names of the columns
-		*dtypes -> returns an array of (column name, type) pairs
-		*explain -> prints debug information about the DataFrame to the console
-# DataFrame Basic Operations(2)
-	-Example: Displaying column data types using dtypes
-		> val peopleDF = sqlContext.read.json("people.json")
-		> peopleDF.dtypes.foreach(println)
-		  (age, LongType)
-		  (name, StringType)
-		  (pcode, StringType)					
+		* schema -> returns a schema object describing the data
+		* printSchema -> diplays the schema as a visual tree
+		* cache / persist -> persist the DataFrame to disk or memory
+		* columns -> returns an array containing the names of the columns
+		* dtypes -> returns an array of (column name, type) pairs
+		* explain -> prints debug information about the DataFrame to the console
+````		
+````scala		
+	// Example: Displaying column data types using dtypes
+    val peopleDF = sqlContext.read.json("people.json")
+	peopleDF.dtypes.foreach(println)
+      (age, LongType)
+      (name, StringType)
+      (pcode, StringType)	
+````      	
+		  			
 # Working with Data in a DataFrame
 	-Queries-create a new DataFrame
 		*DataFrames are immutable
