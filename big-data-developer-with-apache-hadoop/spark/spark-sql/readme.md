@@ -39,13 +39,13 @@
 		* You will need to create one when writing a Spark application
 		* Having multiple SQL context objects is allowed
 	- A SQL context object is created based on the Spark context
-	
+````
 ````scala
 		import org.apache.spark.sql.hive.HiveContext
 		val sqlContext = new HiveContext(sc)
 		import sqlContext.implicits._
 ````			
-````
+
 
 
 # DataFrames		
