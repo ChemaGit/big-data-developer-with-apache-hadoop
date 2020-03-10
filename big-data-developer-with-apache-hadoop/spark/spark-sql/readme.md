@@ -41,11 +41,11 @@
 	- A SQL context object is created based on the Spark context
 ````
 
-``scala
+````scala
 		import org.apache.spark.sql.hive.HiveContext
 		val sqlContext = new HiveContext(sc)
 		import sqlContext.implicits._
-``			
+````			
 
 
 
@@ -97,7 +97,7 @@
     - Then call the generic base function load
 ````    
 
-``scala	
+````scala	
     val sqlContext = spark.SQLContext
     sqlContext.read.format("com.databricks.spark.avro").load("/loudacre/accounts_avro")		
     sqlContext.read.format("jdbc")
@@ -106,7 +106,7 @@
                    .option("user","training")
                    .option("password","training")
                    .load()	
-``                               
+````                               
 		
 ````text               				
     - Data Sources		             
@@ -214,7 +214,7 @@
                     
     - Joining DataFrames(1)						
         - A basic inner join when join column is in both DataFrames
-            > peopleDF.join(pcodesDF, "pcode")
+            peopleDF.join(pcodesDF, "pcode")
         - Specify type of join as inner(default), outer, left_outer, right_outer, or leftsemi
             Python >> peopleDF.join(pcodesDF, "pcode", "left_outer")
             Scala >> peopleDF.join(pcodesDF, Array("pcode"), "left_outer")
@@ -357,13 +357,16 @@
             - A strongly-typed collection of objects, mapped to a relational schema
             - Unified with the DataFrame API-DFs are Datasets of Row objects
             - Use the Spark Catalyst optimizer as DFs do for better performance
-            - Word count using RDDs: Scala
+````
+
+````scala            
+            // Word count using RDDs: Scala
                 val countsRDD = sc.textFile(filename)
                                   .flatMap(line => line.split(" "))
                                   .map(word => (word, 1))
                                   .reduceByKey((v1, v2) => v1 + v2)
                                   
-            - Word count using Datasets: Scala
+            // Word count using Datasets: Scala
                 val countDS = sqlContext.read.text(filename).as[String]
                                         .flatMap(line => line.split(" "))
                                         .groupBy(word => word)
