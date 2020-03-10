@@ -4,16 +4,16 @@ import org.apache.spark.sql.SparkSession
 object WordCount {
   val spark = SparkSession
     .builder()
-    .appName("question54")
+    .appName("WordCount")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "question54")  // To silence Metrics warning
+    .config("spark.app.id", "WordCount")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
   val sqlContext = spark.sqlContext
 
-  val path = "file:/home/training/training_materials/devsh/examples/example-data/purplecow.txt"
+  val path = "hdfs://quickstart.cloudera/user/cloudera/files/purplecow.txt"
 
   def main(args: Array[String]): Unit = {
     Logger.getRootLogger.setLevel(Level.ERROR)
