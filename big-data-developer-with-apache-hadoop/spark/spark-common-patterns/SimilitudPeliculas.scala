@@ -101,6 +101,9 @@ object SimilitudPeliculas {
     } 		
   }
 
+  val sconf = new SparkConf().setAppName("Template").set("spark.ui.port","4141")
+  val sc = new SparkContext(sconf)
+
   def main(args: Array[String]) {
     if (args.length < 1) {
       System.err.println("Usage: example.Template <id>")
@@ -108,62 +111,63 @@ object SimilitudPeliculas {
       System.exit(1)
     }
 
-    val sconf = new SparkConf().setAppName("Template").set("spark.ui.port","4141")
-    val sc = new SparkContext(sconf)
     sc.setLogLevel("ERROR")
-    
-    val idPelicula = args(0).toInt
-    println("Load movies..........")
-    val diccionarioNombres = cargarNombresPeliculas(sc).persist()
-    //diccionarioNombres.collect().foreach(x => println(x))
-    val datos = sc.textFile("/files/opiniones.txt")
 
-    // Mapear opiniones a pares key/value: (idUsuario, (idPelicula, opinion))	
-    val opiniones = datos.map(l => l.split("""\t""")).map(l => (l(0).toInt, (l(1).toInt,l(2).toFloat)))
+    try {
+      val idPelicula = args(0).toInt
+      println("Load movies..........")
+      val diccionarioNombres = cargarNombresPeliculas(sc).cache
+      //diccionarioNombres.collect().foreach(x => println(x))
+      val datos = sc.textFile("/files/opiniones.txt")
 
-    //Producto cartesiano
-    //(idUsuario, ((idPelicula1, opinion1), (idPelicula2, opinion2)))
-    val productoOpiniones = opiniones.join(opiniones)
+      // Mapear opiniones a pares key/value: (idUsuario, (idPelicula, opinion))
+      val opiniones = datos.map(l => l.split("""\t""")).map(l => (l(0).toInt, (l(1).toInt,l(2).toFloat)))
 
-    //Filtrar duplicados
-    val opinionesUnicas = productoOpiniones.filter(filtrarDuplicados)
+      //Producto cartesiano
+      //(idUsuario, ((idPelicula1, opinion1), (idPelicula2, opinion2)))
+      val productoOpiniones = opiniones.join(opiniones)
 
-    //Hacer que clave sean los pares (pelicula1, pelicula2) 
-    //pasar de
-    //	(idUsuario, ((idPelicula1, opinion1), (idPelicula2, opinion2))) a
-    //	((idPelicula1, idPelicula2), (opinion1, opinion2))
-    val paresPeliculas = opinionesUnicas.map(construirPares) 
+      //Filtrar duplicados
+      val opinionesUnicas = productoOpiniones.filter(filtrarDuplicados)
 
-    //Tenemos ahora (pelicula1, pelicula2) => (opinion1, opinion1)
-    //Coleccionar todas las opiniones para cada par de peliculas 
-    val paresOpionesPeliculas = paresPeliculas.groupByKey()
+      //Hacer que clave sean los pares (pelicula1, pelicula2)
+      //pasar de
+      //	(idUsuario, ((idPelicula1, opinion1), (idPelicula2, opinion2))) a
+      //	((idPelicula1, idPelicula2), (opinion1, opinion2))
+      val paresPeliculas = opinionesUnicas.map(construirPares)
 
-    //Tenemos (pelicula1, pelicula2) => (opinion1, opinion2), (opinion1, opinion2) ...
-    //Calculamos similitudes.
-    val similares = paresOpionesPeliculas.mapValues(similitudCoseno).cache()
+      //Tenemos ahora (pelicula1, pelicula2) => (opinion1, opinion1)
+      //Coleccionar todas las opiniones para cada par de peliculas
+      val paresOpionesPeliculas = paresPeliculas.groupByKey()
 
-    //#Salvar los resultados
-    similares.sortByKey()
-    similares.saveAsTextFile("/loudacre/movie-sims")
+      //Tenemos (pelicula1, pelicula2) => (opinion1, opinion2), (opinion1, opinion2) ...
+      //Calculamos similitudes.
+      val similares = paresOpionesPeliculas.mapValues(similitudCoseno).cache()
 
-    val resultadosFiltrados = similares.filter(t => cumpleCondiciones(t, idPelicula))
-    
-    //Ordenar por calidad del resultado. Elegir los 10 mejores
-    val resultados = resultadosFiltrados.map({ case( (pair,sim) ) => (sim, pair) }).sortByKey(ascending = false).take(10) //collect()
+      //#Salvar los resultados
+      similares.sortByKey()
+      similares.saveAsTextFile("/loudacre/movie-sims")
 
-    val pelSim = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == idPelicula}).take(1)
+      val resultadosFiltrados = similares.filter(t => cumpleCondiciones(t, idPelicula))
 
-    println("Resultado similares a la pelicula " + pelSim(0))
+      //Ordenar por calidad del resultado. Elegir los 10 mejores
+      val resultados = resultadosFiltrados.map({ case( (pair,sim) ) => (sim, pair) }).sortByKey(ascending = false).take(10) //collect()
 
-    resultados.foreach({case((s, p)) => {
-      val p1 = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == p._1}).take(1)
-      val p2 = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == p._2}).take(1)
+      val pelSim = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == idPelicula}).take(1)
 
-      val mensaje = "%s  similitud: %f  veces: %d".format(p1(0)._2._2,s._1,s._2)
-      val mensaje1 = "%s  similitud: %f  veces: %d".format(p2(0)._2._2,s._1,s._2)
-      println(mensaje)
-      println(mensaje1)
-    } })
-    sc.stop()
+      println("Resultado similares a la pelicula " + pelSim(0))
+
+      resultados.foreach({case((s, p)) => {
+        val p1 = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == p._1}).take(1)
+        val p2 = diccionarioNombres.filter({case( (m,(m2, m3)) ) => m.toInt == p._2}).take(1)
+
+        val mensaje = "%s  similitud: %f  veces: %d".format(p1(0)._2._2,s._1,s._2)
+        val mensaje1 = "%s  similitud: %f  veces: %d".format(p2(0)._2._2,s._1,s._2)
+        println(mensaje)
+        println(mensaje1)
+      } })
+    } finally {
+      sc.stop()
+    }
   }
 }
