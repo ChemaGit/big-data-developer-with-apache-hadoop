@@ -1,3 +1,4 @@
+````scala
 val mydata = sc.textFile("purplecow.txt")
 mydata.foreach(x => println(x))
 mydata.count()
@@ -12,3 +13,5 @@ fil.saveAsTextFile("/user/training/resFil.txt")
 upper.toDebugString
 upper.saveAsTextFile("/user/training/resUpper.txt") 
 upper.saveAsTextFile("/user/training/upper")
+````
+

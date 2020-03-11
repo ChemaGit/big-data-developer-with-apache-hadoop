@@ -1,3 +1,4 @@
+````scala
 sc.textFile("purplecow.txt").map(line => line.toUpperCase()).filter(line => line.startsWith("I")).count()
 
 sc.textFile("purplecow.txt").map(line => line.toUpperCase())
@@ -32,3 +33,4 @@ rdd1.intersection(rdd1).foreach(x => println(x))
 * -Statistical functions, such as mean, sum, variance, and stdev
 * -Documented in API for: org.apache.spark.rdd.DoubleRDDFunctions
 **/
+````
