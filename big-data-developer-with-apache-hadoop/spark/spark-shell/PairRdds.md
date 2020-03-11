@@ -1,3 +1,4 @@
+````scala
 /**
  * Transformations and Actions on Pair RDD's
  * GroupByKey
@@ -114,3 +115,5 @@ val rddCodeGroup = rddCode.groupByKey().sortByKey()
 rddCodeGroup.sortByKey().take(10).foreach({case(k, it) => {println("---" + k); for( (l, f) <- it ) println(l + ", " + f)}})
 rddCodeGroup.sortByKey().take(5).foreach({case(k, it) => {println("---" + k); it.foreach(println)}})
 rddCodeGroup.sortByKey().take(5).foreach({case(k, it) => {println("---" + k); it.foreach({case(l, f) => println(l + ", " + f)})}})
+````
+

@@ -1,3 +1,4 @@
+````scala
 case class CFFPurchase(customerId: Int, destination: String, price: Double)
 /**
  * Assume we have an RDD of the purchases that users of the Swiss train
@@ -40,3 +41,5 @@ val purchaseRdd: RDD[CFFPurchase] = sc.textFile(dir)
                                       .reduceByKey( (v, v1) => (v._1 + v1._2, v._2 + v1._2))
 val purchasePerMonth = purchaseRdd.collect()                  
 //purchasesPerMonth: Array[(Int, (Int, Double))] = Array((4,(2,45.3)), (2,(3,71.5)), (1,(3,60.3)), (3,(2,48.0)))
+````
+

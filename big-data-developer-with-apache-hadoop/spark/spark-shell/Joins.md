@@ -1,3 +1,4 @@
+````scala
   /**
    * Joins
    * Joins are another sort of transformations on Pair RDDs. 
@@ -73,3 +74,4 @@
    * Shuffles can be an enormous hit to because it means that Spark must send
    * data from one node to another. Why? Latency!  
    */
+````
