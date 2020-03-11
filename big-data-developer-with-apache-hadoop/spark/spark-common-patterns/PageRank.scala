@@ -29,7 +29,7 @@ object PageRank {
     val linkfile = args(0)
     val links = sc.textFile(linkfile).map(_.split(" "))
                                      .map(pages => (pages(0),pages(1)))
-                                     .distinct().groupByKey().persist()
+                                     .distinct().groupByKey().cache
 
     // create initial page ranges of 1.0 for each
     var ranks = links.map(pair => (pair._1,1.0))

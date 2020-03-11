@@ -95,24 +95,24 @@ def mixValues(v1: (Array[String], Int, String) ,v2: (Array[String], Int, String)
    * Usa tailrecursion para iterar
    */
   def buildMap(r: Array[(String, (Array[String], Int, String))]):Map[Int,Int] = {
-	val t = r.length
-	val mapR: Map[Int,Int] = Map()	
+		val t = r.length
+		val mapR: Map[Int,Int] = Map()
 
-	@annotation.tailrec
-	def loadMap(tope: Int, count: Int, arr: Array[(String, (Array[String], Int, String))],myMap:Map[Int,Int]):Map[Int,Int] = {
-		val v = arr(count)
-		val dis = v._2._2
-		val nodos = if(myMap.contains(dis)) myMap.apply(dis) + 1				
-		else 1 
-		val myMapUpd = myMap.updated(dis,nodos)		
-		if(count == tope - 1) {				
-			myMapUpd			
-		} else {
-			loadMap(t,count + 1,arr,myMapUpd)
+		@annotation.tailrec
+		def loadMap(tope: Int, count: Int, arr: Array[(String, (Array[String], Int, String))],myMap:Map[Int,Int]):Map[Int,Int] = {
+			val v = arr(count)
+			val dis = v._2._2
+			val nodos = if(myMap.contains(dis)) myMap.apply(dis) + 1
+			else 1
+			val myMapUpd = myMap.updated(dis,nodos)
+			if(count == tope - 1) {
+				myMapUpd
+			} else {
+				loadMap(t,count + 1,arr,myMapUpd)
+			}
 		}
-	}
 
-	loadMap(t,0,r,mapR)
+		loadMap(t,0,r,mapR)
   }
 
 
@@ -121,38 +121,38 @@ def mixValues(v1: (Array[String], Int, String) ,v2: (Array[String], Int, String)
   * y lo imprime por consola
   */
   def printMap(m: Map[Int,Int]): Unit = {
-	m.foreach((kv) => println("Distancia: %d ** Nodos: %d".format(kv._1, kv._2) ))
+		m.foreach((kv) => println("Distancia: %d ** Nodos: %d".format(kv._1, kv._2) ))
   }
 
   def iterar(acumulador: Accumulator[Int],encontrado: Accumulator[Int], heroesM: org.apache.spark.rdd.RDD[(String, (Array[String], Int, String))]):org.apache.spark.rdd.RDD[(String, (Array[String], Int, String))] = {
-	acumulador.setValue(0)
+			acumulador.setValue(0)
 
-	val grises = heroesM.filter{case (k,(hs,d,c)) => c.equals(G)}
+			val grises = heroesM.filter{case (k,(hs,d,c)) => c.equals(G)}
 
-	acumulador.add(grises.count().toInt)
-		    
-	println("El contador de grises esta a %d".format(acumulador.localValue))
-	println("La distancia es %d".format(encontrado.localValue))
+			acumulador.add(grises.count().toInt)
 
-	if(acumulador.localValue > 0 && encontrado.localValue > 0) {
-		val heroesM1 = heroesM.mapValues(l => changeToBlack(l, encontrado) )	
+			println("El contador de grises esta a %d".format(acumulador.localValue))
+			println("La distancia es %d".format(encontrado.localValue))
 
-		val distancia = grises.take(1)(0)._2._2
+			if(acumulador.localValue > 0 && encontrado.localValue > 0) {
+				val heroesM1 = heroesM.mapValues(l => changeToBlack(l, encontrado) )
 
-		val keys = grises.flatMap{case (k,(hs,d,c)) => hs}
+				val distancia = grises.take(1)(0)._2._2
 
-		val newRdd = keys.map(k => (k, (Array(""), distancia + 1, G)))
+				val keys = grises.flatMap{case (k,(hs,d,c)) => hs}
 
-		val heroesM2 = heroesM1 ++ newRdd
+				val newRdd = keys.map(k => (k, (Array(""), distancia + 1, G)))
 
-		val heroesM3 = heroesM2.reduceByKey{case ((hs,d,c),(hs1,d1,c1))  => mixValues((hs,d,c),(hs1,d1,c1), encontrado)}
+				val heroesM2 = heroesM1 ++ newRdd
 
-		heroesM2.unpersist()
+				val heroesM3 = heroesM2.reduceByKey{case ((hs,d,c),(hs1,d1,c1))  => mixValues((hs,d,c),(hs1,d1,c1), encontrado)}
 
-		iterar(acumulador, encontrado, heroesM3.persist())
-	} else {
-		heroesM
-	}
+				heroesM2.unpersist()
+
+				iterar(acumulador, encontrado, heroesM3.persist())
+			} else {
+				heroesM
+			}
 
   }
 
@@ -180,6 +180,7 @@ def mixValues(v1: (Array[String], Int, String) ,v2: (Array[String], Int, String)
 
     val mapHeroes = heroes.map(tuple => tuple._1 + "," + tuple._2._1.mkString(",") + "," + tuple._2._2 + "," + tuple._2._3)
     mapHeroes.saveAsTextFile("/loudacre/heroes/")
+
     sc.stop()
   }
 }

@@ -70,7 +70,7 @@ object KMeansCoords {
                    .map(line => line.split(","))
                    .map(arr => (arr(3).toDouble, arr(4).toDouble) )
                    .filter({case(lat, lon) => !( (lat == 0.0) && (lon == 0.0) ) })
-                   .persist()	
+                   .cache()
     //start with K randomly selected points from the dataset
     // TODO
     val kPoints = kMeans.takeSample(false, K, 42)	
@@ -107,6 +107,7 @@ object KMeansCoords {
     // TODO    
     println("Final K Points")
     kPoints.foreach(println)
+
     sc.stop()
   }
 }
