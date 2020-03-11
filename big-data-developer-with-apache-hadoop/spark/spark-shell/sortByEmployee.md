@@ -1,3 +1,4 @@
+````scala
 /**
  * 	 E01,Lokesh
  *   E02,Bhupesh
@@ -22,4 +23,5 @@
               .sortBy(r => r(1), ascending = false, numPartitions = 1)
               .map(line => line.mkString(","))
               
-  rdd.saveAsTextFile(outDir)            
+  rdd.saveAsTextFile(outDir)
+````

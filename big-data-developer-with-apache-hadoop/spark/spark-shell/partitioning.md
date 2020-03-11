@@ -1,3 +1,4 @@
+````scala
 /**
  * Customizing a partitioning is only possible on Pair RDDs.
  * 
@@ -134,3 +135,4 @@
     * groupByKey, reduceByKey, combineByKey, distinct, intersection, repartition, coalesce.   
     */
     */
+````    

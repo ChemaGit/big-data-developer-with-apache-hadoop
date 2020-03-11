@@ -1,3 +1,4 @@
+````scala
 val rddCow = sc.textFile("/user/training/purplecow.txt")
 rddCow.collect().foreach(x => println(x))
 val rddDir = sc.textFile("/loudacre/kb/")
@@ -12,3 +13,5 @@ absoluteUri2.collect().foreach(x => println(x))
 
 val whole = sc.wholeTextFiles("/loudacre/kb/")
 whole.take(1).foreach(x => println(x))
+````
+

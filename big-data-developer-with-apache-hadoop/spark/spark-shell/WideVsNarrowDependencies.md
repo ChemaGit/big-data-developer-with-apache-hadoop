@@ -1,3 +1,4 @@
+````scala
 /**
  * LINEAGES
  * Computations on RDDs are represented as a lineage graph; a Directed
@@ -63,3 +64,5 @@
    * Recomputing missing partitions fast for narrow dependencies. 
    * But slow for wide dependencies!
    */
+````   
+   

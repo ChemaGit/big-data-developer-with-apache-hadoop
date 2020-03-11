@@ -1,3 +1,4 @@
+````scala
 //working with Rdd's
 val dir = "/loudacre/weblogs/*"
 val pairRdd = sc.textFile(dir)
@@ -28,3 +29,5 @@ val rdd = sc.textFile(dir)
 rdd.collect().foreach(tuple => println(tuple._1 + "/" + tuple._2)) 
 
 rdd.map(line => line._1 + "/" + line._2).saveAsTextFile("/loudacre/ipIdList")
+````
+
