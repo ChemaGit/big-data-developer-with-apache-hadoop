@@ -1,5 +1,5 @@
 # Quick revision of programming language – Python 3.x (including Dataframes)
-
+````text
 	- As part of this session we will see quick revision of Python as programming languages with emphasis on collections and map reduce APIs.
 
     	- Python CLI and IDE
@@ -12,8 +12,10 @@
     	- Collections and Map Reduce APIs
     	- Usage of Tuples
     	- Development life cycle using Python
+````
 
 # Python CLI and IDE
+````text
 	- As any other programming language, Python also have multiple graphical interfaces to explore, validate and implement the code. 
 	- Python also have web based development tools such as Jupyter Notebook.
     		- Python is to validate simple code snippets before adding to the modules associated with a project.
@@ -23,16 +25,20 @@
         	- Eclipse with Python plugin
         	- PyCharm (we will be using this for demo)
     		- Once we develop the projects or modules using IDE, we have to build zip file to deploy as an application.
+````
 
 # Variables
+````text
 	- Let us understand some important concepts around Python Variables.
     	- Every variable is object
     	- We cannot specify data type, it will be inherited based up on the value used for initialization of the corresponding variable.
     	- You can assign different values of different types to the same variable and the variable inherit the data type (dynamically typed)
     	- We can get the type of variable by using type function
     	- We can get help on a class or function by passing it to help
+````
 
 # Pre-defined Functions
+````text
 	- It is very important for us to understand the broad spectrum of pre-defined functions to leverage them as part of data processing.
 
 	- Operator related functions
@@ -55,6 +61,7 @@
     		- Python gives us rich APIs to manipulate collections.
     		- Most of these APIs take anonymous functions as arguments
     		- There are functions that are part of collection classes and also generic functions that work on all collections.
+````
 
 ````python
 o = '1,2013-07-25 00:00:00.0,1185,CLOSED'
@@ -66,13 +73,14 @@ int(o.split(',')[1][:4]) #get year as number using split, substring and int
 ````
 
 # User-defined Functions
-
+````text
 	- Now let us see how we can develop user defined functions.
     		- Function starts with key word def
     		- We need to define arguments, data type is not required
     		- Return type is also cannot be specified
     		- We can use varrying number of arguments, key word arguments while defining functions
     		- Python also supports anonymous or lambda functions
+````
 
 ````python
 def sumOfIntegers(lb, ub):
@@ -97,6 +105,7 @@ print(str(sumLambda(5, 10, lambda i: i if(i%2==0) else 0)))
 ````
 
 # Collections and Map Reduce APIs
+````text
 	- Python Collections have support for many type of Collection objects and have APIs to process different types of Collections. 
 	- Collections contain group of homogeneous elements.
     		- At a higher level it support list, set and dict
@@ -104,16 +113,20 @@ print(str(sumLambda(5, 10, lambda i: i if(i%2==0) else 0)))
     		- set is group of unique elements
     		- dict is group of key value pairs. Keys are unique.
     		- There are several APIs and packages such as itertools, collections, pandas etc to manipulate collections in Python
+````
 
 # Usage of Tuples
+````text
 	- While collection is like a table with homogeneous elements, tuple is like a row with columns of different type.
     		- Tuple contains group of heterogeneous elements
     		- It is nothing but object with attributes with no names
     		- As there are no names, we can access elements in tuple by position
     		- We use [0] to access first element, [1] to access second element.
     		- Tuples are represented in ()
+````
 
 # Development life cycle
+````text
 	- Let us define problem statement and understand how we can develop the logic using Python as Programming Language. 
 	- This will be quick revision about all important Python programming constructs.
 
@@ -133,6 +146,7 @@ print(str(sumLambda(5, 10, lambda i: i if(i%2==0) else 0)))
         	- Define function getRevenuePerOrder with 1 argument order_items
         	- Use map reduce APIs to get order_item_order_id and order_item_subtotal, then group by order_item_order_id and then process the values for each order_item_order_id
         	- Return a collection which contain order_item_order_id and revenue_per_order_id
+````
 
 ````python
 def readData(dataPath):
