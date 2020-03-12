@@ -1,5 +1,5 @@
 //it is a singleton class
-object Demo {
+object ObjectOrientedConstruct {
 
 	class Order(orderId: Int, orderDate: String, orderCustomerId: Int, orderStatus: String) {
 		

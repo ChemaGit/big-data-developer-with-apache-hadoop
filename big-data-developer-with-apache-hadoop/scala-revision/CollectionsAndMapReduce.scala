@@ -1,7 +1,7 @@
 // Collection -> Group of homogeneous elements
 // Tuple -> Group of heteregeneous elements
 
-object DemoCollections {
+object CollectionsAndMapReduce {
 
 	def main(args: Array[String]): Unit = {
 		val l = List(1, "Hello",4.0)

@@ -1,6 +1,6 @@
 import scala.io.Source
 
-object GetRevenueForOrderId {
+object DevelopmentLifeCycle {
   def getOrderRevenue(orderItems: List[String], orderId: Int) = {
     val orderRevenue = orderItems.
       filter(orderItem => orderItem.split(",")(1).toInt == orderId).

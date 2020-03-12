@@ -1,4 +1,5 @@
 # Quick revision of programming language – Scala 2.11
+````text
 	- As part of this session we will see quick revision of Scala as programming languages with emphasis on collections and map reduce APIs.
    		- Scala REPL, IDE and sbt
    		-  Variables – val vs. var
@@ -11,8 +12,10 @@
     		- Collections and Map Reduce APIs
     		- Usage of Tuples
     		- Development life cycle using Scala
+````
 
 # Scala REPL, IDE and sbt
+````text
 	- As any other programming language, Scala also have multiple graphical interfaces to explore, validate and implement the code.	
     		- Scala REPL (Read, Evaluate, Print and Loop) is nothing but CLI to validate simple code snippets before adding to the modules associated with a project.
      		- IDE (Integrated Development Environment) – we should be comfortable with IDE and should use IDEs to build applications using any programming language. Following are some IDEs which are popular with respect to Scala.
@@ -21,8 +24,10 @@
     		- Once we develop the projects or modules using IDE, we have to compile them into jar files so that they can be deployed. 
 		- Maven is quite popular in Java world. 
 		- With respect to Scala we can either use Maven or SBT. SBT is more popular to build Scala based applications over maven.
+````
 
 # Variables
+````text
 	- Let us understand some important concepts around Scala Variables.
     		- Every variable is object
     		- It is not mandatory to explicitly specify data type (i = 0 and i: Int = 0 are same)
@@ -33,8 +38,10 @@
 		- run efficiently with out significant overhead of a typical object unless the functions are used.
      		- You need to specify whether the variable is mutable or not mutable using var or val. 
 		- If the object is defined as val we cannot assign different values to it.
+````
 
 # Pre-defined Functions
+````text
 	- It is very important for us to understand the broad spectrum of pre-defined functions to leverage them as part of data processing.
 		- Operator related functions
      		- All arithmetic operators are functions in Scala.
@@ -56,18 +63,18 @@
     		- Scala gives us rich APIs to manipulate collections.
     		- Most of these APIs take anonymous functions as arguments
     		- filter, map, reduce, sum, avg, groupBy etc are example functions on type of collections.
-
+````
 ```scala
-val o = "1,2013-07-25 00:00:00.0,1185,CLOSED"
-
-o.length #length of the string
-o.split(',')(3) #extract status
-o.split(',')(1).substring(0, 4).toInt #get year as number using split, substring and int
-(o.split(',')(0).toInt, o.split(',')(1)) #convert o to tuple with order id as int and date
+    val o = "1,2013-07-25 00:00:00.0,1185,CLOSED"
+    
+    o.length // length of the string
+    o.split(',')(3) // extract status
+    o.split(',')(1).substring(0, 4).toInt // get year as number using split, substring and int
+    (o.split(',')(0).toInt, o.split(',')(1)) // convert o to tuple with order id as int and date
 ```
 
 # User-defined Functions
-
+````text
 	- Now let us see how we can develop user defined functions.
     		- Function starts with key word def
     		- We need to define arguments with data types
@@ -75,36 +82,37 @@ o.split(',')(1).substring(0, 4).toInt #get year as number using split, substring
     		- If return statement is used, then return type is mandatory
     		- We can use varrying number of arguments while defining functions
     		- Scala also supports anonymous or lambda functions
-
-````scala
-def sumOfIntegers(lb: Int, ub: Int) = {
-  var total = 0
-  for (i <- (lb to ub))
-    total += i
-  total
-}
-
-print(sumOfIntegers(5, 10))
-
-def sumOfIntegers(i: Int*) = {
-  i.toList.sum
-}
-
-sumOfIntegers(1, 2, 3)
-
-def sum(lb: Int, ub: Int, f: Int => Int) = {
-  var total = 0
-  for (i <- (lb to ub))
-    total += f(i)
-  total
-}
-
-print(sum(5, 10, i => i))
-print(sum(5, 10, i => i * i))
-print(sum(5, 10, i => if(i%2 == 0) i else 0))
 ````
+````scala
+    def sumOfIntegers(lb: Int, ub: Int) = {
+      var total = 0
+      for (i <- (lb to ub))
+        total += i
+      total
+    }
+    
+    print(sumOfIntegers(5, 10))
+    
+    def sumOfIntegers(i: Int*) = {
+      i.toList.sum
+    }
+    
+    sumOfIntegers(1, 2, 3)
+    
+    def sum(lb: Int, ub: Int, f: Int => Int) = {
+      var total = 0
+      for (i <- (lb to ub))
+        total += f(i)
+      total
+    }
+    
+    print(sum(5, 10, i => i))
+    print(sum(5, 10, i => i * i))
+    print(sum(5, 10, i => if(i%2 == 0) i else 0))
+ ````
+ 
 # Object Oriented Constructs
-
+````text
 	- Scala is known as pure object oriented programming languages. It supports different types of classes.
 
     	- class
@@ -119,9 +127,10 @@ print(sum(5, 10, i => if(i%2 == 0) i else 0))
     	- object
         	- It is singleton class
         	- We need to have object to define main method
+````
 
 # Collections and Map Reduce APIs
-
+````text
 	- Scala Collections have support for many type of Collection objects and have APIs to process different types of Collections. 
 	- Collections contain group of homogeneous elements.
     		- In the collection hierarchy you have Traversable at the higher level
@@ -132,9 +141,10 @@ print(sum(5, 10, i => if(i%2 == 0) i else 0))
     		- Set is group of unique elements
     		- Map is group of key value pairs. Keys are unique.
     		- We can use APIs such as map, filter, reduce, groupBy to process data in collections.
+````
 
 # Usage of Tuples
-
+````text
 	- While collection is like a table with homogeneous elements, tuple is like a row with columns of different type.
     		- Tuple contains group of heterogeneous elements
     		- It is nothing but object with attributes with no names
@@ -142,9 +152,10 @@ print(sum(5, 10, i => if(i%2 == 0) i else 0))
     		- We use _1 to access first element, _2 to access second element.
     		- Tuples are represented in ()
     		- Tuples implement Product and hence we have APIs such as productArity, productIterator, productElement etc
+````
 
 # Development life cycle
-
+````text
 	- Let us define problem statement and understand how we can develop the logic using Scala as Programming Language. 
 	- This will be quick revision about all important Scala programming constructs.
     		- Data Set: order_items
@@ -163,46 +174,46 @@ print(sum(5, 10, i => if(i%2 == 0) i else 0))
         	- Define function getRevenuePerOrder with 1 argument order_items
         	- Use map reduce APIs to get order_item_order_id and order_item_subtotal, then group by order_item_order_id and then process the values for each order_item_order_id
         	- Return a collection which contain order_item_order_id and revenue_per_order_id
-
+````
 ````scala
-import scala.io.Source
-
-object GetRevenueForOrderId {
-  def getOrderRevenue(orderItems: List[String], orderId: Int) = {
-    val orderRevenue = orderItems.
-      filter(orderItem => orderItem.split(",")(1).toInt == orderId).
-      map(orderItem => orderItem.split(",")(4).toFloat).
-      reduce((t, v) => t + v)
-    orderRevenue
-  }
-
-  def main(args: Array[String]): Unit = {
-    val orderItems = Source.fromFile(args(0)).getLines.toList
-    val orderRevenue = getOrderRevenue(orderItems, args(1).toInt)
-    print(orderRevenue)
-  }
-}
+    import scala.io.Source
+    
+    object GetRevenueForOrderId {
+      def getOrderRevenue(orderItems: List[String], orderId: Int) = {
+        val orderRevenue = orderItems.
+          filter(orderItem => orderItem.split(",")(1).toInt == orderId).
+          map(orderItem => orderItem.split(",")(4).toFloat).
+          reduce((t, v) => t + v)
+        orderRevenue
+      }
+    
+      def main(args: Array[String]): Unit = {
+        val orderItems = Source.fromFile(args(0)).getLines.toList
+        val orderRevenue = getOrderRevenue(orderItems, args(1).toInt)
+        print(orderRevenue)
+      }
+    }
 ````
 
 ````scala
-import scala.io.Source
-
-
-object GetRevenuePerOrder {
-  def getRevenuePerOrder(orderItems: List[String]) = {
-    val revenuePerOrder = orderItems.
-      map(orderItem => (orderItem.split(",")(1).toInt, orderItem.split(",")(4).toFloat)).
-      groupBy(_._1).
-      map(e => (e._1, e._2.map(r => r._2).sum))
-    revenuePerOrder
-  }
-
-  def main(args: Array[String]) = {
-    val orderItems = Source.fromFile(args(0)).getLines.toList
-    val revenuePerOrder = getRevenuePerOrder(orderItems)
-    revenuePerOrder.take(10).foreach(println)
-  }
-}
+    import scala.io.Source
+    
+    
+    object GetRevenuePerOrder {
+      def getRevenuePerOrder(orderItems: List[String]) = {
+        val revenuePerOrder = orderItems.
+          map(orderItem => (orderItem.split(",")(1).toInt, orderItem.split(",")(4).toFloat)).
+          groupBy(_._1).
+          map(e => (e._1, e._2.map(r => r._2).sum))
+        revenuePerOrder
+      }
+    
+      def main(args: Array[String]) = {
+        val orderItems = Source.fromFile(args(0)).getLines.toList
+        val revenuePerOrder = getRevenuePerOrder(orderItems)
+        revenuePerOrder.take(10).foreach(println)
+      }
+    }
 ````
 
 
