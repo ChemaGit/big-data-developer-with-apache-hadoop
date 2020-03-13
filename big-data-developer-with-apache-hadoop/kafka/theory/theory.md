@@ -1,5 +1,5 @@
-````
-TOPICS, PARTITIONS AND OFFSETS
+# TOPICS, PARTITIONS AND OFFSETS
+````text
 	- Topics: a particular stream of data
 		Similar to a table in a database (without constraints)
 		You can have as many topics as you want
@@ -13,8 +13,10 @@ TOPICS, PARTITIONS AND OFFSETS
 	- Data is kept only for a limited time (default is one week)
 	- Once the data is written to a partition, it can't be changed(immutability)
 	- Data is assigned randomly to a partition unless a key is provided.
+````
 
-BROKERS
+# BROKERS
+````text
 	- A kafka cluster is composed of multiple brokers(servers)
 	- Each broker contains certain topic partitions
 	- After connecting to any broker (called bootstrap broker), you will be connected to the entire cluster
@@ -32,8 +34,10 @@ BROKERS
 		Partition 1	Partition 0
 
 	- Note: Data is distributed and Broker 103 doesn't have any Topic B data
+````
 
-TOPIC REPLICATION FACTOR
+# TOPIC REPLICATION FACTOR
+````text
 	- Topics should have a replication factor > 1 (usually between 2 and 3)
 	- This way if a broker is down, another broker can serve the data
 	- Example: Topic-A with 2 partitions and replication factor of 2
@@ -47,8 +51,10 @@ TOPIC REPLICATION FACTOR
 
 	- Example: we lost Broker 102
 	- Result: Broker 101 and 103 can still serve the data
+````
 
-CONCEPT OF LEADER FOR A PARTITION
+# CONCEPT OF LEADER FOR A PARTITION
+````text
 	- At any time only ONE broker can be a leader for a given partition
 	- Only that leader can receive and serve data for a partition
 	- The other brokers will synchronize the data
@@ -61,8 +67,10 @@ CONCEPT OF LEADER FOR A PARTITION
 	
 				Partition 0
 				Topic-A(ISR)
+````
 
-PRODUCERS
+# PRODUCERS
+````
 	- Producers write data to topics (which is made of partitions)
 	- Producers automatically know to which broker and partition to write to
 	- In case of Broker failures, Producers will automatically recover
@@ -81,8 +89,10 @@ PRODUCERS
 		acks=0:Producer won't wait for acknowledgment (possible data loss)
 		acks=1:Producer will wait for leader acknowledgment (limited data loss)
 		acks=all:Leader + replicas acknowledgment (no data loss)
+````
 
-PRODUCERS: MESSAGE KEYS
+# PRODUCERS: MESSAGE KEYS
+````text
 	- Producer can choose to send a key with the message (string, number, etc..)
 	- If key=null, data is sent round robin (broker 101 then 102 then 103...)
 	- If a key is sent, then all messages for that key will always go to the same partition
@@ -94,8 +104,10 @@ PRODUCERS: MESSAGE KEYS
 
 		truck_id_345 data will always be in partition 1
 		truck_id_456 data will always be in partition 1
+````
 
-CONSUMER
+# CONSUMER
+````text
 	- Consumers read data from a topic (identified by name)
 	- Consumers know which broker to read from
 	- In case of broker failures, consumers know how to recover
@@ -109,23 +121,29 @@ CONSUMER
 
 	Broker 103						 Consumer
 	Topic-A/Partition 2	0|1|2|3|4|5|6|7|8|9| ---------->
+````
 
 
-CONSUMER GROUP
+# CONSUMER GROUP
+````text
 	- Consumers read date in consumer groups
 	- Each consumer within a group reads from exclusive partitions
 	- If you have more consumers than partitions, some consumers will be inactive
 	- Consumers will automatically use a GroupCoordinator and a ConsumerCoordinator to assign a consumers to a partitions
 
 	- What if too many consumers? If you have more consumers than partitions, some consumers will be inactive
+````
 
-CONSUMER OFFSETS
+# CONSUMER OFFSETS
+````text
 	- Kafka stores the offsets at which a consumer group has been reading
 	- The offsets committed live in Kafka topic named __consumer_offsets
 	- When a consumer in a group has processed data received from Kafka, it should be committing the offsets
 	- If a consumer dies, it will be able to read back from where it left off thanks to the committed consumer offsets!
+````
 
-DELIVERY SEMANTICS FOR CONSUMERS
+# DELIVERY SEMANTICS FOR CONSUMERS
+````text
 	- Consumers choose when to commit offsets
 	- Ther are 3 delivery semantics:
 	- At most once:
@@ -138,13 +156,17 @@ DELIVERY SEMANTICS FOR CONSUMERS
 	- Exactly once:
 		- Can be achieved for Kafka => Kafka workflows using Kafka Streams API
 		- For Kafka => External System workflows, use an idempotent consumer.
+````
 
-KAFKA BROKER DISCOVERY
+# KAFKA BROKER DISCOVERY
+````text
 	- Every Kafka broker is also called a "bootstrap server"
 	- That means that you only need to connect to one broker, and you will be connected to the entire cluster.
 	- Each broker knows about all brokers, topics and partitions (metadata).
+````
 
-ZOOKEEPER
+# ZOOKEEPER
+````text
 	- Zookeeper manages brokers (keeps a list of them)
 	- Zookeeper helps in performing leader election for partitions.
 	- Zookeeper sends notifications to Kafka in case of changes (e.g. new topic, broker dies, broker comes up, delete topics, etc.....)
@@ -160,8 +182,10 @@ ZOOKEEPER
 
 Kafka		Kafka		Kafka		Kafka		Kafka
 Broker 1	Broker 2	Broker 3	Broker 4	Broker 5
+````
 
-KAFKA GUARANTEES
+# KAFKA GUARANTEES
+````text
 	- Messages are appended to a topic-partition in the order they are sent
 	- Consumers read messages in the order stored in a topic-partition
 	- With a replication factor of N, producers and consumers can tolerate up to N-1 brokers being down
