@@ -1,13 +1,15 @@
-KAFKA AND SPARK STREAMING INTEGRATION EXAMPLE
-  - Add dependencies in build.sbt
+# KAFKA AND SPARK STREAMING INTEGRATION EXAMPLE
+````text
+- Add dependencies in build.sbt
 - Import necessary packages
 - Create set for list of topics and hash map for Kafka parameters
-  - Create input stream and process the data
+- Create input stream and process the data
 - Download dependencies on the gateway node
-  - Ship and run jar file with jars including kafka dependencies
+- Ship and run jar file with jars including kafka dependencies
 
 $ gedit build.sbt &
-
+````
+````properties
 name := "kafka_spark"
 version := "1.0"
 scalaVersion := "2.11.12"
@@ -18,9 +20,11 @@ libraryDependencies += "org.apache.spark" % "spark-streaming-flume_2.10" % "1.6.
 libraryDependencies += "org.scala-lang" % "scala-library" % "2.11.12"
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.3.2"
 libraryDependencies += "org.apache.spark" % "spark-streaming-kafka_2.10" % "1.6.0"
-
+````
+````text
 $ gedit KafkaStreamingDepartmentCount.scala &
-
+````
+````scala
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{StreamingContext, Seconds}
 import org.apache.spark.streaming.kafka._
@@ -46,9 +50,10 @@ object KafkaStreamingDepartmentCount {
     ssc.awaitTermination()
   }
 }
-
+````
+````text
 $ start_logs
-
-$  flume-ng agent --name wk --conf-file /home/cloudera/flume_demo/flume_kafka.conf
-
+$ flume-ng agent --name wk --conf-file /home/cloudera/flume_demo/flume_kafka.conf
 $ spark-submit --class KafkaStreamingDepartmentCount --master yarn --jars "/usr/lib/oozie/oozie-sharelib-yarn/lib/spark/spark-streaming-kafka_2.10-1.6.0-cdh5.16.1.jar,/usr/lib/oozie/oozie-sharelib-yarn/lib/spark/kafka_2.10-0.9.0-kafka-2.0.2.jar,/usr/lib/oozie/libtools/metrics-core-2.2.0.jar" target/scala-2.10/kafka_spark_2.10-1.0.jar yarn-client
+````
+
