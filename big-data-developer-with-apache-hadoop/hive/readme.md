@@ -11,13 +11,13 @@
 - HiveQL Query
 ````
 ````roomsql
-    SELECT id, fname, lname, city, unpaid
-    FROM accounts
-    JOIN billing
-    ON accounts.acct_num = billing.acct_num
-    WHERE state = 'CA'
-    AND unpaid 100
-    ORDER BY unpaid DESC;
+SELECT id, fname, lname, city, unpaid
+FROM accounts
+JOIN billing
+ON accounts.acct_num = billing.acct_num
+WHERE state = 'CA'
+AND unpaid 100
+ORDER BY unpaid DESC;
 ````
 ## How Data is Stored in Hive
 ````text
@@ -85,7 +85,7 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - The DESCRIBE command lists the fields in the specified table
 ````
 ````roomsql
-	DESCRIBE vendors;
+DESCRIBE vendors;
 ````
 ## Basic HiveQL Syntax
 ````text
@@ -96,9 +96,9 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
     $ cat nearby_customers.hql
 ````
 ````roomsql
-    SELECT acct_num, first_name, last_name
-    FROM accounts
-    WHERE zipcode = '94306'; --  Loudacre headquarters
+SELECT acct_num, first_name, last_name
+FROM accounts
+WHERE zipcode = '94306'; --  Loudacre headquarters
 ````
 				
 ## Selecting Data from a Hive Table
@@ -107,24 +107,24 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Can specify an ordered list of individual columns
 ````
 ````roomsql
-    SELECT first_name, last_name, city FROM accounts;
-    SELECT *  FROM accounts;
-    SELECT acct_num AS id, total -  0.1 AS commission FROM sales;
+SELECT first_name, last_name, city FROM accounts;
+SELECT *  FROM accounts;
+SELECT acct_num AS id, total -  0.1 AS commission FROM sales;
 ````
 ## Limiting and Sorting Query Results
 ````roomsql
-	SELECT acct_num, city FROM accounts LIMIT 10;	
-	SELECT acct_num, city FROM customers ORDER BY city DESC LIMIT 10;		
+SELECT acct_num, city FROM accounts LIMIT 10;	
+SELECT acct_num, city FROM customers ORDER BY city DESC LIMIT 10;		
 ````
 ## Using a WHERE Clause to Restrict Results
 ````roomsql
-	SELECT *  FROM accounts WHERE acct_num = 1287;
-	
-	SELECT *  FROM accounts WHERE first_name = 'Anne'
-	
-	SELECT *  
-	FROM accounts 
-	WHERE first_name LIKE 'Ann%' AND (city = 'Seattle' OR city = 'Portland');
+SELECT *  FROM accounts WHERE acct_num = 1287;
+
+SELECT *  FROM accounts WHERE first_name = 'Anne'
+
+SELECT *  
+FROM accounts 
+WHERE first_name LIKE 'Ann%' AND (city = 'Seattle' OR city = 'Portland');
 ````
 ## JOINS in Hive
 ````text
@@ -133,9 +133,9 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - For best performance, list the largest table last in your query
 ````
 ````roomsql
-    SELECT emp_name, dept_name 
-    FROM employees 
-    JOIN departments ON (employees.dept_id = departments.id);
+SELECT emp_name, dept_name 
+FROM employees 
+JOIN departments ON (employees.dept_id = departments.id);
 ````
 ## Hive Functions
 ````text
@@ -146,7 +146,7 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Function names are not case- sensitive
 ````
 ````roomsql
-	SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM accounts;
+SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM accounts;
 ````
 ## Getting Help with Functions
 ````text
@@ -161,8 +161,8 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
         Example:
 ````
 ````roomsql
-	SELECT UPPER('Facebook') FROM src LIMIT 1;
-	--'FACEBOOK'
+SELECT UPPER('Facebook') FROM src LIMIT 1;
+--'FACEBOOK'
 ````
 ## Common Built- In Functions
 ````text
@@ -183,9 +183,9 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Columns not part of the aggregation must be listed in GROUP BY
 ````
 ````roomsql
-    SELECT region, state, COUNT(id) AS num
-    FROM vendors
-    GROUP BY region, state;
+SELECT region, state, COUNT(id) AS num
+FROM vendors
+GROUP BY region, state;
 ````
 ## Built- In Aggregate Functions
 ````text
@@ -226,12 +226,12 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Data stored in text file format with four delimited fields per record
 ````
 ````roomsql
-    CREATE TABLE products (
-        id	INT,
-        name STRING,
-        price INT,
-        data_added TIMESTAMP
-    );       
+CREATE TABLE products (
+    id	INT,
+    name STRING,
+    price INT,
+    data_added TIMESTAMP
+);       
 ````
 ````text
 - Default field delimiter is \001 (Ctrl- A) and line ending is \n (newline)
@@ -243,14 +243,14 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 ````roomsql
 -- If you have tab- delimited data, you would create the table like this
 -- Data stored as text with four tab- delimited fields per record
-    CREATE TABLE products (
-        id	INT,
-        name STRING,
-        price INT,
-        data_added TIMESTAMP
-    )
-    ROW FORMAT DELIMITED
-    FIELDS TERMINATED BY '\t';
+CREATE TABLE products (
+    id	INT,
+    name STRING,
+    price INT,
+    data_added TIMESTAMP
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t';
 ````
 ````text
 - Example of corresponding records for the table above
@@ -260,13 +260,13 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 ## Creating a Table with Sequence File Format
 ````roomsql
 -- Creating tables that will be populated with SequencesFiles is also easy
-    CREATE TABLE products (
-        id	INT,
-        name STRING,
-        price INT,
-        data_added TIMESTAMP
-    )
-    STORED AS SEQUENCEFILE;
+CREATE TABLE products (
+    id	INT,
+    name STRING,
+    price INT,
+    data_added TIMESTAMP
+)
+STORED AS SEQUENCEFILE;
 -- STORED AS TEXTFILE is the default and is rarely specified explicitly
 ````
 ## Creating a Table with Avro File Format			 
@@ -276,24 +276,24 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Field names and types are defined in the schema
 ````
 ````roomsql
-    CREATE TABLE products
-    ROW FORMAT SERDE
-        'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
-    STORED AS 
-    INPUTFORMAT
-        'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
-    OUTPUTFORMAT
-        'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
-    TBLPROPERTIES
-        ('avro.schema.url'='hdfs://dev.loudacre.com:8020/schemas/products.avsc');
+CREATE TABLE products
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+STORED AS 
+INPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+TBLPROPERTIES
+    ('avro.schema.url'='hdfs://dev.loudacre.com:8020/schemas/products.avsc');
 ````
 ## Removing a Table
 ````roomsql
 -- Use DROP TABLE to remove a table from Hive
-    DROP TABLE products;
+DROP TABLE products;
 -- Add IF EXISTS to avoid error if table does not already exist
 -- Useful for scripting setup tasks
-    DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS products;
 -- Caution: dropping a table is a destructive operation
 -- This will remove metadata and may remove data from HDFS if CREATE EXTERNAL TABLE is not specified
 -- Hive does not have a rollback or undo feature
@@ -307,13 +307,13 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Use LOCATION clause during creation to specify alternate directory
 ````
 ````roomsql
-    CREATE TABLE products (
-        id	INT,
-        name STRING,
-        price INT,
-        data_added TIMESTAMP		
-      )															             
-      LOCATION '/loudacre/products';
+CREATE TABLE products (
+    id	INT,
+    name STRING,
+    price INT,
+    data_added TIMESTAMP		
+  )															             
+  LOCATION '/loudacre/products';
 ````
 ## Self- Managed(External) Tables
 ````text
@@ -325,13 +325,13 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
     - Almost always used in conjunction with the LOCATION keyword	
 ````
 ````roomsql
-    CREATE EXTERNAL TABLE products (
-        id	INT,
-        name STRING,
-        price INT,
-        data_added TIMESTAMP		
-      )															             
-      LOCATION '/loudacre/products';	
+CREATE EXTERNAL TABLE products (
+    id	INT,
+    name STRING,
+    price INT,
+    data_added TIMESTAMP		
+  )															             
+  LOCATION '/loudacre/products';	
 ````
 ## Loading Data Into Hive Tables
 ````text
@@ -343,37 +343,37 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
     - Equivalent to the above, but does not require you to specify table path
 ````
 ````roomsql
-    LOAD DATA INPATH 'newaccounts.csv' INTO TABLE accounts;
-    -- Unlike an RDBMS, Hive does not validate data on insert
-    -- Missing or invalid data will be represented as NULL in query results
+LOAD DATA INPATH 'newaccounts.csv' INTO TABLE accounts;
+-- Unlike an RDBMS, Hive does not validate data on insert
+-- Missing or invalid data will be represented as NULL in query results
 ````
 ## Appending Selected Records to a Table
 ````roomsql
 -- Another way to populate a table is througs a query
 -- Use INSERT INTO to append results to an existing Hive table
-        INSERT INTO TABLE accounts_copy
-            SELECT *  FROM accounts;
+INSERT INTO TABLE accounts_copy
+    SELECT *  FROM accounts;
 -- Specify a WHERE clause to control which records are appended
-        INSERT INTO TABLE loyal_customers
-            SELECT *  FROM accounts
-            WHERE YEAR(acct_create_dt) = 2008
-                AND acct_close_dt IS NULL;
+INSERT INTO TABLE loyal_customers
+    SELECT *  FROM accounts
+    WHERE YEAR(acct_create_dt) = 2008
+        AND acct_close_dt IS NULL;
 ````
 ## Creating and Populating a Tables using CTAS
 ````roomsql
 -- You can also create and populate a table with a single statement
 -- This technique is known as "Create Table As Select" (CTAS)
 -- Column names and types are derived from the source table
-    CREATE TABLE loyal_customers AS
-        SELECT -  FROM accounts
-        WHERE YEAR(acc_create_dt) = 2008
-            AND acct_close_dt IS NULL;
+CREATE TABLE loyal_customers AS
+    SELECT -  FROM accounts
+    WHERE YEAR(acc_create_dt) = 2008
+        AND acct_close_dt IS NULL;
 -- New table uses Hive's default format, but you can override this
-    CREATE TABLE california_customers
-      STORED AS SEQUENCEFILE
-      AS
-        SELECT -  FROM accounts
-        WHERE state = 'CA';
+CREATE TABLE california_customers
+  STORED AS SEQUENCEFILE
+  AS
+    SELECT -  FROM accounts
+    WHERE state = 'CA';
 ````
 			  	
 # HOW HIVE READS DATA
@@ -394,29 +394,29 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Each line from the input file(s) is considered a record
 ````
 ````roomsql
-    CREATE TABLE sales(
-        id INT,
-        salesperson STRING,
-        price INT		
-    )
-    ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+CREATE TABLE sales(
+    id INT,
+    salesperson STRING,
+    price INT		
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 ````
 ## Specifying the Input and Output Format in Hive
 ````roomsql
 -- The file type implies which input and output formats are used for the table
-    CREATE TABLE people (
-        id INT,
-        name STRING
-    )
-    STORED AS SEQUENCEFILE;
+CREATE TABLE people (
+    id INT,
+    name STRING
+)
+STORED AS SEQUENCEFILE;
 -- This is an alternative to specifying input and output formats explicitly	
-    CREATE TABLE people (
-        id INT,
-        name STRING
-    )
-    STORED AS
-        INPUTFORMAT 'org.apache.hadoop.mapred.SequenceFileInputFormat'
-        OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat'
+CREATE TABLE people (
+    id INT,
+    name STRING
+)
+STORED AS
+    INPUTFORMAT 'org.apache.hadoop.mapred.SequenceFileInputFormat'
+    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat'
 ````
 ## How Hive Extracts Fields from Records
 ````text
@@ -429,12 +429,12 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - Also used if ROW FORMAT is missing from CREATE TABLE
 ````
 ````roomsql
-    CREATE TABLE sales(
-        id INT,
-        salesperson STRING,
-        price INT		
-    )
-    ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+CREATE TABLE sales(
+    id INT,
+    salesperson STRING,
+    price INT		
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
 ````
 ## Common SerDe Implementations
 ````text
@@ -454,16 +454,16 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 ## Specifying the SerDe Type
 ````roomsql
 -- A SerDe can be specified explicitly in the CREATE TABLE statement
-    CREATE TABLE products
-    ROW FORMAT SERDE
-        'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
-    STORED AS
-    INPUTFORMAT
-        'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
-    OUTPUTFORMAT
-        'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
-    TBLPROPERTIES
-        ('avro.schema.url'='hdfs://dev.loudacre.com:8020/schemas/products.avsc');
+CREATE TABLE products
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+STORED AS
+INPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+TBLPROPERTIES
+    ('avro.schema.url'='hdfs://dev.loudacre.com:8020/schemas/products.avsc');
 ````
 															
 # USING THE REGEXSERDE IN HIVE
@@ -490,15 +490,15 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 - SerDe	
 ````
 ````roomsql
-    CREATE TABLE calls (
-        event_date STRING,
-        event_time STRING,
-        from_number STRING,
-        to_number STRING,
-        event_desc STRING)
-    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
-    WITH SERDEPROPERTIES ("input.regex" =
-        "(.- ?)@(.- ?) (.- ?):(.- ?) \"([^\"]- )\"");
+CREATE TABLE calls (
+    event_date STRING,
+    event_time STRING,
+    from_number STRING,
+    to_number STRING,
+    event_desc STRING)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
+WITH SERDEPROPERTIES ("input.regex" =
+    "(.- ?)@(.- ?) (.- ?):(.- ?) \"([^\"]- )\"");
 -- Table		
 -- event_date	 	event_time	 	from_number	 	to_number	 	event_desc	
 -- 08/14/2015 	15:25:47 		415- 555- 2854 		312- 555- 7819  Call placed
@@ -555,11 +555,11 @@ $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 ## Maven Configuration for Custom UDF Development
 ````xml
 <!-- To develop a custom UDF, first add the following to your pom.xml-->
-    <dependency>
-        <artifactId>hive- exec</artifactId>
-        <groupId>org.apache.hive</groupId>
-        <version>${hive.version}</version>
-    </dependency>
+<dependency>
+    <artifactId>hive- exec</artifactId>
+    <groupId>org.apache.hive</groupId>
+    <version>${hive.version}</version>
+</dependency>
 ````
 ````text
 - Value of hive.version varies based on your CDH release
@@ -690,11 +690,11 @@ public class FormatCents extends UDF {
 ````roomsql
 -- Your UDF must be registered before using it in a query
 -- This can be done using the CREATE TEMPORARY FUNCTION command
-    CREATE TEMPORARY FUNCTION KPM
-        AS 'com.loudacre.example.KilometersPerMile';
-    SELECT KPM() - miles_to_warehouse AS km_to_warehouse
-        FROM store_locations
-        WHERE store_id=1234;
+CREATE TEMPORARY FUNCTION KPM
+    AS 'com.loudacre.example.KilometersPerMile';
+SELECT KPM() - miles_to_warehouse AS km_to_warehouse
+    FROM store_locations
+    WHERE store_id=1234;
 -- Repeat this step during every Hive session where the function is used	
 ````
 
