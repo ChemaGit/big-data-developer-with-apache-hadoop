@@ -119,8 +119,12 @@
 ## Using a WHERE Clause to Restrict Results
 ````roomsql
 	SELECT *  FROM accounts WHERE acct_num = 1287;
+	
 	SELECT *  FROM accounts WHERE first_name = 'Anne'
-	SELECT *  FROM accounts WHERE first_name LIKE 'Ann%' AND (city = 'Seattle' OR city = 'Portland');
+	
+	SELECT *  
+	FROM accounts 
+	WHERE first_name LIKE 'Ann%' AND (city = 'Seattle' OR city = 'Portland');
 ````
 ## JOINS in Hive
 ````text
@@ -129,7 +133,9 @@
 		- For best performance, list the largest table last in your query
 ````
 ````roomsql
-			SELECT emp_name, dept_name FROM employees JOIN departments ON (employees.dept_id = departments.id);
+			SELECT emp_name, dept_name 
+			FROM employees 
+			JOIN departments ON (employees.dept_id = departments.id);
 ````
 ## Hive Functions
 ````text
