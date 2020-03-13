@@ -11,13 +11,13 @@
 	- HiveQL Query
 ````
 ````roomsql
-		SELECT id, fname, lname, city, unpaid
-		FROM accounts
-		JOIN billing
-		ON accounts.acct_num = billing.acct_num
-		WHERE state = 'CA'
-		AND unpaid 100
-		ORDER BY unpaid DESC;
+    SELECT id, fname, lname, city, unpaid
+    FROM accounts
+    JOIN billing
+    ON accounts.acct_num = billing.acct_num
+    WHERE state = 'CA'
+    AND unpaid 100
+    ORDER BY unpaid DESC;
 ````
 ## How Data is Stored in Hive
 ````text
@@ -41,13 +41,13 @@
 ## Accessing Hive Using the Beeline Shell
 ````text
 	- You can execute HiveQL with Beeline, a replacement for the old Hive shell
-		- Start Beeline by specifying login credentials and a JDBC URL
-		- Connection details vary based on cluster settings(ask your sysadmin)
+	- Start Beeline by specifying login credentials and a JDBC URL
+	- Connection details vary based on cluster settings(ask your sysadmin)
 ````
 ````bash
-			$ beeline - n alice - p swordfish - u jdbc:hive2://dev.loudacre.com:10000/default	
-			$ beeline - n training - p training - u jdbc:hive2://localhost:10000/hadoopexam
-			$ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
+    $ beeline - n alice - p swordfish - u jdbc:hive2://dev.loudacre.com:10000/default	
+    $ beeline - n training - p training - u jdbc:hive2://localhost:10000/hadoopexam
+    $ beeline - n training - p training - u jdbc:hive2://localhost:10000/default
 ````
 ````text
 	- You will then see some starup messages followed by a prompt
@@ -85,31 +85,31 @@
 	- The DESCRIBE command lists the fields in the specified table
 ````
 ````roomsql
-		DESCRIBE vendors;
+	DESCRIBE vendors;
 ````
 ## Basic HiveQL Syntax
 ````text
 	- Hive keyword are not case- sensitive, but often capitalized by convention
 	- Statements may span lines and are terminated by a semicolon
 	- Comments begin with - -  (double hyphen)
-		- Supported in Hive scripts and Hue, but not in Beeline
-			$ cat nearby_customers.hql
+	- Supported in Hive scripts and Hue, but not in Beeline
+		$ cat nearby_customers.hql
 ````
 ````roomsql
-			SELECT acct_num, first_name, last_name
-				FROM accounts
-				WHERE zipcode = '94306'; --  Loudacre headquarters
+    SELECT acct_num, first_name, last_name
+    FROM accounts
+    WHERE zipcode = '94306'; --  Loudacre headquarters
 ````
 				
 ## Selecting Data from a Hive Table
 ````text
 	- The SELECT statement retrieves data from Hive tables
-		- Can specify an ordered list of individual columns
+	- Can specify an ordered list of individual columns
 ````
 ````roomsql
-			SELECT first_name, last_name, city FROM accounts;
-			SELECT *  FROM accounts;
-			SELECT acct_num AS id, total -  0.1 AS commission FROM sales;
+    SELECT first_name, last_name, city FROM accounts;
+    SELECT *  FROM accounts;
+    SELECT acct_num AS id, total -  0.1 AS commission FROM sales;
 ````
 ## Limiting and Sorting Query Results
 ````roomsql
@@ -129,24 +129,24 @@
 ## JOINS in Hive
 ````text
 	- Joining disparate data sets is a common use of Hive
-		- Caution: note the JOIN .. ON syntax required by Hive
-		- For best performance, list the largest table last in your query
+	- Caution: note the JOIN .. ON syntax required by Hive
+	- For best performance, list the largest table last in your query
 ````
 ````roomsql
-			SELECT emp_name, dept_name 
-			FROM employees 
-			JOIN departments ON (employees.dept_id = departments.id);
+    SELECT emp_name, dept_name 
+    FROM employees 
+    JOIN departments ON (employees.dept_id = departments.id);
 ````
 ## Hive Functions
 ````text
 	- Hive offers dozens of built- in functions to use in queries
-		- Many are identical to those found in SQL
-		- Others are Hive- specific
+	- Many are identical to those found in SQL
+	- Others are Hive- specific
 	- Example function invocation
-		- Function names are not case- sensitive
+	- Function names are not case- sensitive
 ````
 ````roomsql
-			SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM accounts;
+	SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM accounts;
 ````
 ## Getting Help with Functions
 ````text
@@ -161,29 +161,26 @@
 			Example:
 ````
 ````roomsql
-				SELECT UPPER('Facebook') FROM src LIMIT 1;
-				--'FACEBOOK'
+	SELECT UPPER('Facebook') FROM src LIMIT 1;
+	--'FACEBOOK'
 ````
 ## Common Built- In Functions
 ````text
-	- These built- in functions operate on one value at a time
-		- Function Description					Example Invocation				Input			Output
-		- Rounds to specified places			ROUND(total_price,2)				23.492			23.49
-		- Returns nearest integer				CEIL(total_price)					23.492			24
-		above the supplied value
-		- Returns nearest integer				FLOOR(total_price)				23.492			23
-		below the supplied value
-		- Extracts the year from the			YEAR(order_dt)						2015- 06- 14		2015
-		supplied timestamp														16:51:05
-		- Extract portion of string			SUBSTRING(name,0,3)				Benjamin		Ben
-		- Converts timestamp from 			TO_UTC_TIMESTAMP(ts, 'PST')		2015- 08- 27
-		specified timezone to UTC												15:03:14
-		- Converts to another type			CAST(weight as INT)				3.581			3
+  - These built- in functions operate on one value at a time
+    - Function Description					                Example Invocation				Input			Output
+    
+    - Rounds to specified places			                ROUND(total_price,2)			23.492			23.49
+    - Returns nearest integer above the supplied value		CEIL(total_price)				23.492			24
+    - Returns nearest integer below the supplied value		FLOOR(total_price)				23.492			23
+    - Extracts the year from the supplied timestamp			YEAR(order_dt)					2015-06-14	    2015														16:51:05
+    - Extract portion of string			                    SUBSTRING(name,0,3)				Benjamin		Ben
+    - Converts timestamp from specified timezone to UTC		TO_UTC_TIMESTAMP(ts, 'PST')		                2015-08-27 15:03:14
+    - Converts to another type			                    CAST(weight as INT)				3.581			3
 ````
 ## Record Grouping for Use with Aggregate Functions
 ````text
 	- GROUP BY groups selected data by one or more columns
-		- Columns not part of the aggregation must be listed in GROUP BY
+	- Columns not part of the aggregation must be listed in GROUP BY
 ````
 ````roomsql
 			SELECT region, state, COUNT(id) AS num
@@ -192,18 +189,15 @@
 ````
 ## Built- In Aggregate Functions
 ````text
-	- Hive has many built- in aggregate functions, including:
-		- Function Description								Example Invocation
-		- Count all rows									COUNT(- )
-		- Count number of non- null values				COUNT(first_name)
-		for a given field														
-		- Count number of unique,							COUNT(DISTINCT fname)
-		non- null values for field
-		- Returns the largest value						MAX(salary)
-		- Returns the smallest value						MIN(salary)
-		- Returns total of selected values				SUM(price)
-		- Returns the average of all supplied			AVG(salary)
-		values
+  - Hive has many built- in aggregate functions, including:
+    - Function Description							        Example Invocation
+    - Count all rows								        COUNT(- )
+    - Count number of non- null values for a given field	COUNT(first_name)														
+    - Count number of unique, non- null values for field	COUNT(DISTINCT fname)
+    - Returns the largest value						        MAX(salary)
+    - Returns the smallest value					        MIN(salary)
+    - Returns total of selected values				        SUM(price)
+    - Returns the average of all supplied values	        AVG(salary)
 ````
 # Working with Tables in Apache Hive
 
@@ -216,19 +210,19 @@
 		- Hive returns NULL values for non- conforming data in HDFS
 	- Here are some common data types in Hive
 		- Hive also supports a few complex types such as maps and arrays
-		Name				Descripci�n					           Example Value		
-		STRING            Character data (of any length)	       Alice
-		BOOLEAN           True or False	                         TRUE
-		TIMESTAMP         Instant in	Gme	                         2015- 09- 14 17:01:29
-		INT               Range: same as Java int                84127213
-		BIGINT            Range: same as Java long               7613292936514215317
-		FLOAT             Range: same as Java float              3.14159
-       DOUBLE            Range:	same as Java double             3.1415926535897932385
+		Name			Description					          Example Value		
+		STRING           Character data (of any length)	      Alice
+		BOOLEAN          True or False	                      TRUE
+		TIMESTAMP        Instant in	Gme	                      2015- 09- 14 17:01:29
+		INT              Range: same as Java int              84127213
+		BIGINT           Range: same as Java long             7613292936514215317
+		FLOAT            Range: same as Java float            3.14159
+       DOUBLE            Range:	same as Java double           3.1415926535897932385
 ````
 ## Creating a Table in Hive
 ````text
 	- The following example creates a new table named products
-		- Data stored in text file format with four delimited fields per record
+	- Data stored in text file format with four delimited fields per record
 ````
 ````roomsql
 		CREATE TABLE products (
@@ -242,12 +236,12 @@
 		- Default field delimiter is \001 (Ctrl- A) and line ending is \n (newline)
 		- Example of corresponding records for the table above
 		   1^AUSB Cable^A799^A2015- 08- 11 17:23:19\n          
-          2^AScreen Cover^A3499^A2015- 08- 12 08:41:26\n 
+           2^AScreen Cover^A3499^A2015- 08- 12 08:41:26\n 
 ````
 ## Changing the Default Field Delimiter When Creating a Table
-````text
-	- If you have tab- delimited data, you would create the table like this
-		- Data stored as text with four tab- delimited fields per record
+````roomsql
+	-- If you have tab- delimited data, you would create the table like this
+	-- Data stored as text with four tab- delimited fields per record
 		CREATE TABLE products (
 			id	INT,
 			name STRING,
@@ -277,8 +271,8 @@
 ## Creating a Table with Avro File Format			 
 ````text
 	- Avro- based tables must specify a few more details
-		- Of these, only the table name and schema URL typically change
-		- Field names and types are defined in the schema
+	- Of these, only the table name and schema URL typically change
+	- Field names and types are defined in the schema
 ````
 ````roomsql
 		CREATE TABLE products
@@ -386,17 +380,17 @@
 ## Recap: Reading Data in MapReduce
 ````text
 	- Recall: a MapReduce job's InputFormat class controls how records are read from files
-		- TextInputFormat (default) supplies each line of text as the value
-		- It is your responsibility to parse content into specific fields
+	- TextInputFormat (default) supplies each line of text as the value
+	- It is your responsibility to parse content into specific fields
 ````
 ## How Hive Reads Records from files
 ````text
 	- Hive queries are executed as MapReduce jobs
-		- Records are read using the InputFormat associated with the table
-		- Similarly, records are written using the table's OutputFormat
-		- These formats are specified or implied during table creation
+	- Records are read using the InputFormat associated with the table
+	- Similarly, records are written using the table's OutputFormat
+	- These formats are specified or implied during table creation
 	- As with MapReduce, TextInputFormat is used by default
-		- Each line from the input file(s) is considered a record
+	- Each line from the input file(s) is considered a record
 ````
 ````roomsql
 			CREATE TABLE sales(
@@ -426,12 +420,12 @@
 ## How Hive Extracts Fields from Records
 ````text
 	- You have learned how Hive reads records from a file
-		- How does Hive retrieve fields from those records?
+	- How does Hive retrieve fields from those records?
 	- Hive uses a class called a SerDe to extracts fields from each record
-		- SerDe is short for "Serializer/Deserializer"
+	- SerDe is short for "Serializer/Deserializer"
 	- The default SerDe(LazySimpleSerDe) parses fields based on delimiter
-		- Used if ROW FORMAT DELIMITED specified in CREATE TABLE
-		- Also used if ROW FORMAT is missing from CREATE TABLE
+	- Used if ROW FORMAT DELIMITED specified in CREATE TABLE
+	- Also used if ROW FORMAT is missing from CREATE TABLE
 ````
 ````roomsql
 			CREATE TABLE sales(
@@ -451,9 +445,9 @@
 		ParquetHiveSerDe	Using the Parquet columnar format
 		RegexSerDe			Using the supplied regular expression
 		
-		- See Hive documentation for fully- qualified class names
+	- See Hive documentation for fully- qualified class names
 	- Not all SerDes are compatible with all file formats
-		- Cannot use AvroSerDe with SequenceFiles, for example
+	- Cannot use AvroSerDe with SequenceFiles, for example
 ````
 		
 ## Specifying the SerDe Type
@@ -476,16 +470,16 @@
 ## About the RegexSerDe
 ````text
 	- Hadoop is a great fit for semi- structured data
-		- Many formats typically lack a consistent delimiter character
-			08/14/2015@15:25:47 415- 555- 2854:312- 555- 7819 "Call placed"
-			08/14/2015@15:25:53 415- 555- 2854:312- 555- 7819 "Call dropped"
+	- Many formats typically lack a consistent delimiter character
+		08/14/2015@15:25:47 415- 555- 2854:312- 555- 7819 "Call placed"
+		08/14/2015@15:25:53 415- 555- 2854:312- 555- 7819 "Call dropped"
 					
 	- RegexSerDe can help you to parse such data
-		- Regular expressions provide great flexibility
-		- Example: using RegexSerDe allows you to perform queries on log files
+	- Regular expressions provide great flexibility
+	- Example: using RegexSerDe allows you to perform queries on log files
 	- Points to note about RegexSerDe
-		- Only supports STRING column type in Hive 0.10 and earlier
-		- Backslashes in regular expressions must be escaped with a backslash
+	- Only supports STRING column type in Hive 0.10 and earlier
+	- Backslashes in regular expressions must be escaped with a backslash
 ````
 ## Using the RegexSerDe
 ````text
@@ -513,20 +507,20 @@
 ## Supporting Fixed- Width Formats with RegexSerDe
 ````text
 	- Hive does not have a specific SerDe to support fixed- width formats
-		- Yet these are commonly produced by older applications
-		- Fixed- width data is easy to read with RegexSerDe
-			Raw Data
-				2015-08-1212345673661845I love the guitar solo
-				2015-08-1216431444025652Hard to dance to this one
-				2015-08-1412957863971103It needs more cowbell
-			SerDe(Excerpt)
-				CREATE TABLE ... WITH SERDEPROPERTIES ("input.regex" =
-					"(.{10})(\\d{6})(\\d{7})(\\d)(.- )";
-			Resulting Table
-				comment_date	 acct_num	 prod_id	 rating	 comments	
-				2015- 08- 12    123456 	    7366184 		5 		I love the guitar solo
-				2015- 08- 12 	164314 		4402565 		2 		Hard to dance to this one
-				2015- 08- 14 	129578 		6397110 		3 		It needs more cowbell
+	- Yet these are commonly produced by older applications
+	- Fixed- width data is easy to read with RegexSerDe
+        Raw Data
+            2015-08-1212345673661845I love the guitar solo
+            2015-08-1216431444025652Hard to dance to this one
+            2015-08-1412957863971103It needs more cowbell
+        SerDe(Excerpt)
+            CREATE TABLE ... WITH SERDEPROPERTIES ("input.regex" =
+                "(.{10})(\\d{6})(\\d{7})(\\d)(.- )";
+        Resulting Table
+            comment_date	 acct_num	 prod_id	 rating	 comments	
+            2015- 08- 12    123456 	    7366184 		5 		I love the guitar solo
+            2015- 08- 12 	164314 		4402565 		2 		Hard to dance to this one
+            2015- 08- 14 	129578 		6397110 		3 		It needs more cowbell
 ````
 				
 # DEVELOPING USER- DEFINED FUNCTIONS
@@ -534,9 +528,9 @@
 ## Why Create User- Defined Functions?
 ````text
 	- User- defined functions allow you to extend the capabilities of Hive
-		- You might need to reformat values in a query
-		- You might need to add new mathematical functions
-		- You might need to include support for custom processing
+	- You might need to reformat values in a query
+	- You might need to add new mathematical functions
+	- You might need to include support for custom processing
 ````
 ## Types of User- Defined Functions
 ````text
@@ -568,18 +562,18 @@
 ````
 ````text
 	- Value of hive.version varies based on your CDH release
-		- Use the Maven repository Web UI to search for available versions
-		- https://repository.cloudera.com/
+	- Use the Maven repository Web UI to search for available versions
+	- https://repository.cloudera.com/
 ````
 ## Developing and Using a Custom UDF
 ````text
 	- The easiest way to develop a UDF is to extend the UDF class
-		- Implementation differs for UDAFs and UDTFs
+	- Implementation differs for UDAFs and UDTFs
 	- Your UDF must implement one or more methods named evaluate
-		- Each method can accept a different type of argument
-		- Methods should accept and return Writable types
+	- Each method can accept a different type of argument
+	- Methods should accept and return Writable types
 	- The UDF should also use a Description annotation
-		- Provides information used in SHOW FUNCTION command	
+	- Provides information used in SHOW FUNCTION command	
 ````
 ## Simple UDF Example
 ````java
@@ -610,9 +604,9 @@
 		- Example: FORMAT_CENTS(375) returns $3.75
 		- Example: FORMAT_CENTS(375, '€') returns €3.75
 	- The class defines two Text objects as member variables
-		- It is more efficient to reuse objects than create new instances
+	- It is more efficient to reuse objects than create new instances
 	- This evaluate method invokes the two- argument version
-		- By supplying the default symbol			
+	- By supplying the default symbol			
 ````
 ````java
 		package com.loudacre.example;
@@ -659,14 +653,14 @@
 	- The first step in deployment is to package your UDF as a JAR file
 		$ mvn package
 	- Deployment may require assistance from your system administrator
-		- Your account may lack permissions to make the necessary changes
+	- Your account may lack permissions to make the necessary changes
 	- Older versions of Hive used the ADD JAR command
-		- This approach does not work with HiveServer2
-		- We need to update the HiveServer2 daemon's classpath
+	- This approach does not work with HiveServer2
+	- We need to update the HiveServer2 daemon's classpath
 	- Edit /etc/hive/conf/hive- site.xml on the node running HiveServer2
-		- Add or edit the hive.aux.jars.path property
-		- Set its value to the fully- qualified URI of your JAR file(s)
-		- Multiple URIs are separated by commas for this property
+	- Add or edit the hive.aux.jars.path property
+	- Set its value to the fully- qualified URI of your JAR file(s)
+	- Multiple URIs are separated by commas for this property
 ````
 ````xml
 			<property>
