@@ -444,12 +444,12 @@
 ## Common SerDe Implementations
 ````text
 	- Hive in CDH ships with many SerDes, including:
-		Class Name									Reads and Writes Records
-		LaxySimpleSerDe							Using specified field delimiters(default)
-		AvroSerDe									Using Avro, according to specified schema
-		ColumnarSerDe								Using the RCFile columnar format
-		ParquetHiveSerDe							Using the Parquet columnar format
-		RegexSerDe									Using the supplied regular expression
+		Class Name			Reads and Writes Records
+		LaxySimpleSerDe	    Using specified field delimiters(default)
+		AvroSerDe			Using Avro, according to specified schema
+		ColumnarSerDe		Using the RCFile columnar format
+		ParquetHiveSerDe	Using the Parquet columnar format
+		RegexSerDe			Using the supplied regular expression
 		
 		- See Hive documentation for fully- qualified class names
 	- Not all SerDes are compatible with all file formats
@@ -524,7 +524,7 @@
 					"(.{10})(\\d{6})(\\d{7})(\\d)(.- )";
 			Resulting Table
 				comment_date	 acct_num	 prod_id	 rating	 comments	
-				2015- 08- 12 	123456 		7366184 		5 		I love the guitar solo
+				2015- 08- 12    123456 	    7366184 		5 		I love the guitar solo
 				2015- 08- 12 	164314 		4402565 		2 		Hard to dance to this one
 				2015- 08- 14 	129578 		6397110 		3 		It needs more cowbell
 ````
