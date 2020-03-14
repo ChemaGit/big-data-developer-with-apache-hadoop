@@ -1,4 +1,5 @@
 # wskafka.conf: A single-node Flume configuration
+````properties
 # to read data from webserver logs and publish
 # to kafka topic
 
@@ -24,7 +25,10 @@ wk.channels.mem.transactionCapacity = 100
 # Bind the source and sink to the channel
 wk.sources.ws.channels = mem
 wk.sinks.kafka.channel = mem
+````
+````bash
+$ flume-ng agent --name wk --conf-file /home/cloudera/flume_demo/flume_kafka_sink.conf
 
-# flume-ng agent --name wk --conf-file /home/cloudera/flume_demo/flume_kafka_sink.conf
+$ kafka-console-consumer --bootstrap-server quickstart.cloudera:9092 --topic kafka_demo --from-beginning
+````
 
-# kafka-console-consumer --bootstrap-server quickstart.cloudera:9092 --topic kafka_demo --from-beginning
