@@ -1,3 +1,4 @@
+````properties
 # example.conf: A single-node Flume configuration
 
 # Name the components on this agent
@@ -21,10 +22,12 @@ a1.channels.c1.transactionCapacity = 100
 # Bind the source and sink to the channel
 a1.sources.r1.channels = c1
 a1.sinks.k1.channel = c1
+````
+````bash
+$ flume-ng agent --name a1 --conf-file /home/cloudera/flume_demo/example.conf
 
-# flume-ng agent --name a1 --conf-file /home/josem32832/flume_demo/example.conf
-
-# nc localhost 44444
-#Hello World
-#How are you
-#Ok
+$ nc localhost 44444
+Hello World
+How are you
+Ok
+````

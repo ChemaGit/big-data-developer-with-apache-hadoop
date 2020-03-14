@@ -1,5 +1,5 @@
-# wshdfs.conf
-# To get the data from web server logs to HDFS
+# To get the data from web server logs to HDFS with FLUME
+````properties
 wh.sources = ws
 wh.sinks = hd
 wh.channels = mem
@@ -28,4 +28,5 @@ wh.channels.mem.transactionCapacity = 100
 wh.sources.ws.channels = mem
 wh.sinks.hd.channel = mem
 
-# flume-ng agent --name wh --conf-file /home/josem32832/flume_demo/wslogstohdfs/wshdfs.conf
+# $ flume-ng agent --name wh --conf-file /home/josem32832/flume_demo/wslogstohdfs/wshdfs.conf
+````

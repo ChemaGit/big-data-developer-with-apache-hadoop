@@ -1,7 +1,8 @@
+# FLUME - WEB SERVER LOGS TO HDFS
+````bash
 $ ls -ltr /opt/gen_logs
 $ cd /opt/gen_logs
-
-FLUME - WEB SERVER LOGS TO HDFS
+  
 
 $ mkdir wslogstohdfs
 $ cp example.conf wslogstohdfsf/
@@ -11,10 +12,10 @@ $ vi wshdfs.conf
   :%s/a1/wh
 :%s/r1/ws
   :%s/c1/mem
+````
 
-
-# example.conf: A single-node Flume configuration
-
+## example.conf: A single-node Flume configuration
+````properties
 # Name the components on this agent
 wh.sources = ws
 wh.sinks = k1
@@ -36,4 +37,5 @@ wh.channels.mem.transactionCapacity = 100
 wh.sources.ws.channels = mem
 wh.sinks.k1.channel = mem
 
-# flume-ng agent --name wh --conf-file /home/josem32832/flume_demo/wslogstohdfs/wshdfs.conf
+## $ flume-ng agent --name wh --conf-file /home/josem32832/flume_demo/wslogstohdfs/wshdfs.conf
+````
