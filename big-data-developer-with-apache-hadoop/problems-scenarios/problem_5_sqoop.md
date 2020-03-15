@@ -1,4 +1,5 @@
-# Pre-Work: Please perform these steps before solving the problem
+# Pre-Work: 
+## Please perform these steps before solving the problem
 ````text
 1. Login to MySQL using below commands on a fresh terminal window
     mysql -u retail_dba -p
@@ -14,7 +15,8 @@
     update products_replica set product_sentiment  = 'WEAK'  where product_price between 300 and  500;
 ````
 
-# Problem 5: Above steps are important so please complete them successfully before attempting to solve the problem
+# Problem 5: 
+## Above steps are important so please complete them successfully before attempting to solve the problem
 ````text
 1. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '|' and lines are separated by '\n'. 
    Null values are represented as -1 for numbers and "NOT-AVAILABLE" for strings. 
@@ -56,7 +58,8 @@
 - Validate to make sure the records have not be duplicated in mysql table
 ````
 
-# Pre-Work: Please perform these steps before solving the problem
+# Pre-Work: 
+## Please perform these steps before solving the problem
 ````roomsql
 -- 1. Login to MySQL using below commands on a fresh terminal window
 -- mysql -u retail_dba -p
@@ -80,10 +83,10 @@ update products_replica set product_grade = 1  where product_price > 500;
 update products_replica set product_sentiment  = 'WEAK'  where product_price between 300 and  500;
 ````
 
-# 1. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '|' and lines are separated by '\n'.
-# Null values are represented as -1 for numbers and "NOT-AVAILABLE" for strings.
-# Only records with product id greater than or equal to 1 and less than or equal to 1000 should be imported and use 3 mappers for importing.
-# The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text.
+## 1. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '|' and lines are separated by '\n'.
+## Null values are represented as -1 for numbers and "NOT-AVAILABLE" for strings.
+## Only records with product id greater than or equal to 1 and less than or equal to 1000 should be imported and use 3 mappers for importing.
+## The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text.
 ````bash
 $ sqoop import \
 --connect jdbc:mysql://quickstart:3306/hadoopexam \
@@ -106,9 +109,10 @@ $ hdfs dfs -ls /user/cloudera/problem5/products-text
 $ hdfs dfs -cat /user/cloudera/problem5/products-text/part* | head -n 20
 ````
 
-# 2. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '*' and lines are separated by '\n'.
-# Null values are represented as -1000 for numbers and "NA" for strings. Only records with product id less than or equal to 1111 should be imported and use 2 mappers for importing.
-# The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text-part1.
+## 2. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '*' and lines are separated by '\n'.
+## Null values are represented as -1000 for numbers and "NA" for strings. 
+## Only records with product id less than or equal to 1111 should be imported and use 2 mappers for importing.
+## The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text-part1.
 ````bash
 $ sqoop import \
 --connect jdbc:mysql://quickstart:3306/hadoopexam \
@@ -131,9 +135,10 @@ $ hdfs dfs -ls /user/cloudera/problem5/products-text-part1
 $ hdfs dfs -cat /user/cloudera/problem5/products-text-part1/part* | head -n 20
 ````
 
-# 3. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '*' and lines are separated by '\n'.
-# Null values are represented as -1000 for numbers and "NA" for strings. Only records with product id greater than 1111 should be imported and use 5 mappers for importing.
-# The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text-part2.
+## 3. Using sqoop, import products_replica table from MYSQL into hdfs such that fields are separated by a '*' and lines are separated by '\n'.
+## Null values are represented as -1000 for numbers and "NA" for strings. 
+## Only records with product id greater than 1111 should be imported and use 5 mappers for importing.
+## The destination file should be stored as a text file to directory  /user/cloudera/problem5/products-text-part2.
 ````bash
 $ sqoop import \
 --connect jdbc:mysql://quickstart:3306/hadoopexam \
@@ -156,8 +161,8 @@ $ hdfs dfs -ls /user/cloudera/problem5/products-text-part2
 $ hdfs dfs -cat /user/cloudera/problem5/products-text-part2/part* | head -n 20
 ````
 
-# 4. Using sqoop merge data available in /user/cloudera/problem5/products-text-part1 and /user/cloudera/problem5/products-text-part2 
-# to produce a new set of files in /user/cloudera/problem5/products-text-both-parts
+## 4. Using sqoop merge data available in /user/cloudera/problem5/products-text-part1 and /user/cloudera/problem5/products-text-part2 
+## to produce a new set of files in /user/cloudera/problem5/products-text-both-parts
 ````bash
 $ sqoop merge \
 --jar-file /home/cloudera/bindir/products_replica.jar \
@@ -172,7 +177,7 @@ $ hdfs dfs -cat /user/cloudera/problem5/products-text-both-parts/part-r-00000 | 
 $ hdfs dfs -cat /user/cloudera/problem5/products-text-both-parts/part-r-00000 | tail -n 20
 ````
 
-# 5. Using sqoop do the following. Read the entire steps before you create the sqoop job.
+## 5. Using sqoop do the following. Read the entire steps before you create the sqoop job.
 ````text
 - create a sqoop job Import Products_replica table as text file to directory /user/cloudera/problem5/products-incremental. Import all the records.
 - insert three more records to Products_replica from mysql
@@ -217,7 +222,7 @@ insert into products_replica values (1350,6,"Microphone Cool","Good Microphone",
 -- $ hdfs dfs -cat /user/cloudera/problem5/products-incremental/part* | tail -n 20
 ````
 
-# 6. Using sqoop do the following. Read the entire steps before you create the sqoop job.
+## 6. Using sqoop do the following. Read the entire steps before you create the sqoop job.
 ````text
 -- create a hive table in database named problem5 using below command
 -- create table products_hive  (product_id int, product_category_id int, product_name string, product_description string, product_price float, product_imaage string,product_grade int,  product_sentiment string);
@@ -274,7 +279,7 @@ select * from products_hive;
 select count(*) from products_hive;
 ````
 
-# 7. Using sqoop do the following. 
+## 7. Using sqoop do the following. 
 ````text
 - insert 2 more records into products_hive table using hive.
 - create table in mysql using below command
