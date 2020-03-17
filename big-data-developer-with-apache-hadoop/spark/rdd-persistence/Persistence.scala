@@ -5,14 +5,14 @@
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
-object Temperatures1800 {
+object Persistence {
 
   val spark = SparkSession
     .builder()
-    .appName("question54")
+    .appName("Persistence")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "question54") // To silence Metrics warning
+    .config("spark.app.id", "Persistence") // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
