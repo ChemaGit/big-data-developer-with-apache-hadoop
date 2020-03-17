@@ -1,5 +1,5 @@
-/*
-Question 4: Correct
+# Question 4: Correct
+````text
 PreRequiste:
 [Prerequisite section will not be there in actual exam]
 Create product_hive table in mysql using below script:
@@ -20,22 +20,28 @@ A mysql instance is running on the gateway node.In that instance you will find c
 
 Output Requirement:
 product_hive table should contain all product data imported from hive table.
-*/
-$ mysql -u root -p
-mysql> use retail_db;
-mysql> create table product_hive as select * from products;
-mysql> truncate product_hive;
+````
+````roomsql
+-- $ mysql -u root -p
+USE retail_db;
+CREATE table product_hive AS SELEC * FROM products;
+TRUNCATE product_hive;
+````
 
-sqoop export \
+````bash
+$ sqoop export \
 --connect jdbc:mysql://quickstart:3306/retail_db \
-  --username root \
-  --password cloudera \
-  --table product_hive \
-  --hcatalog-database default \
+--username root \
+--password cloudera \
+--table product_hive \
+--hcatalog-database default \
 --hcatalog-table product_new \
 --outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
 --num-mappers 8
+````
+````roomsql
+SELECT * FROM product_hive LIMIT 10;
+exit;
+````
 
-mysql> select * from product_hive limit 10;
-mysql> exit;
