@@ -17,23 +17,23 @@ Place the customers files in HDFS directory "/user/cloudera/problem1/customers/a
 Use avro format with pipe delimiter and snappy compression.
 Load every customer record completely
 ````
-````properties
+````bash
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
-  --username root \
-  --password cloudera \
-  --table customers \
-  --where "customer_state = 'CA'" \
-  --fields-terminated-by '|' \
-  --as-avrodatafile \
-  --compress \
+--username root \
+--password cloudera \
+--table customers \
+--where "customer_state = 'CA'" \
+--fields-terminated-by '|' \
+--as-avrodatafile \
+--compress \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec \
-  --delete-target-dir \
-  --target-dir /user/cloudera/problem1/customers/avrodata \
-  --outdir /home/cloudera/outdir \
+--delete-target-dir \
+--target-dir /user/cloudera/problem1/customers/avrodata \
+--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir
 
-// 5. Read avro file data and metadata using avro tools: avro-tools tojson | getmeta part*00*.avro
+# 5. Read avro file data and metadata using avro tools: avro-tools tojson | getmeta part*00*.avro
 
 $ avro-tools getmeta hdfs://quickstart.cloudera/user/cloudera/problem1/customers/avrodata/part-m-00000.avro
 $ avro-tools tojson hdfs://quickstart.cloudera/user/cloudera/problem1/customers/avrodata/part-m-00000.avro
