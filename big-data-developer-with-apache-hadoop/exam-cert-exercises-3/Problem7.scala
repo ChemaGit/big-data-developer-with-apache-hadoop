@@ -3,7 +3,16 @@ Question 7: Correct
 PreRequiste:[Prerequisite section will not be there in actual exam]
 Run below sqoop command
 
-sqoop import --connect "jdbc:mysql://localhost/retail_db" --password cloudera --username root --table customers --columns "customer_id,customer_fname,customer_city" --target-dir /user/cloudera/problem8/customer-avro --as-avrodatafile
+sqoop import
+--connect "jdbc:mysql://localhost/retail_db" \
+--password cloudera \
+--username root \
+--table customers \
+--columns "customer_id,customer_fname,customer_city" \
+--target-dir /user/cloudera/problem8/customer-avro \
+--as-avrodatafile \
+--bindir /home/cloudera/bindir \
+--outdir /home/cloudera/outdir
 
 Instructions:
 Create a metastore table from avro files provided at below location.
@@ -22,14 +31,14 @@ avro-tools getschema hdfs://cloudera@quickstart:8020/user/cloudera/problem8/cust
 
 sqoop import \
 --connect "jdbc:mysql://localhost/retail_db" \
-  --password cloudera \
-  --username root \
-  --table customers \
-  --columns "customer_id,customer_fname,customer_city" \
-  --delete-target-dir \
-  --target-dir /user/cloudera/problem8/customer-avro \
-  --as-avrodatafile \
-  --outdir /home/cloudera/outdir \
+--password cloudera \
+--username root \
+--table customers \
+--columns "customer_id,customer_fname,customer_city" \
+--delete-target-dir \
+--target-dir /user/cloudera/problem8/customer-avro \
+--as-avrodatafile \
+--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/outdir \
 --num-mappers 8
 
@@ -41,7 +50,7 @@ customers.write.parquet("/user/cloudera/problem8/customer-parquet-hive")
 sqlContext.sql("""create table customer_parquet_avro(customer_id int,customer_fname string,customer_city string) STORED AS PARQUET LOCATION "/user/cloudera/problem8/customer-parquet-hive" TBLPROPERTIES("parquet.compression"="gzip")""")
 
 $ hive
-  hive> show tables;
+hive> show tables;
 hive> describe formatted customer_parquet_avro;
 hive> select * from customer_parquet_avro limit 10;
 

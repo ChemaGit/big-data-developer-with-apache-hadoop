@@ -1,5 +1,5 @@
-/*
-Question 1: Correct
+# Question 1: Correct
+````text
 Please read this before starting this question,
 This question is just for reference and not actual practice question.
 There is only 1% chance of getting a flume question in exam.
@@ -24,9 +24,9 @@ $ flume-ng agent -n telnet-agent -f f.config
 Output Requirement
 Output should be saved in HDFS Location /user/practice2/problem3/hdfs/sink
 Prefix for the files should be .log
-
-
-Flume Template File
+````
+## Flume Template File
+````properties
 telnet-agent.sources = r1
 telnet-agent.sinks = k1
 telnet-agent.channels = c1
@@ -47,8 +47,11 @@ telnet-agent.channels.c1.transactionCapacity =
 # Bind the source and sink to the channel
 telnet-agent.sources.r1.channels = c1
 telnet-agent.sinks.k1.channel = c1
-*/
+````
 
+
+## Solution
+````properties
 telnet-agent.sources = r1
 telnet-agent.sinks = k1
 telnet-agent.channels = c1
@@ -59,26 +62,29 @@ telnet-agent.sources.r1.port = 44444
 # Describe the sink
 telnet-agent.sinks.k1.type = hdfs
 telnet-agent.sinks.k1.hdfs.path = /user/practice2/problem3/hdfs/sink
-  telnet-agent.sinks.k1.hdfs.fileSuffix = .log
+telnet-agent.sinks.k1.hdfs.fileSuffix = .log
 telnet-agent.sinks.k1.hdfs.writeFormat = Text
 telnet-agent.sinks.k1.hdfs.fileType = DataStream
 # Use a channel which buffers events in memory
-  telnet-agent.channels.c1.type = memory
+telnet-agent.channels.c1.type = memory
 telnet-agent.channels.c1.capacity = 1000
 telnet-agent.channels.c1.transactionCapacity = 200
 # Bind the source and sink to the channel
-  telnet-agent.sources.r1.channels = c1
+telnet-agent.sources.r1.channels = c1
 telnet-agent.sinks.k1.channel = c1
-
+````
+````bash
 $ flume-ng agent --name telnet-agent --conf-file /home/cloudera/flume_demo/problem1.conf
 $ nc localhost 44444
 Hi, How are you?
-  I'm fine thank you
-  Where are you?
-  I'm from Madrid, Spain
+I'm fine thank you
+Where are you?
+I'm from Madrid, Spain
 Good, nice to meet you
-  nice to meet you too
+nice to meet you too
 Bye for now
 
 $ hdfs dfs -ls /user/practice2/problem3/hdfs/sink
 $ hdfs dfs -cat $ hdfs dfs -ls /user/practice2/problem3/hdfs/sink/*.log
+````
+
