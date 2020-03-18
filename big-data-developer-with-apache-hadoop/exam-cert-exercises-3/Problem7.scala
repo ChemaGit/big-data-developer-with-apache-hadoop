@@ -1,4 +1,4 @@
-/*
+/**
 Question 7: Correct
 PreRequiste:[Prerequisite section will not be there in actual exam]
 Run below sqoop command
@@ -29,6 +29,77 @@ parquet-tools meta hdfs://quickstart.cloudera:8020/user/cloudera/problem8/custom
 avro-tools getschema hdfs://cloudera@quickstart:8020/user/cloudera/problem8/customer-avro/part-m-00000.avro > cust-avro.avsc
 */
 
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
+import com.databricks.spark.avro._
+
+object Problem7 {
+
+  val spark = SparkSession
+    .builder()
+    .appName("Problem7")
+    .master("local[*]")
+    .enableHiveSupport()
+    .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
+    .config("spark.app.id", "Problem7")  // To silence Metrics warning
+    .getOrCreate()
+
+  val sc = spark.sparkContext
+  val sqlContext = spark.sqlContext
+
+  val input = "hdfs://quickstart.cloudera/user/cloudera/problem8/customer-avro"
+  val output = "hdfs://quickstart.cloudera/user/cloudera/problem8/customer-parquet-hive"
+
+  def main(args: Array[String]): Unit = {
+
+    Logger.getRootLogger.setLevel(Level.ERROR)
+
+    try {
+
+      val customersAvro = sqlContext
+        .read
+        .avro(input)
+        .cache()
+
+      customersAvro.show(10)
+
+      customersAvro
+        .write
+        .option("compression","gzip")
+        .parquet(output)
+
+      sqlContext.sql("""USE hadoopexam""")
+
+      sqlContext
+        .sql(
+          s"""CREATE EXTERNAL TABLE IF NOT EXISTS customer_parquet_avro(
+             |customer_id INT,
+             |customer_fname STRING,
+             |customer_city STRING
+             |)
+             |STORED AS PARQUET
+             |LOCATION '$output'
+             |TBLPROPERTIES ("parquet.compression"="gzip")
+            """.stripMargin)
+
+      sqlContext.sql("SHOW tables").show()
+
+      sqlContext.sql("""SELECT * FROM customer_parquet_avro LIMIT 10""").show()
+
+      // To have the opportunity to view the web console of Spark: http://localhost:4040/
+      println("Type whatever to the console to exit......")
+      scala.io.StdIn.readLine()
+    } finally {
+      sc.stop()
+      println("SparkContext stopped.")
+      spark.stop()
+      println("SparkSession stopped.")
+    }
+  }
+}
+
+
+/*SOLUTION IN THE SPARK REPL
 sqoop import \
 --connect "jdbc:mysql://localhost/retail_db" \
 --password cloudera \
@@ -61,3 +132,4 @@ $ parquet-tools schema hdfs://quickstart.cloudera/user/cloudera/problem8/custome
 /**SOLUTION WITH HIVE**/
 CREATE EXTERNAL TABLE customer_avro_new(custId string,fname string,city string) STORED AS AVRO LOCATION '/user/cloudera/problem8/customer-avro' TBLPROPERTIES('avro.schema.url'='file:///home/cloudera/cust-avro.avsc');
 CREATE TABLE customer_parquet_avro STORED AS PARQUET LOCATION '/user/clodera/problem8/customer-parquet-hive' TBLPROPERTIES('parquet.compression'='GZIP') AS SELECT * FROM customer_avro_new;
+*/
