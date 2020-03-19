@@ -17,19 +17,19 @@ Null values are represented as -1 for numbers and "NA" for strings
 */
 sqoop import \
 --connect jdbc:mysql://quickstart.cloudera:3306/retail_db \
-  --username root \
-  --password cloudera \
-  --table orders \
-  --where "order_status LIKE('COMPLETE')" \
-  --fields-terminated-by '\t' \
-  --null-string "NA" \
-  --null-non-string -1 \
-  --as-parquetfile \
-  --compress \
+--username root \
+--password cloudera \
+--table orders \
+--where "order_status LIKE('COMPLETE')" \
+--fields-terminated-by '\t' \
+--null-string "NA" \
+--null-non-string -1 \
+--as-parquetfile \
+--compress \
 --compression-codec snappy \
 --delete-target-dir \
-  --target-dir /user/cloudera/problem1/orders/parquetdata \
-  --outdir /home/cloudera/outdir \
+--target-dir /user/cloudera/problem1/orders/parquetdata \
+--outdir /home/cloudera/outdir \
 --bindir /home/cloudera/bindir \
 --num-mappers 8
 
