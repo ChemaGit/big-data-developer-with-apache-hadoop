@@ -156,10 +156,7 @@ object Problem6 {
       // Output file should be tab separated file
       result
         .write
-        .mode("overwrite")      // TODO: check the results
-      // hdfs dfs -ls /user/cloudera/practice3/problem3/
-      // hdfs dfs -ls /user/cloudera/practice3/problem3/joinResults
-      // hdfs dfs -cat /user/cloudera/practice3/problem3/joinResults/*.csv | head -n 10
+        .mode("overwrite")
         .option("sep","\t")
         .option("header", true)
         .csv(s"${path}joinResults")
