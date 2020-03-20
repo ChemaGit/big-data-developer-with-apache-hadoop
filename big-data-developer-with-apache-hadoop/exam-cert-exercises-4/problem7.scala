@@ -46,14 +46,14 @@ Output should have product_id and revenue seperated with ':' and should be saved
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
-object exercise_7 {
+object problem7 {
 
   val spark = SparkSession
     .builder()
-    .appName("exercise_7")
+    .appName("problem7")
     .master("local[*]")
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_7")  // To silence Metrics warning
+    .config("spark.app.id", "problem7")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext
