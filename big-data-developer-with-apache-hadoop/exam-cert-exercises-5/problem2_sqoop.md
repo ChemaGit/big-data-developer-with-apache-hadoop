@@ -22,7 +22,7 @@ Sample Output
 ````
 
 ````bash
-sqoop import \
+$ sqoop import \
 --connect jdbc:mysql://quickstart.cloudera:3306/retail_db \
 --username root \
 --password cloudera \
@@ -37,7 +37,7 @@ sqoop import \
 --bindir /home/cloudera/bindir \
 --num-mappers 8
 
-hdfs dfs -ls /user/cloudera/problem1/customers/textdata
-hdfs dfs -cat /user/cloudera/problem1/customers/textdata/p* | tail -n 20
+$ hdfs dfs -ls /user/cloudera/problem1/customers/textdata
+$ hdfs dfs -cat /user/cloudera/problem1/customers/textdata/p* | tail -n 20
 ````
 

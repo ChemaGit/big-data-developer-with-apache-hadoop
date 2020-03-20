@@ -1,5 +1,5 @@
-/*
-Question 3:
+# Question 3:
+````text
 Instructions:
 Connect to mySQL database using sqoop, import all completed orders into HDFS directory.
 Data Description:
@@ -14,8 +14,10 @@ Output Requirement:
 Place the customers files in HDFS directory "/user/cloudera/problem1/orders/parquetdata"
 Use parquet format with tab delimiter and snappy compression.
 Null values are represented as -1 for numbers and "NA" for strings
-*/
-sqoop import \
+````
+
+````bash
+$ sqoop import \
 --connect jdbc:mysql://quickstart.cloudera:3306/retail_db \
 --username root \
 --password cloudera \
@@ -36,3 +38,5 @@ sqoop import \
 $ hdfs dfs -ls /user/cloudera/problem1/orders/parquetdata
 $ parquet-tools meta hdfs://quickstart.cloudera/user/cloudera/problem1/orders/parquetdata/5f94d536-3e3e-4fcc-97af-7b75e65579b5.parquet
 $ parquet-tools head hdfs://quickstart.cloudera/user/cloudera/problem1/orders/parquetdata/5f94d536-3e3e-4fcc-97af-7b75e65579b5.parquet
+````
+
