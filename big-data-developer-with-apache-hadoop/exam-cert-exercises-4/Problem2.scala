@@ -24,15 +24,15 @@ Output should have product_id,product_name,product_price,product_category_id.Res
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 
-object exercise_4 {
+object Problem2 {
 
   val spark = SparkSession
     .builder()
-    .appName("exercise_4")
+    .appName("Problem2")
     .master("local[*]")
     .enableHiveSupport()
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
-    .config("spark.app.id", "exercise_4")  // To silence Metrics warning
+    .config("spark.app.id", "Problem2")  // To silence Metrics warning
     .getOrCreate()
 
   val sc = spark.sparkContext

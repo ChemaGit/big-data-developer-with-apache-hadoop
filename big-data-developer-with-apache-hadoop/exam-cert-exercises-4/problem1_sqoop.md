@@ -1,5 +1,5 @@
-/*
-Question 1: Correct
+# Question 1: Correct
+````text
 Instructions:
 Connect to mySQL database using sqoop, import all customers records into HDFS.
 Data Description:
@@ -13,7 +13,8 @@ Output Requirement:
 Place the customers files in HDFS directory "/user/cloudera/problem1/customers/text2"
 Input fields should be separated with ^ and output should be compressed in deflate codec.
 Only import customer_id, customer_fname, customer_lname, customer_street
-*/
+````
+````bash
 sqoop import \
 --connect jdbc:mysql://quickstart:3306/retail_db \
   --username root \
@@ -32,3 +33,5 @@ sqoop import \
 
 $ hdfs dfs -ls /user/cloudera/problem1/customers/text2
 $ hdfs dfs -text /user/cloudera/problem1/customers/text2/part-m-00000.deflate | head -n 50
+````
+
