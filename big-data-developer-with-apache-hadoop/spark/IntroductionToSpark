@@ -1,0 +1,89 @@
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.SparkSession
+
+object IntroductionToSpark {
+
+  val spark = SparkSession
+    .builder()
+    .appName("OptimizingTransformationsAndActions")
+    .master("local[*]")
+    .enableHiveSupport()
+    .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
+    .config("spark.app.id", "OptimizingTransformationsAndActions")  // To silence Metrics warning
+    .getOrCreate()
+
+  val sc = spark.sparkContext
+
+  val input = "hdfs://quickstart.cloudera/public/cognitive_class/readme.md"
+  val output = "hdfs://quickstart.cloudera/user/cloudera/cognitive_class/"
+
+  def main(args: Array[String]): Unit = {
+
+    Logger.getRootLogger.setLevel(Level.ERROR)
+
+    try {
+      println(sc.version)
+
+      val readme = sc
+        .textFile(input)
+        .cache()
+
+      println(readme.count())
+      println(readme.first())
+
+      val linesWithSpark = readme.filter(line =>  line.contains("Spark"))
+
+      linesWithSpark.collect().foreach(println)
+
+      println(readme.filter(line =>  line.contains("Spark")).count())
+
+      // We can use this to do a word count on the readme file.
+      val wordCounts = readme
+        .flatMap(line => line.split(" "))
+        .map(word => (word, 1))
+        .reduceByKey( (a, b) => a + b)
+
+      // To collect the word counts, use the collect action.
+      // It should be noted that the collect function brings all of the data into the driver node.
+      // For a small dataset, this is acceptable but, for a large dataset this can cause an Out Of Memory error.
+      // It is recommended to use collect() for testing only.
+      // The safer approach is to use the take() function e.g. print take(n)
+      wordCounts.collect().foreach(println)
+
+      // determine what is the most frequent word in the README, and how many times was it used?
+      val mostFrequentWord = wordCounts.reduce({case ((w,c), (w1, c1)) => if(c > c1) (w, c) else (w1, c1)})
+
+      println(mostFrequentWord)
+
+      wordCounts.saveAsTextFile(s"${output}IntroductionToSpark")
+
+      // Using Spark caching
+      // This is very useful for accessing repeated data, such as querying a small “hot” dataset or when running an iterative algorithm.
+      // Both Python and Scala use the same commands.
+      println(linesWithSpark.count())
+
+      def benchmark(rdd: RDD[String]): Long = {
+        val start = System.currentTimeMillis()
+        rdd.count()
+        val end = System.currentTimeMillis()
+        (end - start)
+      }
+
+      println("Iteration count() without cachint took " + benchmark(linesWithSpark) + " ms")
+
+      linesWithSpark.cache()
+
+      println("Iteration count() with caching took " + benchmark(linesWithSpark) + " ms")
+
+      // To have the opportunity to view the web console of Spark: http://localhost:4040/
+      println("Type whatever to the console to exit......")
+      scala.io.StdIn.readLine()
+    } finally {
+      sc.stop()
+      println("SparkContext stopped.")
+      spark.stop()
+      println("SparkSession stopped.")
+    }
+  }
+}
