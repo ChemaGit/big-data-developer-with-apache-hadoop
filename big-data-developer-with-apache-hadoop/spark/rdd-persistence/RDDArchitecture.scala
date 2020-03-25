@@ -1,3 +1,5 @@
+package spark
+
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.HashPartitioner
 import org.apache.spark.sql.SparkSession
@@ -8,7 +10,6 @@ object RDDArchitecture {
     .builder()
     .appName("RDDArchitecture")
     .master("local[*]")
-    .enableHiveSupport()
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
     .config("spark.app.id", "RDDArchitecture")  // To silence Metrics warning
     .config("spark.scheduler.mode", "FAIR") // To schedule concurrent jobs, default FIFO, FAIR is more appropiate for multiusers

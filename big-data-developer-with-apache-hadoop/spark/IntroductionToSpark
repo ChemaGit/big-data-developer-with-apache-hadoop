@@ -1,3 +1,5 @@
+package spark
+
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -8,7 +10,6 @@ object IntroductionToSpark {
     .builder()
     .appName("IntroductionToSpark")
     .master("local[*]")
-    .enableHiveSupport()
     .config("spark.sql.shuffle.partitions", "4") //Change to a more reasonable default number of partitions for our data
     .config("spark.app.id", "IntroductionToSpark")  // To silence Metrics warning
     .getOrCreate()
