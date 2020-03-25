@@ -1,4 +1,4 @@
-# CCA Spark and Hadoop Developer Exam (CCA175)
+# CLOUDERA CCA Spark and Hadoop Developer Exam (CCA175)
 ````text
 - Recently I got certified as Hadoop and Spark Developer - CCA175 and 
   I wanted to share my experience about the test and training in this repository.
