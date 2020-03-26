@@ -4,7 +4,7 @@
 [https://www.cloudera.com/about/training/certification/cca-spark.html][Cloudera web page]
 
 ### And visit my repository about Spark 2.0 where you can find a lot of examples with Spark RDD, Pair RDD, Dataframes and Spark SQL
-[https://github.com/ChemaGit/Apache-Spark-2.0-with-Scala][Apache Spark 2 whith Scala]
+[https://github.com/ChemaGit/Apache-Spark-2.0-with-Scala] [Apache Spark 2 whith Scala]
 
 ````text
 - Recently I got certified as Hadoop and Spark Developer - CCA175 and 
