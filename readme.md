@@ -1,9 +1,9 @@
 # CLOUDERA CCA Spark and Hadoop Developer Exam (CCA175) with Scala
 
-### Cloudera has recently changed the syllabus. The exam is right now all about Spark, this include Spark RDD, Spark Dataframes, and Spark SQL. You can check out the syllabus on the following link 
+### Cloudera has recently changed the syllabus. The exam is right now all about Spark, this include Spark RDD, Spark Dataframes, and Spark SQL. You can check out the syllabus in the following link 
 [https://www.cloudera.com/about/training/certification/cca-spark.html][Cloudera web page]
 
-### And visit my repository about Spark 2.0 where you can find a lot of examples with Spark RDD, Pair RDD, Dataframes and Spark SQL on the following link
+### And visit my repository about Spark 2.0 where you can find a lot of examples with Spark RDD, Pair RDD, Dataframes and Spark SQL in the following link
 https://github.com/ChemaGit/Apache-Spark-2.0-with-Scala
 
 ````text
