@@ -37,6 +37,12 @@ dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-core" % "2.9.5"
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.5"
 dependencyOverrides += "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.9.5"
 
+// https://mvnrepository.com/artifact/org.scalatest/scalatest
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0-SNAP3" % Test
+
+// https://mvnrepository.com/artifact/com.holdenkarau/spark-testing-base
+libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.4.5_0.14.0" % Test
+
 /*
 libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.1.8"
 libraryDependencies += "org.apache.hbase" % "hbase-common" % "1.1.8"
