@@ -1,4 +1,4 @@
-# Examples in Hadoop
+## Hadoop Distributed File System (HDFS)
 ````text
 - How the Apache Hadoop Distributed File System(HDFS) stores data across a cluster
 - How to use HDFS using the hdfs command
