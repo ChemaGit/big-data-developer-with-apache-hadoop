@@ -1,6 +1,4 @@
 ````properties
-#!/usr/bin/env bash
-
 # to see a list of available tools run
 sqoop help
 
